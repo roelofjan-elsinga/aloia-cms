@@ -1,0 +1,34 @@
+{
+    "name": "roelofjan-elsinga/flat-file-cms",
+    "description": "A drop-in flat file CMS for Laravel.",
+    "require": {
+        "roelofjan-elsinga/content-to-html-parser": "^0.1.0",
+        "illuminate/support": "^5.7",
+        "illuminate/console": "^5.7"
+    },
+    "keywords": [
+        "laravel",
+        "cms",
+        "file"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Roelof Jan Elsinga",
+            "email": "roelofjanelsinga@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "FlatFileCms\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "FlatFileCms\\FlatFileCmsServiceProvider"
+            ]
+        }
+    }
+}
