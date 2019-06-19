@@ -3,9 +3,9 @@
 namespace FlatFileCms\Commands;
 
 use Carbon\Carbon;
+use FlatFileCms\Article;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Main\Content\Article;
 
 class NewArticle extends Command
 {
