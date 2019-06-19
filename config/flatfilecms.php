@@ -5,7 +5,7 @@ return [
     /*
      * This value represents the JSON file that contains all the meta data about a post
      * */
-    'article_data_file' => resource_path('content/articles/flatfilecms.json'),
+    'article_data_file' => resource_path('content/articles.json'),
 
     /*
      * This value represents the location in which the content files are saved.
