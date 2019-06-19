@@ -16,6 +16,8 @@ class FlatFileCmsServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $this->mergeConfigFrom(__DIR__ . '/../config/flatfilecms.php', 'flatfilecms');
+
         $this->publishes([
             __DIR__.'/../config/flatfilecms.php' => config_path('flatfilecms.php'),
         ]);
