@@ -30,7 +30,7 @@ class GenerateArticleFiles extends Command
      */
     public function handle()
     {
-        $folder_path = config('flatfilecms.article_data_path');
+        $folder_path = config('flatfilecms.articles.data_path');
 
         $files = File::allFiles($folder_path);
 

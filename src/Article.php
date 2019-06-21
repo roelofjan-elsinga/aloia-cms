@@ -106,7 +106,7 @@ class Article implements ArticleInterface
      */
     private function getImagesUrlPath(): string
     {
-        return Config::get('flatfilecms.article_image_path');
+        return Config::get('flatfilecms.articles.image_path');
     }
 
     /**
@@ -241,7 +241,7 @@ class Article implements ArticleInterface
      */
     private function getContentFolderPath(): string
     {
-        return Config::get('flatfilecms.article_data_path');
+        return Config::get('flatfilecms.articles.data_path');
     }
 
     /**
@@ -281,13 +281,13 @@ class Article implements ArticleInterface
      */
     private static function getMetaDataFilePath(): string
     {
-        return Config::get('flatfilecms.article_data_file');
+        return Config::get('flatfilecms.articles.data_file');
     }
 
     /**
      * Get all articles
      *
-     * @return Collection
+     * @return Collection|Article[]
      */
     public static function all(): Collection
     {

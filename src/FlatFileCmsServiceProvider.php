@@ -12,6 +12,8 @@ class FlatFileCmsServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/flatfilecms.php', 'flatfilecms');
+
+        $this->bindFacades();
     }
 
     public function boot()
@@ -26,6 +28,17 @@ class FlatFileCmsServiceProvider extends ServiceProvider
                 NewArticle::class,
             ]);
         }
+    }
+
+    /**
+     * Bind the facades used by this package
+     */
+    private function bindFacades()
+    {
+        $this->app->bind('FlatFileCmsBlock', function()
+        {
+            return new Block;
+        });
     }
 
 }
