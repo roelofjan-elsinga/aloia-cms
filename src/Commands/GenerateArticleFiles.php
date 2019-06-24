@@ -4,6 +4,7 @@ namespace FlatFileCms\Commands;
 
 use FlatFileCms\Article;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 
 class GenerateArticleFiles extends Command
@@ -30,7 +31,7 @@ class GenerateArticleFiles extends Command
      */
     public function handle()
     {
-        $folder_path = config('flatfilecms.articles.data_path');
+        $folder_path = Config::get('flatfilecms.articles.folder_path');
 
         $files = File::allFiles($folder_path);
 
