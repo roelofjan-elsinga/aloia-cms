@@ -8,7 +8,6 @@ use FlatFileCms\Contracts\ArticleInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
-use Main\Classes\HtmlParser;
 
 class Article implements ArticleInterface
 {
@@ -241,7 +240,7 @@ class Article implements ArticleInterface
      */
     private function getContentFolderPath(): string
     {
-        return Config::get('flatfilecms.articles.data_path');
+        return Config::get('flatfilecms.articles.folder_path');
     }
 
     /**
@@ -281,7 +280,7 @@ class Article implements ArticleInterface
      */
     private static function getMetaDataFilePath(): string
     {
-        return Config::get('flatfilecms.articles.data_file');
+        return Config::get('flatfilecms.articles.file_path');
     }
 
     /**

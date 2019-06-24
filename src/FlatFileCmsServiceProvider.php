@@ -19,7 +19,7 @@ class FlatFileCmsServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config/flatfilecms.php' => config_path('flatfilecms.php'),
+            __DIR__ . '/../config/flatfilecms.php' => config_path('flatfilecms.php'),
         ]);
 
         if ($this->app->runningInConsole()) {
@@ -35,8 +35,7 @@ class FlatFileCmsServiceProvider extends ServiceProvider
      */
     private function bindFacades()
     {
-        $this->app->bind('FlatFileCmsBlock', function()
-        {
+        $this->app->bind('FlatFileCmsBlock', function () {
             return new Block;
         });
     }

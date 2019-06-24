@@ -71,7 +71,7 @@ class Block
      */
     private function getBlockFolderPath(): string
     {
-        return Config::get('flatfilecms.content_blocks.data_path');
+        return Config::get('flatfilecms.content_blocks.folder_path');
     }
 
 

@@ -19,7 +19,7 @@ php artisan vendor:publish --provider="FlatFileCms\\FlatFileCmsServiceProvider"
 ## Usage of Article
 
 To load all articles located at the folder you specified in 
-``config('flatfilecms.articles.data_path')`` you can use the following script:
+``config('flatfilecms.articles.folder_path')`` you can use the following script:
 
 ```php
 use FlatFileCms\Article;
