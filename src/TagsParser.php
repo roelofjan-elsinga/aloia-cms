@@ -157,10 +157,15 @@ class TagsParser
             file_put_contents($file_path, json_encode([
                 "tags" => [
                     "default" => [
-                        "title" => "This is a page title"
+                        "title" => "Page title",
+                        "keywords" => "Keywords go here",
+                        "description" => "Page description",
+                        "author" => "Author name",
+                        "image_small" => "",
+                        "image_large" => ""
                     ]
                 ]
-            ]));
+            ], JSON_PRETTY_PRINT));
         }
     }
 }
