@@ -16,8 +16,12 @@ class Media
      */
     public function allFiles(): MediaCollection
     {
+        $image_path = $this->getImagesPath();
+
+        $this->createImagesPathIfNotExisting($image_path);
+
         return new MediaCollection(
-            File::allFiles($this->getImagesPath())
+            File::allFiles($image_path)
         );
     }
 
@@ -61,5 +65,20 @@ class Media
         $filename = strtolower($filename_without_spaces);
 
         return $filename;
+    }
+
+
+    /**
+     * Create the image path if it doesn't exist
+     *
+     * @param string $image_path
+     */
+    private function createImagesPathIfNotExisting(string $image_path)
+    {
+        if(! file_exists( $image_path ) ) {
+
+            mkdir($image_path);
+
+        }
     }
 }
