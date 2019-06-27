@@ -5,11 +5,12 @@ namespace FlatFileCms;
 use Carbon\Carbon;
 use ContentParser\ContentParser;
 use FlatFileCms\Contracts\ArticleInterface;
+use FlatFileCms\Contracts\StorableInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 
-class Article implements ArticleInterface
+class Article implements ArticleInterface, StorableInterface
 {
     private $article;
 
@@ -35,6 +36,16 @@ class Article implements ArticleInterface
                 return $article->slug() === $slug;
             })
             ->first();
+    }
+
+    /**
+     * Return a new instance of this Article
+     *
+     * @return Article|null
+     */
+    public static function instance(): ?Article
+    {
+        return new static([]);
     }
 
     /**
@@ -230,7 +241,7 @@ class Article implements ArticleInterface
      */
     private function getFilePath(): string
     {
-        return $this->getContentFolderPath() . '/' . $this->filename();
+        return $this->getFolderPath() . '/' . $this->filename();
     }
 
     /**
@@ -238,7 +249,7 @@ class Article implements ArticleInterface
      *
      * @return string
      */
-    private function getContentFolderPath(): string
+    public function getFolderPath(): string
     {
         return Config::get('flatfilecms.articles.folder_path');
     }
