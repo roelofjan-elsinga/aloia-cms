@@ -5,12 +5,13 @@ namespace FlatFileCms;
 use Carbon\Carbon;
 use ContentParser\ContentParser;
 use FlatFileCms\Contracts\ArticleInterface;
+use FlatFileCms\Contracts\DataSourceInterface;
 use FlatFileCms\Contracts\StorableInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 
-class Article implements ArticleInterface, StorableInterface
+class Article extends Content implements ArticleInterface, StorableInterface
 {
     private $article;
 
@@ -56,6 +57,16 @@ class Article implements ArticleInterface, StorableInterface
     public function slug(): string
     {
         return pathinfo($this->article['filename'])['filename'] ?? "";
+    }
+
+    /**
+     * Get the type of this article
+     *
+     * @return string
+     */
+    public function type(): string
+    {
+        return "article";
     }
 
     /**
@@ -214,27 +225,6 @@ class Article implements ArticleInterface, StorableInterface
     }
 
     /**
-     * Generate a description for the content
-     *
-     * @return bool|string
-     * @throws \Exception
-     */
-    private function getDescriptionFromContent(): string
-    {
-        $paragraphs = HtmlParser::getTextBetweenTags($this->content(), 'p');
-
-        $paragraphs_with_text_content = array_filter($paragraphs, function ($paragraph) {
-            return !empty(strip_tags($paragraph));
-        });
-
-        if (count($paragraphs_with_text_content) > 0) {
-            return substr(head($paragraphs_with_text_content), 0, 160);
-        }
-
-        return "";
-    }
-
-    /**
      * Get the file path of this article
      *
      * @return string
@@ -289,7 +279,7 @@ class Article implements ArticleInterface, StorableInterface
      *
      * @return string
      */
-    private static function getMetaDataFilePath(): string
+    protected static function getMetaDataFilePath(): string
     {
         return Config::get('flatfilecms.articles.file_path');
     }
@@ -326,6 +316,21 @@ class Article implements ArticleInterface, StorableInterface
     }
 
     /**
+     * Check if the meta data file exists and create it if it doesn't
+     *
+     * @param string $file_path
+     * @return void
+     */
+    protected static function validateMetaDataFile(string $file_path)
+    {
+        if(! File::exists($file_path)) {
+            self::update(
+                new Collection()
+            );
+        }
+    }
+
+    /**
      * Update the meta data file with updated articles meta data
      *
      * @param Collection $articles
@@ -334,20 +339,14 @@ class Article implements ArticleInterface, StorableInterface
     {
         $file_path = self::getMetaDataFilePath();
 
-        File::put($file_path, $articles->toJson(JSON_PRETTY_PRINT));
-    }
-
-    /**
-     * Check if the meta data file exists and create it if it doesn't
-     *
-     * @param string $file_path
-     * @return void
-     */
-    private static function validateMetaDataFile(string $file_path)
-    {
-        if(! File::exists($file_path)) {
-            self::update(new Collection());
-        }
+        File::put(
+            $file_path,
+            $articles
+                ->map(function($article) {
+                    return \FlatFileCms\DataSource\Article::create($article)->toArray();
+                })
+                ->toJson(JSON_PRETTY_PRINT)
+        );
     }
 
     /**

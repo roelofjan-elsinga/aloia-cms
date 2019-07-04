@@ -1,0 +1,44 @@
+<?php
+
+namespace FlatFileCms\Contracts;
+
+
+interface PageInterface extends ArticleInterface
+{
+
+    /**
+     * Get the author of this page
+     *
+     * @return string
+     */
+    public function author(): string;
+
+    /**
+     * Get the summary of this page
+     *
+     * @return string
+     */
+    public function summary(): string;
+
+    /**
+     * Get the template name of this page
+     *
+     * @return string
+     */
+    public function templateName(): string;
+
+    /**
+     * Determine whether this page is in the menu
+     *
+     * @return bool
+     */
+    public function isInMenu(): bool;
+
+    /**
+     * Get the keywords of this page
+     *
+     * @return string
+     */
+    public function keywords(): string;
+
+}
