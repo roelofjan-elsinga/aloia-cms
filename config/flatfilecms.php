@@ -2,6 +2,27 @@
 
 return [
 
+    'pages' => [
+
+        /*
+        * This value represents the JSON file that contains all the meta data about a post
+        * */
+        'file_path' => resource_path('content/pages.json'),
+
+        /*
+         * This value represents the location in which the content files are saved.
+         * The filename in the config('flatfilecms.articles.file_path') will search in this folder.
+         * */
+        'folder_path' => resource_path('content/pages'),
+
+        /*
+         * This value represents the location in which the post images are found.
+         * This is used to generate URL's to display the images
+         * */
+        'image_path' => 'images/pages'
+
+    ],
+
     'articles' => [
 
         /*
