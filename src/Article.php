@@ -255,6 +255,16 @@ class Article extends Content implements ArticleInterface, StorableInterface
     }
 
     /**
+     * Get the URL if it's set
+     *
+     * @return null|string
+     */
+    public function url(): ?string
+    {
+        return $this->article['url'] ?? null;
+    }
+
+    /**
      * Determine whether this article is published
      *
      * @return bool

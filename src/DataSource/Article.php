@@ -40,6 +40,8 @@ class Article implements DataSourceInterface
             'description',
             'isScheduled',
             'isPublished',
+            'url',
+            'canonical',
         ];
 
         $resource_fields = [
