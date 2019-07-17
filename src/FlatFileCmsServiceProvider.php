@@ -2,6 +2,7 @@
 
 namespace FlatFileCms;
 
+use FlatFileCms\Commands\ConfigCommand;
 use FlatFileCms\Commands\GenerateArticleFiles;
 use FlatFileCms\Commands\NewArticle;
 use Illuminate\Support\ServiceProvider;
@@ -20,12 +21,13 @@ class FlatFileCmsServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../config/flatfilecms.php' => config_path('flatfilecms.php'),
-        ]);
+        ], 'config');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
                 GenerateArticleFiles::class,
                 NewArticle::class,
+                ConfigCommand::class,
             ]);
         }
     }
