@@ -30,65 +30,56 @@ class Article implements DataSourceInterface
      * Convert the data source to an array
      *
      * @return array
+     * @throws \Exception
      */
     public function toArray(): array
     {
-        $data_source = [
-            "filename" => $this->filename(),
-            "description" => $this->description(),
-            "postDate" => $this->postDate(),
-            "isPublished" => $this->isPublished(),
-            "isScheduled" => $this->isScheduled()
+        $optional_fields = [
+            'updateDate',
+            'thumbnail',
+            'description',
+            'isScheduled',
+            'isPublished',
         ];
 
-        if($this->has('updateDate')) {
-            $data_source['updateDate'] = $this->updateDate();
+        $resource_fields = [
+            'filename' => $this->getRequiredField('filename'),
+            'postDate' => $this->getRequiredField('postDate')
+        ];
+
+        foreach($optional_fields as $field_name) {
+            if($this->has($field_name)) {
+                $resource_fields[$field_name] = $this->attributes[$field_name];
+            }
         }
 
-        if($this->has('thumbnail')) {
-            $data_source['thumbnail'] = $this->thumbnail();
-        }
-
-        return $data_source;
+        return $resource_fields;
     }
 
-    private function filename()
-    {
-        return $this->attributes['filename'];
-    }
-
-    private function description()
-    {
-        return $this->attributes['description'];
-    }
-
-    private function postDate()
-    {
-        return $this->attributes['postDate'];
-    }
-
-    private function isPublished()
-    {
-        return $this->attributes['isPublished'];
-    }
-
-    private function isScheduled()
-    {
-        return $this->attributes['isScheduled'];
-    }
-
-    private function updateDate()
-    {
-        return $this->attributes['updateDate'];
-    }
-
-    private function thumbnail()
-    {
-        return $this->attributes['thumbnail'];
-    }
-
-    private function has(string $string)
+    /**
+     * Determine whether the given attribute name exists
+     *
+     * @param string $string
+     * @return bool
+     */
+    private function has(string $string): bool
     {
         return isset($this->attributes[$string]);
+    }
+
+    /**
+     * Get the required field value and through an exception if it doesn't exist
+     *
+     * @param string $field_name
+     * @return string
+     * @throws \Exception
+     */
+    private function getRequiredField(string $field_name)
+    {
+        if(!$this->has($field_name)) {
+            throw new \Exception("Attribute {$field_name} is required");
+        }
+
+        return $this->attributes[$field_name];
     }
 }
