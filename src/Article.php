@@ -200,7 +200,9 @@ class Article extends Content implements ArticleInterface, StorableInterface
      */
     public function content(): string
     {
-        return ContentParser::forFile($this->getFilePath())->parse();
+        return $this->parseContentBlocks(
+            ContentParser::forFile($this->getFilePath())->parse()
+        );
     }
 
     /**

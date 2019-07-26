@@ -72,4 +72,15 @@ abstract class Content
 
         return "";
     }
+
+    /**
+     * Convert block tags in HTML strings into block content
+     *
+     * @param string $html_string
+     * @return string
+     */
+    protected function parseContentBlocks(string $html_string): string
+    {
+        return (new Block)->parseHtmlString($html_string);
+    }
 }
