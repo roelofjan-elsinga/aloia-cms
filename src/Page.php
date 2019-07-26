@@ -38,6 +38,20 @@ class Page extends Content implements PageInterface
             })
             ->first();
     }
+
+    /**
+     * Get the homepage
+     *
+     * @return null|Page
+     */
+    public static function homepage(): ?Page
+    {
+        return self::all()
+            ->filter(function (Page $page) {
+                return $page->isHomepage();
+            })
+            ->first();
+    }
     
     /**
      * Get the slug of this page
@@ -192,7 +206,9 @@ class Page extends Content implements PageInterface
      */
     public function content(): string
     {
-        return ContentParser::forFile($this->getFilePath())->parse();
+        return $this->parseContentBlocks(
+            ContentParser::forFile($this->getFilePath())->parse()
+        );
     }
 
     /**
@@ -284,6 +300,16 @@ class Page extends Content implements PageInterface
     public function isInMenu(): bool
     {
         return $this->page['in_menu'] ?? false;
+    }
+
+    /**
+     * Determine whether this page is the homepage
+     *
+     * @return bool
+     */
+    public function isHomepage(): bool
+    {
+        return $this->page['is_homepage'] ?? false;
     }
 
     /**

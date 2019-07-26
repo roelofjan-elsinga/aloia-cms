@@ -40,6 +40,7 @@ class Page implements DataSourceInterface
             'canonical',
             'author',
             'in_menu',
+            'is_homepage',
             'keywords',
             'image'
         ];

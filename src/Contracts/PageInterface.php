@@ -35,6 +35,13 @@ interface PageInterface extends ArticleInterface
     public function isInMenu(): bool;
 
     /**
+     * Determine whether this page is the homepage
+     *
+     * @return bool
+     */
+    public function isHomepage(): bool;
+
+    /**
      * Get the keywords of this page
      *
      * @return string
