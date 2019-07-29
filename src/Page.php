@@ -60,7 +60,7 @@ class Page extends Content implements PageInterface
      */
     public function slug(): string
     {
-        return pathinfo($this->page['filename'])['filename'] ?? "";
+        return pathinfo($this->page['filename'], PATHINFO_FILENAME) ?? "";
     }
 
     /**
@@ -71,6 +71,16 @@ class Page extends Content implements PageInterface
     public function type(): string
     {
         return "website";
+    }
+
+    /**
+     * Get the filename of this article
+     *
+     * @return string
+     */
+    public function fileType(): string
+    {
+        return pathinfo($this->article['filename'], PATHINFO_EXTENSION) ?? "";
     }
 
     /**

@@ -56,7 +56,7 @@ class Article extends Content implements ArticleInterface, StorableInterface
      */
     public function slug(): string
     {
-        return pathinfo($this->article['filename'])['filename'] ?? "";
+        return pathinfo($this->article['filename'], PATHINFO_FILENAME) ?? "";
     }
 
     /**
@@ -77,6 +77,16 @@ class Article extends Content implements ArticleInterface, StorableInterface
     public function filename(): string
     {
         return $this->article['filename'] ?? "";
+    }
+
+    /**
+     * Get the filename of this article
+     *
+     * @return string
+     */
+    public function fileType(): string
+    {
+        return pathinfo($this->article['filename'], PATHINFO_EXTENSION) ?? "";
     }
 
     /**

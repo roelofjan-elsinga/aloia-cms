@@ -41,4 +41,11 @@ interface ContentInterface
      * @return null|string
      */
     public function canonicalLink(): ?string;
+
+    /**
+     * Get the fileType of this article
+     *
+     * @return string
+     */
+    public function fileType(): string;
 }
