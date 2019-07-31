@@ -62,6 +62,16 @@ return [
          * */
         'file_path' => resource_path('content/metatags.json')
 
+    ],
+
+    'taxonomy' => [
+
+        /*
+         * This value represents the path to the file that holds the taxonomy data.
+         * This is used to create and resolve nesting in pages.
+         * */
+        'file_path' => resource_path('content/taxonomy.json')
+
     ]
 
 ];

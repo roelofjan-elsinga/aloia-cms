@@ -333,6 +333,16 @@ class Page extends Content implements PageInterface
     }
 
     /**
+     * Get the category of this page
+     *
+     * @return string
+     */
+    public function category(): string
+    {
+        return $this->page['category'] ?? 'home';
+    }
+
+    /**
      * Get the path to the meta data file
      *
      * @return string

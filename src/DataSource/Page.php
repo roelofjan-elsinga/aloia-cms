@@ -42,7 +42,8 @@ class Page implements DataSourceInterface
             'in_menu',
             'is_homepage',
             'keywords',
-            'image'
+            'image',
+            'category'
         ];
         
         $resource_fields = [
