@@ -72,6 +72,11 @@ class Taxonomy
         );
     }
 
+    /**
+     * Get the path of the file which contains the taxonomy information
+     *
+     * @return string
+     */
     private static function getFilePath(): string
     {
         return Config::get('flatfilecms.taxonomy.file_path');
@@ -85,39 +90,21 @@ class Taxonomy
      */
     public static function addChildToCategoryWithName(string $parent_name, array $child_category): void
     {
-        $taxonomy = Taxonomy::get()->toArray();
+        $taxonomies = Taxonomy::get()->toArray();
 
-        self::insert($taxonomy, $parent_name, $child_category);
-
-        self::update(new Collection($taxonomy));
-    }
-
-    /**
-     * Append a child category into the parent category
-     *
-     * @param array $taxonomies
-     * @param string $parent_name
-     * @param array $child_category
-     */
-    private static function insert(array &$taxonomies, string $parent_name, array $child_category): void
-    {
-        foreach($taxonomies as $index => $taxonomy) {
-
-            if($taxonomy['category_name'] === $parent_name) {
-
+        self::nestedConditionalTask(
+            $taxonomies,
+            function(array $taxonomy) use ($child_category) {
                 $taxonomy['children'][] = $child_category;
 
-                $taxonomies[$index] = $taxonomy;
-
-                break;
-
-            } else {
-
-                self::insert($taxonomy['children'], $parent_name, $child_category);
-
+                return $taxonomy;
+            },
+            function(array $taxonomy) use ($parent_name) {
+                return $taxonomy['category_name'] === $parent_name;
             }
+        );
 
-        }
+        self::update(new Collection($taxonomies));
     }
 
     /**
@@ -128,39 +115,114 @@ class Taxonomy
      */
     public static function updateCategoryWithUrlPrefix(string $parent_url_prefix, array $parent_category): void
     {
-        $taxonomy = Taxonomy::get()->toArray();
+        $taxonomies = Taxonomy::get()->toArray();
 
-        self::updateParent($taxonomy, $parent_url_prefix, $parent_category);
+        self::nestedConditionalTask(
+            $taxonomies,
+            function(array $taxonomy) use ($parent_category) {
+                $taxonomy['category_name'] = $parent_category['category_name'];
+                $taxonomy['category_url_prefix'] = $parent_category['category_url_prefix'];
 
-        self::update(new Collection($taxonomy));
+                return $taxonomy;
+            },
+            function(array $taxonomy) use ($parent_url_prefix) {
+                return $taxonomy['category_url_prefix'] === $parent_url_prefix;
+            }
+        );
+
+        self::update(new Collection($taxonomies));
     }
 
     /**
-     * Update the taxonomy details for the given parent name
+     * Get a list of all the category names with children
+     *
+     * @return Collection
+     */
+    public static function list(): Collection
+    {
+        $taxonomies = Taxonomy::get()->toArray();
+
+        self::nestedTask($taxonomies, function(array $taxonomy) {
+            return [
+                "category_name" => $taxonomy['category_name'],
+                "children" => $taxonomy['children'],
+            ];
+        });
+
+        return new Collection($taxonomies);
+    }
+
+    /**
+     * Perform a task on all nested taxonomies
      *
      * @param array $taxonomies
-     * @param string $parent_url_prefix
-     * @param array $parent_category
+     * @param callable $task
      */
-    private static function updateParent(array &$taxonomies, string $parent_url_prefix, array $parent_category): void
+    private static function nestedTask(array &$taxonomies, callable $task): void
     {
+
         foreach($taxonomies as $index => $taxonomy) {
 
-            if($taxonomy['category_url_prefix'] === $parent_url_prefix) {
+            $taxonomy = $task($taxonomy);
 
-                $taxonomies[$index]['category_name'] = $parent_category['category_name'];
-                $taxonomies[$index]['category_url_prefix'] = $parent_category['category_url_prefix'];
+            self::nestedTask($taxonomy['children'], $task);
 
-                break;
+            $taxonomies[$index] = $taxonomy;
+
+        }
+
+    }
+
+    /**
+     * Perform a task on all taxonomies if the condition passes validation
+     *
+     * @param array $taxonomies
+     * @param callable $task
+     * @param callable|null $condition
+     */
+    private static function nestedConditionalTask(array &$taxonomies, callable $task, ?callable $condition): void
+    {
+
+        foreach($taxonomies as $index => $taxonomy) {
+
+            if($condition($taxonomy)) {
+
+                $taxonomy = $task($taxonomy);
 
             } else {
 
-                self::updateParent($taxonomy['children'], $parent_url_prefix, $parent_category);
-
-                $taxonomies[$index]['children'] = $taxonomy['children'];
+                self::nestedConditionalTask($taxonomy['children'], $task, $condition);
 
             }
 
+            $taxonomies[$index] = $taxonomy;
+
         }
+
     }
+
+    /**
+     * Remove the category with the given name from the taxonomy
+     *
+     * @param string $category_name
+     */
+    public static function destroy(string $category_name): void
+    {
+        $taxonomies = Taxonomy::get()->toArray();
+
+        self::nestedTask(
+            $taxonomies,
+            function(array $taxonomy) use ($category_name) {
+
+                $taxonomy['children'] = array_filter($taxonomy['children'], function($child) use ($category_name) {
+                    return $child['category_name'] !== $category_name;
+                });
+
+                return $taxonomy;
+            }
+        );
+
+        self::update(new Collection($taxonomies));
+    }
+
 }
