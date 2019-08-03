@@ -7,6 +7,8 @@ use Carbon\Carbon;
 use ContentParser\ContentParser;
 use FlatFileCms\Contracts\PageInterface;
 use FlatFileCms\Contracts\StorableInterface;
+use FlatFileCms\Taxonomy\Taxonomy;
+use FlatFileCms\Taxonomy\TaxonomyLevel;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -28,13 +30,14 @@ class Page extends Content implements PageInterface
      * Get an page by slug
      *
      * @param string $slug
+     * @param bool $including_parents
      * @return null|Page
      */
-    public static function forSlug(string $slug): ?Page
+    public static function forSlug(string $slug, bool $including_parents = false): ?Page
     {
         return self::all()
-            ->filter(function (Page $page) use ($slug) {
-                return $page->slug() === $slug;
+            ->filter(function (Page $page) use ($slug, $including_parents) {
+                return $page->slug($including_parents) === $slug;
             })
             ->first();
     }
@@ -52,15 +55,27 @@ class Page extends Content implements PageInterface
             })
             ->first();
     }
-    
+
     /**
      * Get the slug of this page
      *
+     * @param bool $including_parents
      * @return string
      */
-    public function slug(): string
+    public function slug(bool $including_parents = false): string
     {
-        return pathinfo($this->page['filename'], PATHINFO_FILENAME) ?? "";
+        $slug_prefix = '';
+
+        if(isset($this->page['category']) && $including_parents) {
+
+            $category = Taxonomy::byName($this->page['category']);
+
+            if(!empty($category->fullUrl())) {
+                $slug_prefix = "{$category->fullUrl()}/";
+            }
+        }
+
+        return $slug_prefix . pathinfo($this->page['filename'], PATHINFO_FILENAME) ?? "";
     }
 
     /**
@@ -313,6 +328,17 @@ class Page extends Content implements PageInterface
     }
 
     /**
+     * Get the menu name of the page
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function menuName(): string
+    {
+        return $this->page['menu_name'] ?? $this->title();
+    }
+
+    /**
      * Determine whether this page is the homepage
      *
      * @return bool
@@ -330,6 +356,16 @@ class Page extends Content implements PageInterface
     public function keywords(): string
     {
         return $this->page['keywords'] ?? '';
+    }
+
+    /**
+     * Get the category of this page
+     *
+     * @return string
+     */
+    public function category(): string
+    {
+        return $this->page['category'] ?? 'home';
     }
 
     /**

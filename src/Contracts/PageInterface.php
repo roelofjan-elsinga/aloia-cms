@@ -48,4 +48,11 @@ interface PageInterface extends ArticleInterface
      */
     public function keywords(): string;
 
+    /**
+     * Get the category of this page
+     *
+     * @return string
+     */
+    public function category(): string;
+
 }
