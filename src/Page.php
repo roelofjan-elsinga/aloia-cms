@@ -313,6 +313,17 @@ class Page extends Content implements PageInterface
     }
 
     /**
+     * Get the menu name of the page
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function menuName(): string
+    {
+        return $this->page['menu_name'] ?? $this->title();
+    }
+
+    /**
      * Determine whether this page is the homepage
      *
      * @return bool
