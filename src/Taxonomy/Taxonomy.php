@@ -3,33 +3,69 @@
 
 namespace FlatFileCms\Taxonomy;
 
+use FlatFileCms\Page;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 
 class Taxonomy
 {
-
-    public static function get(): Collection
+    /**
+     * Get a TaxonomyCollection of TaxonomyLevel[]
+     *
+     * @return TaxonomyCollection
+     */
+    public static function get(): TaxonomyCollection
     {
         $file_path = self::getFilePath();
 
         self::validateFilePath($file_path);
 
-        // todo this needs to be converted to nested Taxonomy[]
+        return TaxonomyCollection::make(json_decode(File::get($file_path), true))
 
-        return Collection::make(json_decode(File::get($file_path), true));
+            ->map(function(array $data_source) {
 
+                return TaxonomyLevel::forDataSource($data_source);
+
+            });
     }
 
-    public function parent(): ?string
+    /**
+     * Get the TaxonomyLevel by name
+     *
+     * @param string $category_name
+     * @return TaxonomyLevel|null
+     */
+    public static function byName(string $category_name): ?TaxonomyLevel
     {
-        // return the name of the parent category, or null of this is home.
+        return self::get()
+
+            ->filter(function(TaxonomyLevel $level) use ($category_name) {
+
+                return $level->name() === $category_name;
+
+            })
+
+            ->first();
     }
 
-    public function children(): Collection
+    /**
+     * Get the TaxonomyLevel by URL
+     *
+     * @param string $category_url
+     * @return TaxonomyLevel|null
+     */
+    public static function byUrl(string $category_url): ?TaxonomyLevel
     {
-        return Collection::make(/*$this->attributes['children']*/);
+        return self::get()
+
+            ->filter(function(TaxonomyLevel $level) use ($category_url) {
+
+                return $level->url() === $category_url;
+
+            })
+
+            ->first();
     }
 
     /**
@@ -46,6 +82,7 @@ class Taxonomy
                     [
                         "category_url_prefix" => "",
                         "category_name" => "home",
+                        "parent_category" => null,
                         "children" => []
                     ]
                 ])
@@ -56,17 +93,21 @@ class Taxonomy
     /**
      * Update the meta data file with updated articles meta data
      *
-     * @param Collection $articles
+     * @param TaxonomyLevel[]|Collection $taxonomies
      */
-    public static function update(Collection $articles): void
+    public static function update(Collection $taxonomies): void
     {
         $file_path = self::getFilePath();
 
         File::put(
             $file_path,
-            $articles
-                ->map(function($article) {
-                    return \FlatFileCms\DataSource\Taxonomy::create($article)->toArray();
+            $taxonomies
+                ->map(function(TaxonomyLevel $level) {
+                    return [
+                        "category_url_prefix" => $level->url(),
+                        "category_name" => $level->name(),
+                        "parent_category" => $level->parent()
+                    ];
                 })
                 ->toJson(JSON_PRETTY_PRINT)
         );
@@ -90,21 +131,16 @@ class Taxonomy
      */
     public static function addChildToCategoryWithName(string $parent_name, array $child_category): void
     {
-        $taxonomies = Taxonomy::get()->toArray();
-
-        self::nestedConditionalTask(
-            $taxonomies,
-            function(array $taxonomy) use ($child_category) {
-                $taxonomy['children'][] = $child_category;
-
-                return $taxonomy;
-            },
-            function(array $taxonomy) use ($parent_name) {
-                return $taxonomy['category_name'] === $parent_name;
-            }
+        self::update(
+            new Collection(
+                Taxonomy::get()
+                    ->add(
+                        TaxonomyLevel::forDataSource(
+                            array_merge($child_category, ['parent_category' => $parent_name])
+                        )
+                    )
+            )
         );
-
-        self::update(new Collection($taxonomies));
     }
 
     /**
@@ -115,90 +151,56 @@ class Taxonomy
      */
     public static function updateCategoryWithUrlPrefix(string $parent_url_prefix, array $parent_category): void
     {
-        $taxonomies = Taxonomy::get()->toArray();
+        $updating_taxonomy = Taxonomy::byUrl($parent_url_prefix);
 
-        self::nestedConditionalTask(
-            $taxonomies,
-            function(array $taxonomy) use ($parent_category) {
-                $taxonomy['category_name'] = $parent_category['category_name'];
-                $taxonomy['category_url_prefix'] = $parent_category['category_url_prefix'];
+        self::update(
 
-                return $taxonomy;
-            },
-            function(array $taxonomy) use ($parent_url_prefix) {
-                return $taxonomy['category_url_prefix'] === $parent_url_prefix;
-            }
+            Taxonomy::get()
+
+                ->map(function(TaxonomyLevel $level) use ($parent_url_prefix, $parent_category, $updating_taxonomy) {
+
+                    if($level->url() === $parent_url_prefix) {
+
+                        self::onUpdatingTaxonomy($level->name(), $parent_category['category_name']);
+
+                        $level
+                            ->setName($parent_category['category_name'])
+                            ->setUrl($parent_category['category_url_prefix']);
+                    }
+
+                    // Update the children with the new parent category
+                    else if($level->parent() === $updating_taxonomy->name()) {
+                        $level->setParent($parent_category['category_name']);
+                    }
+
+                    return $level;
+
+                })
         );
-
-        self::update(new Collection($taxonomies));
     }
 
     /**
-     * Get a list of all the category names with children
+     * Change the category on pages from the old name to the new name
      *
-     * @return Collection
+     * @param string $old_taxonomy_name
+     * @param null|string $new_taxonomy_name
      */
-    public static function list(): Collection
+    private static function onUpdatingTaxonomy(string $old_taxonomy_name, ?string $new_taxonomy_name): void
     {
-        $taxonomies = Taxonomy::get()->toArray();
+        Page::update(
 
-        self::nestedTask($taxonomies, function(array $taxonomy) {
-            return [
-                "category_name" => $taxonomy['category_name'],
-                "children" => $taxonomy['children'],
-            ];
-        });
+            Page::raw()
 
-        return new Collection($taxonomies);
-    }
+                ->map(function(array $page) use ($old_taxonomy_name, $new_taxonomy_name) {
 
-    /**
-     * Perform a task on all nested taxonomies
-     *
-     * @param array $taxonomies
-     * @param callable $task
-     */
-    private static function nestedTask(array &$taxonomies, callable $task): void
-    {
+                    if(isset($page['category']) && $page['category'] === $old_taxonomy_name) {
+                        $page['category'] = $new_taxonomy_name;
+                    }
 
-        foreach($taxonomies as $index => $taxonomy) {
+                    return $page;
 
-            $taxonomy = $task($taxonomy);
-
-            self::nestedTask($taxonomy['children'], $task);
-
-            $taxonomies[$index] = $taxonomy;
-
-        }
-
-    }
-
-    /**
-     * Perform a task on all taxonomies if the condition passes validation
-     *
-     * @param array $taxonomies
-     * @param callable $task
-     * @param callable|null $condition
-     */
-    private static function nestedConditionalTask(array &$taxonomies, callable $task, ?callable $condition): void
-    {
-
-        foreach($taxonomies as $index => $taxonomy) {
-
-            if($condition($taxonomy)) {
-
-                $taxonomy = $task($taxonomy);
-
-            } else {
-
-                self::nestedConditionalTask($taxonomy['children'], $task, $condition);
-
-            }
-
-            $taxonomies[$index] = $taxonomy;
-
-        }
-
+                })
+        );
     }
 
     /**
@@ -208,21 +210,30 @@ class Taxonomy
      */
     public static function destroy(string $category_name): void
     {
-        $taxonomies = Taxonomy::get()->toArray();
+        self::onUpdatingTaxonomy($category_name, null);
 
-        self::nestedTask(
-            $taxonomies,
-            function(array $taxonomy) use ($category_name) {
+        self::update(
+            Taxonomy::get()
 
-                $taxonomy['children'] = array_filter($taxonomy['children'], function($child) use ($category_name) {
-                    return $child['category_name'] !== $category_name;
-                });
+                ->map(function(TaxonomyLevel $level) use ($category_name) {
 
-                return $taxonomy;
-            }
+                    // Update the children with the new parent category
+                    if($level->parent() === $category_name) {
+                        $level->setParent(null);
+                    }
+
+                    return $level;
+
+                })
+
+                ->filter(function(TaxonomyLevel $level) use ($category_name) {
+
+                    return $level->name() !== $category_name;
+
+                })
+
+                ->values()
         );
-
-        self::update(new Collection($taxonomies));
     }
 
 }
