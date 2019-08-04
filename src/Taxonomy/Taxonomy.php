@@ -50,6 +50,20 @@ class Taxonomy
     }
 
     /**
+     * Get an empty, default state of the TaxonomyLevel
+     *
+     * @return TaxonomyLevel|null
+     */
+    public static function emptyState(): ? TaxonomyLevel
+    {
+        return TaxonomyLevel::forDataSource([
+            'category_name' => 'home',
+            'category_url_prefix' => '',
+            'parent_category' => null
+        ]);
+    }
+
+    /**
      * Get the TaxonomyLevel by URL
      *
      * @param string $category_url

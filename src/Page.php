@@ -79,6 +79,18 @@ class Page extends Content implements PageInterface
     }
 
     /**
+     * Get the taxonomy level for this page, or null if none has been selected
+     *
+     * @return TaxonomyLevel
+     */
+    public function taxonomy(): TaxonomyLevel
+    {
+        return isset($this->page['category'])
+            ? Taxonomy::byName($this->page['category'])
+            : Taxonomy::emptyState();
+    }
+
+    /**
      * Get the type of this page
      *
      * @return string

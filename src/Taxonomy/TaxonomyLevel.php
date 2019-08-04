@@ -75,6 +75,26 @@ class TaxonomyLevel
      */
     public function fullUrl(): string
     {
+        $parents = $this->getParentTaxonomies();
+
+        return $parents
+            ->filter(function(TaxonomyLevel $level) {
+                return !empty($level->url());
+            })
+            ->reverse()
+            ->map(function(TaxonomyLevel $level) {
+                return $level->url();
+            })
+            ->implode('/');
+    }
+
+    /**
+     * Get the parent taxonomies
+     *
+     * @return Collection
+     */
+    public function getParentTaxonomies(): Collection
+    {
         $parents = new Collection();
 
         $current_level = Taxonomy::byName($this->name());
@@ -93,15 +113,7 @@ class TaxonomyLevel
 
         }
 
-        return $parents
-            ->filter(function(TaxonomyLevel $level) {
-                return !empty($level->url());
-            })
-            ->reverse()
-            ->map(function(TaxonomyLevel $level) {
-                return $level->url();
-            })
-            ->implode('/');
+        return $parents;
     }
 
     /**
