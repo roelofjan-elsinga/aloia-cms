@@ -93,12 +93,7 @@ class Taxonomy
         if(! File::exists($file_path)) {
             self::update(
                 new Collection([
-                    [
-                        "category_url_prefix" => "",
-                        "category_name" => "home",
-                        "parent_category" => null,
-                        "children" => []
-                    ]
+                    Taxonomy::emptyState()
                 ])
             );
         }
