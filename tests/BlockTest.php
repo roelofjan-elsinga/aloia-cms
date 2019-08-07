@@ -49,7 +49,7 @@ class BlockTest extends TestCase
 
         $block = new Block();
 
-        $this->assertSame("This is a ===replacement=== for the string", $block->parseHtmlString($html_string));
+        $this->assertSame("This is a <div>===replacement===</div> for the string", $block->parseHtmlString($html_string));
     }
 
     public function test_block_is_inserted_in_template()
@@ -60,7 +60,24 @@ class BlockTest extends TestCase
 
         $block = new Block();
 
-        $this->assertSame("This is a <strong>replacing text</strong> for the string", $block->parseHtmlString($html_string));
+        $this->assertSame(
+            "This is a <div><strong>replacing text</strong></div> for the string",
+            $block->parseHtmlString($html_string)
+        );
+    }
+
+    public function test_block_is_inserted_including_options()
+    {
+        $html_string = "This is a ===replacement[class=big small,style=color:red;]=== for the string";
+
+        file_put_contents("{$this->fs->getChild('content/blocks')->url()}/replacement.html", "<strong>replacing text</strong>");
+
+        $block = new Block();
+
+        $this->assertSame(
+            "This is a <div class=\"big small\" style=\"color:red;\"><strong>replacing text</strong></div> for the string",
+            $block->parseHtmlString($html_string)
+        );
     }
 
 }

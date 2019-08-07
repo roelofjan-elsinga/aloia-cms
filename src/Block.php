@@ -5,6 +5,7 @@ namespace FlatFileCms;
 
 use ContentParser\ContentParser;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
@@ -112,11 +113,7 @@ class Block
 
             $block_name = trim(str_replace("===", "", $tag));
 
-            $replacement = $this->get($block_name);
-
-            if(!empty($replacement)) {
-                $replacements[$tag] = $replacement;
-            }
+            $replacements[$tag] = $this->getReplacementFromBlockName($tag, $block_name);
 
         }
 
@@ -150,6 +147,49 @@ class Block
         } else {
             return [];
         }
+    }
+
+    /**
+     * Parse the options given to the blocks and apply them as attributes to the surrounding div
+     *
+     * @param string $tag
+     * @param string $block_name
+     * @return string
+     */
+    private function getReplacementFromBlockName(string $tag, string $block_name): string
+    {
+        $index_of_options = strpos($block_name, '[');
+
+        $options = '';
+
+        if($index_of_options !== false) {
+
+            $options_string = substr($block_name, $index_of_options + 1, -1);
+
+            if(strlen($options_string) > 0) {
+                $options = Collection::make(explode(',', $options_string))
+                    ->reduce(function(string $carry, string $option) {
+
+                        $option_pair = explode('=', $option);
+
+                        return "{$carry}{$option_pair[0]}=\"{$option_pair[1]}\" ";
+
+                    }, ' ');
+
+                $options = rtrim($options);
+
+                $block_name = substr($block_name, 0, $index_of_options);
+            }
+
+        }
+
+        $block_value = $this->get($block_name);
+
+        if(empty($block_value)) {
+            $block_value = $tag;
+        }
+
+        return "<div{$options}>{$block_value}</div>";
     }
 
 }
