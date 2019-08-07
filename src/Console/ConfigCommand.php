@@ -1,7 +1,7 @@
 <?php
 
 
-namespace FlatFileCms\Commands;
+namespace FlatFileCms\Console;
 
 use Illuminate\Console\Command;
 

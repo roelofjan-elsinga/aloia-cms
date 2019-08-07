@@ -112,7 +112,11 @@ class Block
 
             $block_name = trim(str_replace("===", "", $tag));
 
-            $replacements[$tag] = $this->get($block_name);
+            $replacement = $this->get($block_name);
+
+            if(!empty($replacement)) {
+                $replacements[$tag] = $replacement;
+            }
 
         }
 

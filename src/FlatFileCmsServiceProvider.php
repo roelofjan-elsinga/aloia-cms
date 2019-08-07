@@ -2,9 +2,9 @@
 
 namespace FlatFileCms;
 
-use FlatFileCms\Commands\ConfigCommand;
-use FlatFileCms\Commands\GenerateArticleFiles;
-use FlatFileCms\Commands\NewArticle;
+use FlatFileCms\Console\ConfigCommand;
+use FlatFileCms\Console\GenerateArticleFiles;
+use FlatFileCms\Console\NewArticle;
 use Illuminate\Support\ServiceProvider;
 
 class FlatFileCmsServiceProvider extends ServiceProvider

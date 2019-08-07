@@ -1,6 +1,6 @@
 <?php
 
-namespace FlatFileCms\Commands;
+namespace FlatFileCms\Console;
 
 use Carbon\Carbon;
 use FlatFileCms\Article;
@@ -14,7 +14,7 @@ class NewArticle extends Command
      *
      * @var string
      */
-    protected $signature = 'new:article {--slug=} {--post_date=} {--file_type=md}';
+    protected $signature = 'flatfilecms:new:article {--slug=} {--post_date=} {--file_type=md}';
 
     /**
      * The console command description.

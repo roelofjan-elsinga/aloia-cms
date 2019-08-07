@@ -1,13 +1,6 @@
 {
   "name": "roelofjan-elsinga/flat-file-cms",
   "description": "A drop-in flat file CMS for Laravel.",
-  "require": {
-    "roelofjan-elsinga/content-to-html-parser": "^0.1.0",
-    "illuminate/support": "^5.7",
-    "illuminate/console": "^5.7",
-    "ext-json": "*",
-    "ext-dom": "*"
-  },
   "keywords": [
     "laravel",
     "cms",
@@ -20,11 +13,16 @@
       "email": "roelofjanelsinga@gmail.com"
     }
   ],
-  "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
-      "FlatFileCms\\": "src/"
+      "FlatFileCms\\": "src/",
+      "FlatFileCms\\Tests\\": "tests/"
     }
+  },
+  "autoload-dev": {
+    "classmap": [
+      "tests/TestCase.php"
+    ]
   },
   "extra": {
     "laravel": {
@@ -32,5 +30,17 @@
         "FlatFileCms\\FlatFileCmsServiceProvider"
       ]
     }
+  },
+  "require": {
+    "roelofjan-elsinga/content-to-html-parser": "^0.1.0",
+    "illuminate/support": "^5.7",
+    "illuminate/console": "^5.7",
+    "ext-json": "*",
+    "ext-dom": "*"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^3.8",
+    "mikey179/vfsstream": "^1.6",
+    "phpunit/phpunit": "^8.3"
   }
 }

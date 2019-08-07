@@ -1,6 +1,6 @@
 <?php
 
-namespace FlatFileCms\Commands;
+namespace FlatFileCms\Console;
 
 use FlatFileCms\Article;
 use Illuminate\Console\Command;
@@ -15,7 +15,7 @@ class GenerateArticleFiles extends Command
      *
      * @var string
      */
-    protected $signature = 'article:generate';
+    protected $signature = 'flatfilecms:article:generate';
 
     /**
      * The console command description.
