@@ -72,6 +72,15 @@ return [
          * */
         'file_path' => resource_path('content/taxonomy.json')
 
+    ],
+
+    'uploaded_files' => [
+
+        /*
+         * This value represents the folder in which the uploaded files can be found.
+         * */
+        'folder_path' => public_path('files')
+
     ]
 
 ];

@@ -29,7 +29,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
             'content' => [
                 'pages' => [],
                 'articles' => [],
-                'blocks' => []
+                'blocks' => [],
+                'test-file.txt' => 'Test'
             ]
         ]);
 
@@ -42,6 +43,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
         Config::set('flatfilecms.content_blocks.folder_path', "{$content_path}/blocks");
         Config::set('flatfilecms.meta_tags.file_path', "{$content_path}/metatags.json");
         Config::set('flatfilecms.taxonomy.file_path', "{$content_path}/taxonomy.json");
+        Config::set('flatfilecms.uploaded_files.folder_path', "{$content_path}/files");
     }
 
     protected function getPackageProviders($app)
