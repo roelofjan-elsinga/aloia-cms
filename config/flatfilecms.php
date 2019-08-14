@@ -81,6 +81,20 @@ return [
          * */
         'folder_path' => public_path('files')
 
-    ]
+    ],
+
+    'permissions' => [
+
+        /*
+         * This value represents the user the webserver uses to serve the static files
+         * */
+        'user' => env('FILE_OWNER', 'www-data'),
+
+        /*
+         * This value represents the user group the webserver user belongs to
+         * */
+        'group' => env('FILE_GROUP', 'www-data')
+
+    ],
 
 ];

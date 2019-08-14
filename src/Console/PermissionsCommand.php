@@ -13,7 +13,7 @@ class PermissionsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'flatfilecms:set-permissions {--user=} {--group=}';
+    protected $signature = 'flatfilecms:set-permissions';
 
     /**
      * The console command description.
@@ -40,11 +40,15 @@ class PermissionsCommand extends Command
             Config::get('flatfilecms.uploaded_files.folder_path'),
         ];
 
+        $user = Config::get('flatfilecms.permissions.user');
+
+        $group = Config::get('flatfilecms.permissions.group');
+
         foreach($resource_paths as $resource_path) {
 
-            $this->info("Setting owner of \"{$resource_path}\" to {$this->option('user')}:{$this->option('group')}");
+            $this->info("Setting owner of \"{$resource_path}\" to {$user}:{$group}");
 
-            system("chown -R {$this->option('user')}:{$this->option('group')} {$resource_path}");
+            system("chown -R {$user}:{$group} {$resource_path}");
 
         }
     }
