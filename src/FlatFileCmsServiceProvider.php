@@ -5,6 +5,7 @@ namespace FlatFileCms;
 use FlatFileCms\Console\ConfigCommand;
 use FlatFileCms\Console\GenerateArticleFiles;
 use FlatFileCms\Console\NewArticle;
+use FlatFileCms\Console\PermissionsCommand;
 use FlatFileCms\Console\SelfUpgradeCommand;
 use Illuminate\Support\ServiceProvider;
 
@@ -30,6 +31,7 @@ class FlatFileCmsServiceProvider extends ServiceProvider
                 NewArticle::class,
                 ConfigCommand::class,
                 SelfUpgradeCommand::class,
+                PermissionsCommand::class,
             ]);
         }
     }
