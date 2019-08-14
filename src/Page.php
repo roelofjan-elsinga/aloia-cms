@@ -393,7 +393,7 @@ class Page extends Content implements PageInterface
     /**
      * Get all content resources
      *
-     * @return Collection|StorableInterface[]
+     * @return Collection|PageInterface[]
      */
     public static function all(): Collection
     {
@@ -405,6 +405,20 @@ class Page extends Content implements PageInterface
             ->map(function ($page) {
                 return new static($page);
             });
+    }
+
+    /**
+     * Get all content resources
+     *
+     * @return Collection|PageInterface[]
+     */
+    public static function published(): Collection
+    {
+        return Page::all()
+            ->filter(function (Page $page) {
+                return $page->isPublished();
+            })
+            ->values();
     }
 
     /**
