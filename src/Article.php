@@ -345,7 +345,13 @@ class Article extends Content implements ArticleInterface, StorableInterface
      */
     protected static function validateMetaDataFile(string $file_path)
     {
-        if(! File::exists($file_path)) {
+        $articles_folder_path = Config::get('flatfilecms.articles.folder_path');
+
+        if(! is_dir($articles_folder_path)) {
+            mkdir($articles_folder_path);
+        }
+
+        if(! file_exists($file_path)) {
             self::update(
                 new Collection()
             );

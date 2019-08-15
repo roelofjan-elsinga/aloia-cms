@@ -443,7 +443,13 @@ class Page extends Content implements PageInterface
      */
     protected static function validateMetaDataFile(string $file_path)
     {
-        if(! File::exists($file_path)) {
+        $pages_folder_path = Config::get('flatfilecms.pages.folder_path');
+
+        if(! is_dir($pages_folder_path)) {
+            mkdir($pages_folder_path);
+        }
+
+        if(! file_exists($file_path)) {
             self::update(
                 new Collection()
             );
