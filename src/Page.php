@@ -249,6 +249,36 @@ class Page extends Content implements PageInterface
     }
 
     /**
+     * Get custom sidebar content
+     *
+     * @return null|string
+     */
+    public function sidebar(): ?string
+    {
+        if(isset($this->page['sidebar']) && !empty($this->page['sidebar'])) {
+            return $this->parseContentBlocks(
+                $this->page['sidebar']
+            );
+        }
+
+        return null;
+    }
+
+    /**
+     * Get custom raw sidebar content
+     *
+     * @return null|string
+     */
+    public function rawSidebar(): ?string
+    {
+        if(isset($this->page['sidebar']) && !empty($this->page['sidebar'])) {
+            return $this->page['sidebar'];
+        }
+
+        return null;
+    }
+
+    /**
      * Get the file path of this page
      *
      * @return string

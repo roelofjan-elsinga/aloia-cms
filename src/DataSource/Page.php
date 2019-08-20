@@ -44,7 +44,8 @@ class Page implements DataSourceInterface
             'keywords',
             'image',
             'category',
-            'menu_name'
+            'menu_name',
+            'sidebar'
         ];
         
         $resource_fields = [
