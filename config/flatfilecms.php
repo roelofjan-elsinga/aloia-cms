@@ -40,7 +40,13 @@ return [
          * This value represents the location in which the post images are found.
          * This is used to generate URL's to display the images
          * */
-        'image_path' => 'images/articles'
+        'image_path' => 'images/articles',
+
+        /*
+         * This value represents the prefix in the URL before the slug of the article.
+         * This is used to generate URL's for the articles
+         * */
+        'url_prefix' => 'articles'
 
     ],
 

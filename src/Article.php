@@ -52,11 +52,19 @@ class Article extends Content implements ArticleInterface, StorableInterface
     /**
      * Get the slug of this article
      *
+     * @param bool $including_parents
      * @return string
      */
-    public function slug(): string
+    public function slug(bool $including_parents = false): string
     {
-        return pathinfo($this->article['filename'], PATHINFO_FILENAME) ?? "";
+        $slug_prefix = '';
+
+        if($including_parents) {
+            $slug_prefix = Config::get('flatfilecms.articles.url_prefix');
+            $slug_prefix .= '/';
+        }
+
+        return $slug_prefix . pathinfo($this->article['filename'], PATHINFO_FILENAME) ?? "";
     }
 
     /**
