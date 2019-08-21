@@ -30,7 +30,7 @@ class FileFinder
 
             return Collection::make($files)
 
-                ->map(function(string $file_path) use ($instance_name): ArticleInterface {
+                ->map(function(string $file_path) use ($instance_name): ?ArticleInterface {
 
                     $filename_without_extension = pathinfo($file_path, PATHINFO_FILENAME);
 
@@ -38,7 +38,7 @@ class FileFinder
 
                 })
 
-                ->filter(function(ArticleInterface $article) {
+                ->filter(function(?ArticleInterface $article) {
 
                     return !is_null($article) && $article->isPublished();
 
