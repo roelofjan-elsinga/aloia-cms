@@ -3,39 +3,44 @@
 namespace FlatFileCms\Search;
 
 use FlatFileCms\Article;
+use FlatFileCms\Contracts\ArticleInterface;
 use FlatFileCms\Contracts\StorableInterface;
+use FlatFileCms\Page;
 use Illuminate\Support\Collection;
 
 class FileFinder
 {
 
-    /**@var string $folder_path*/
-    private $folder_path;
-
-    public function __construct(StorableInterface $storable)
-    {
-        $this->folder_path = $storable->getFolderPath();
-    }
-
     /**
      * Search for the given text in this folder_path
      *
+     * @param StorableInterface $storable
      * @param string $search_string
      * @return Collection|Article[]
      */
-    public function find(string $search_string): Collection
+    public static function find(StorableInterface $storable, string $search_string): Collection
     {
         try {
 
-            exec("grep -iRl \"{$search_string}\" {$this->folder_path}", $files);
+            $instance_name = get_class($storable);
+
+            $folder_path = $storable->getFolderPath();
+
+            exec("grep -iRl \"{$search_string}\" {$folder_path}", $files);
 
             return Collection::make($files)
 
-                ->map(function(string $file_path) {
+                ->map(function(string $file_path) use ($instance_name): ArticleInterface {
 
                     $filename_without_extension = pathinfo($file_path, PATHINFO_FILENAME);
 
-                    return Article::forSlug($filename_without_extension);
+                    return $instance_name::forSlug($filename_without_extension);
+
+                })
+
+                ->filter(function(ArticleInterface $article) {
+
+                    return !is_null($article) && $article->isPublished();
 
                 });
 

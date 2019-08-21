@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 
-class Page extends Content implements PageInterface
+class Page extends Content implements PageInterface, StorableInterface
 {
     private $page;
 
@@ -40,6 +40,16 @@ class Page extends Content implements PageInterface
                 return $page->slug($including_parents) === $slug;
             })
             ->first();
+    }
+
+    /**
+     * Return a new instance of this Page
+     *
+     * @return Page|null
+     */
+    public static function instance(): ?Page
+    {
+        return new static([]);
     }
 
     /**
@@ -159,8 +169,12 @@ class Page extends Content implements PageInterface
      */
     public function rawPostDate(): Carbon
     {
-        return Carbon::createFromFormat("Y-m-d", $this->page['postDate'])
-            ->setTimeFromTimeString("12:00:00");
+        try {
+            return Carbon::createFromFormat("Y-m-d", $this->page['postDate'])
+                ->setTimeFromTimeString("12:00:00");
+        } catch (\Exception $exception) {
+            return Carbon::now();
+        }
     }
 
     /**
