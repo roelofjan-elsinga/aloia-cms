@@ -80,4 +80,18 @@ class BlockTest extends TestCase
         );
     }
 
+    public function test_block_gets_link_when_href_is_included()
+    {
+        $html_string = "This is a ===replacement[class=big small,href=/link-to-page]=== for the string";
+
+        file_put_contents("{$this->fs->getChild('content/blocks')->url()}/replacement.html", "<strong>replacing text</strong>");
+
+        $block = new Block();
+
+        $this->assertSame(
+            "This is a <div class=\"big small\"><a href=\"/link-to-page\"><strong>replacing text</strong></a></div> for the string",
+            $block->parseHtmlString($html_string)
+        );
+    }
+
 }

@@ -162,21 +162,16 @@ class Block
 
         $options = '';
 
+        $link = null;
+
         if($index_of_options !== false) {
 
             $options_string = substr($block_name, $index_of_options + 1, -1);
 
             if(strlen($options_string) > 0) {
-                $options = Collection::make(explode(',', $options_string))
-                    ->reduce(function(string $carry, string $option) {
+                $options = $this->blockAttributes($options_string);
 
-                        $option_pair = explode('=', $option);
-
-                        return "{$carry}{$option_pair[0]}=\"{$option_pair[1]}\" ";
-
-                    }, ' ');
-
-                $options = rtrim($options);
+                $link = $this->linkAttributes($options_string);
 
                 $block_name = substr($block_name, 0, $index_of_options);
             }
@@ -189,7 +184,83 @@ class Block
             $block_value = $tag;
         }
 
-        return "<div{$options}>{$block_value}</div>";
+        return "<div{$options}>{$this->linkTag($link)}{$block_value}{$this->linkTag($link, false)}</div>";
+    }
+
+    /**
+     * Get the attributes applied to the content block
+     *
+     * @param string $options_string
+     * @return Collection
+     */
+    private function wrapperAttributes(string $options_string): Collection
+    {
+        return Collection::make(explode(',', $options_string))
+            ->map(function(string $option_string) {
+                return explode('=', $option_string);
+            });
+    }
+
+    /**
+     * Get the link attributes applied to the content block
+     *
+     * @param string $options_string
+     * @return string
+     */
+    private function linkAttributes(string $options_string): string
+    {
+        $attributes = $this->wrapperAttributes($options_string)
+            ->filter(function(array $option) {
+                return in_array($option[0], ['href']);
+            });
+
+        return rtrim($this->toAttributesString($attributes));
+    }
+
+    /**
+     * Get the block (div) attributes applied to the content block
+     *
+     * @param string $options_string
+     * @return string
+     */
+    private function blockAttributes(string $options_string): string
+    {
+        $attributes = $this->wrapperAttributes($options_string)
+            ->filter(function(array $option) {
+                return in_array($option[0], ['class', 'id', 'style']);
+            });
+
+        return rtrim($this->toAttributesString($attributes));
+    }
+
+    /**
+     * Generate a string from the attributes
+     *
+     * @param Collection $attributes
+     * @return string
+     */
+    private function toAttributesString(Collection $attributes): string
+    {
+        return $attributes
+            ->reduce(function(string $carry, array $option_pair) {
+                return "{$carry}{$option_pair[0]}=\"{$option_pair[1]}\" ";
+            }, ' ');
+    }
+
+    /**
+     * Generate an anchor tag from the given link attributes
+     *
+     * @param null|string $link
+     * @param bool $open_tag
+     * @return string
+     */
+    private function linkTag(?string $link, bool $open_tag = true): string
+    {
+        if(!is_null($link) && !empty($link)) {
+            return $open_tag ? "<a{$link}>" : "</a>";
+        }
+
+        return "";
     }
 
 }
