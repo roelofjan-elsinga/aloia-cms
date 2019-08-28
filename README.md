@@ -1,3 +1,10 @@
+<p align="center">
+<a href="https://travis-ci.com/roelofjan-elsinga/flat-file-cms"><img src="https://travis-ci.com/roelofjan-elsinga/flat-file-cms.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/roelofjan-elsinga/flat-file-cms"><img src="https://poser.pugx.org/roelofjan-elsinga/flat-file-cms/downloads" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/roelofjan-elsinga/flat-file-cms"><img src="https://poser.pugx.org/roelofjan-elsinga/flat-file-cms/v/stable" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/roelofjan-elsinga/flat-file-cms"><img src="https://poser.pugx.org/roelofjan-elsinga/flat-file-cms/license" alt="License"></a>
+</p>
+
 # Flat File CMS
 
 This package contains a drop-in CMS that uses files to store its contents.
@@ -103,7 +110,7 @@ Using a content block in a HTML or Markdown file managed through the CMS:
 <!--page managed through the CMS-->
 ===content===
 
-<!==resulting HTML output==>
+<!--resulting HTML output-->
 <div>
     <h1>This is a title</h1>
 </div>
@@ -118,7 +125,7 @@ Adding a class to the content block:
 <!--page managed through the CMS-->
 ===content[class=primary-block]===
 
-<!==resulting HTML output==>
+<!--resulting HTML output-->
 <div class="primary-block">
     <h1>This is a title</h1>
 </div>
@@ -133,7 +140,7 @@ Adding multiple classes and a style tag to the content block:
 <!--page managed through the CMS-->
 ===content[class=block primary-block,style=color:red;]===
 
-<!==resulting HTML output==>
+<!--resulting HTML output-->
 <div class="block primary-block" style="color:red;">
     <h1>This is a title</h1>
 </div>
@@ -147,7 +154,7 @@ When you add a href attribute to the content block, you get a nested anchor tag:
 <!--page managed through the CMS-->
 ===content[class=primary-block,href=/link-to-a-page]===
 
-<!==resulting HTML output==>
+<!--resulting HTML output-->
 <div class="primary-block">
     <a href="/link-to-a-page">
         <h1>This is a title</h1>
