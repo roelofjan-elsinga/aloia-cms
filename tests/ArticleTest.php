@@ -3,14 +3,12 @@
 
 namespace FlatFileCms\Tests;
 
-
 use FlatFileCms\Article;
 use Illuminate\Support\Collection;
 use org\bovigo\vfs\vfsStream;
 
 class ArticleTest extends TestCase
 {
-
     public function test_articles_file_is_created_when_non_exists()
     {
         $this->assertFalse($this->fs->hasChild('content/articles.json'));
@@ -106,5 +104,4 @@ class ArticleTest extends TestCase
 
         $this->assertSame(0, $articles->count());
     }
-
 }

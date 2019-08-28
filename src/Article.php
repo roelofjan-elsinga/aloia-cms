@@ -59,7 +59,7 @@ class Article extends Content implements ArticleInterface, StorableInterface
     {
         $slug_prefix = '';
 
-        if($including_parents) {
+        if ($including_parents) {
             $slug_prefix = Config::get('flatfilecms.articles.url_prefix');
             $slug_prefix .= '/';
         }
@@ -355,11 +355,11 @@ class Article extends Content implements ArticleInterface, StorableInterface
     {
         $articles_folder_path = Config::get('flatfilecms.articles.folder_path');
 
-        if(! is_dir($articles_folder_path)) {
+        if (! is_dir($articles_folder_path)) {
             mkdir($articles_folder_path);
         }
 
-        if(! file_exists($file_path)) {
+        if (! file_exists($file_path)) {
             self::update(
                 new Collection()
             );
@@ -378,7 +378,7 @@ class Article extends Content implements ArticleInterface, StorableInterface
         File::put(
             $file_path,
             $articles
-                ->map(function($article) {
+                ->map(function ($article) {
                     return \FlatFileCms\DataSource\Article::create($article)->toArray();
                 })
                 ->toJson(JSON_PRETTY_PRINT)

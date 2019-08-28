@@ -4,8 +4,8 @@ namespace FlatFileCms\Tests;
 
 use FlatFileCms\FlatFileCmsServiceProvider;
 use Illuminate\Support\Facades\Config;
-use org\bovigo\vfs\vfsStream,
-    org\bovigo\vfs\vfsStreamDirectory;
+use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {

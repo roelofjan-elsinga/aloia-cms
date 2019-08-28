@@ -2,7 +2,6 @@
 
 namespace FlatFileCms;
 
-
 use Carbon\Carbon;
 use ContentParser\ContentParser;
 use FlatFileCms\Contracts\PageInterface;
@@ -76,11 +75,10 @@ class Page extends Content implements PageInterface, StorableInterface
     {
         $slug_prefix = '';
 
-        if(isset($this->page['category']) && $including_parents) {
-
+        if (isset($this->page['category']) && $including_parents) {
             $category = Taxonomy::byName($this->page['category']);
 
-            if(!empty($category->fullUrl())) {
+            if (!empty($category->fullUrl())) {
                 $slug_prefix = "{$category->fullUrl()}/";
             }
         }
@@ -269,7 +267,7 @@ class Page extends Content implements PageInterface, StorableInterface
      */
     public function sidebar(): ?string
     {
-        if(isset($this->page['sidebar']) && !empty($this->page['sidebar'])) {
+        if (isset($this->page['sidebar']) && !empty($this->page['sidebar'])) {
             return $this->parseContentBlocks(
                 $this->page['sidebar']
             );
@@ -285,7 +283,7 @@ class Page extends Content implements PageInterface, StorableInterface
      */
     public function rawSidebar(): ?string
     {
-        if(isset($this->page['sidebar']) && !empty($this->page['sidebar'])) {
+        if (isset($this->page['sidebar']) && !empty($this->page['sidebar'])) {
             return $this->page['sidebar'];
         }
 
@@ -489,11 +487,11 @@ class Page extends Content implements PageInterface, StorableInterface
     {
         $pages_folder_path = Config::get('flatfilecms.pages.folder_path');
 
-        if(! is_dir($pages_folder_path)) {
+        if (! is_dir($pages_folder_path)) {
             mkdir($pages_folder_path);
         }
 
-        if(! file_exists($file_path)) {
+        if (! file_exists($file_path)) {
             self::update(
                 new Collection()
             );
@@ -512,7 +510,7 @@ class Page extends Content implements PageInterface, StorableInterface
         File::put(
             $file_path,
             $articles
-                ->map(function($article) {
+                ->map(function ($article) {
                     return \FlatFileCms\DataSource\Page::create($article)->toArray();
                 })
                 ->toJson(JSON_PRETTY_PRINT)

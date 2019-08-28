@@ -2,7 +2,6 @@
 
 namespace FlatFileCms\DataSource;
 
-
 use FlatFileCms\Contracts\DataSourceInterface;
 
 class Page implements DataSourceInterface
@@ -59,8 +58,8 @@ class Page implements DataSourceInterface
             'template_name' => $this->getRequiredField('template_name'),
         ];
         
-        foreach($optional_fields as $field_name) {
-            if($this->has($field_name)) {
+        foreach ($optional_fields as $field_name) {
+            if ($this->has($field_name)) {
                 $resource_fields[$field_name] = $this->attributes[$field_name];
             }
         }
@@ -80,7 +79,7 @@ class Page implements DataSourceInterface
      */
     private function getRequiredField(string $field_name)
     {
-        if(!$this->has($field_name)) {
+        if (!$this->has($field_name)) {
             throw new \Exception("Attribute {$field_name} is required");
         }
 

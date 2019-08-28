@@ -3,7 +3,6 @@
 
 namespace FlatFileCms\Taxonomy;
 
-
 use Illuminate\Support\Collection;
 
 class TaxonomyLevel
@@ -78,11 +77,11 @@ class TaxonomyLevel
         $parents = $this->getParentTaxonomies();
 
         return $parents
-            ->filter(function(TaxonomyLevel $level) {
+            ->filter(function (TaxonomyLevel $level) {
                 return !empty($level->url());
             })
             ->reverse()
-            ->map(function(TaxonomyLevel $level) {
+            ->map(function (TaxonomyLevel $level) {
                 return $level->url();
             })
             ->implode('/');
@@ -103,14 +102,12 @@ class TaxonomyLevel
 
         $parent = $current_level->parent();
 
-        while(!is_null($parent)) {
-
+        while (!is_null($parent)) {
             $current_level = Taxonomy::byName($parent);
 
             $parents->add($current_level);
 
             $parent = $current_level->parent();
-
         }
 
         return $parents;
@@ -196,7 +193,7 @@ class TaxonomyLevel
      */
     public function addChildren(Collection $levels): TaxonomyLevel
     {
-        foreach($levels as $level) {
+        foreach ($levels as $level) {
             $this->addChild($level);
         }
 

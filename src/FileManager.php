@@ -3,7 +3,6 @@
 
 namespace FlatFileCms;
 
-
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
@@ -55,8 +54,8 @@ class FileManager
      */
     public function get(): Collection
     {
-        return Collection::make( File::allFiles($this->uploaded_files_folder_path) )
-            ->map(function(string $file_path) {
+        return Collection::make(File::allFiles($this->uploaded_files_folder_path))
+            ->map(function (string $file_path) {
                 return \FlatFileCms\DataSource\File::forFilePath($file_path);
             });
     }
@@ -98,9 +97,8 @@ class FileManager
      */
     private function assertFolderPathExists()
     {
-        if(!is_dir($this->uploaded_files_folder_path)) {
+        if (!is_dir($this->uploaded_files_folder_path)) {
             mkdir($this->uploaded_files_folder_path);
         }
     }
-
 }

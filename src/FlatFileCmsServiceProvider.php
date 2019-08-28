@@ -11,7 +11,6 @@ use Illuminate\Support\ServiceProvider;
 
 class FlatFileCmsServiceProvider extends ServiceProvider
 {
-
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/flatfilecms.php', 'flatfilecms');
@@ -45,5 +44,4 @@ class FlatFileCmsServiceProvider extends ServiceProvider
             return new Block;
         });
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace FlatFileCms\Contracts;
 
-
 interface PageInterface extends ArticleInterface
 {
 
@@ -54,5 +53,4 @@ interface PageInterface extends ArticleInterface
      * @return string
      */
     public function category(): string;
-
 }

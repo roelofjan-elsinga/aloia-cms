@@ -2,12 +2,10 @@
 
 namespace FlatFileCms\DataSource;
 
-
 use FlatFileCms\Contracts\DataSourceInterface;
 
 class Article implements DataSourceInterface
 {
-
     private $attributes;
 
     private function __construct(array $attributes)
@@ -49,8 +47,8 @@ class Article implements DataSourceInterface
             'postDate' => $this->getRequiredField('postDate')
         ];
 
-        foreach($optional_fields as $field_name) {
-            if($this->has($field_name)) {
+        foreach ($optional_fields as $field_name) {
+            if ($this->has($field_name)) {
                 $resource_fields[$field_name] = $this->attributes[$field_name];
             }
         }
@@ -78,7 +76,7 @@ class Article implements DataSourceInterface
      */
     private function getRequiredField(string $field_name)
     {
-        if(!$this->has($field_name)) {
+        if (!$this->has($field_name)) {
             throw new \Exception("Attribute {$field_name} is required");
         }
 

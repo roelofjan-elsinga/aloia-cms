@@ -44,12 +44,10 @@ class PermissionsCommand extends Command
 
         $group = Config::get('flatfilecms.permissions.group');
 
-        foreach($resource_paths as $resource_path) {
-
+        foreach ($resource_paths as $resource_path) {
             $this->info("Setting owner of \"{$resource_path}\" to {$user}:{$group}");
 
             system("chown -R {$user}:{$group} {$resource_path}");
-
         }
     }
 }

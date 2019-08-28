@@ -3,14 +3,12 @@
 
 namespace FlatFileCms\Tests;
 
-
 use FlatFileCms\Page;
 use Illuminate\Support\Collection;
 use org\bovigo\vfs\vfsStream;
 
 class PageTest extends TestCase
 {
-
     public function test_pages_file_is_created_when_non_exists()
     {
         $this->assertFalse($this->fs->hasChild('content/pages.json'));
@@ -119,5 +117,4 @@ class PageTest extends TestCase
         $this->assertNotNull($article);
         $this->assertSame('Testing', $article->title());
     }
-
 }

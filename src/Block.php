@@ -2,7 +2,6 @@
 
 namespace FlatFileCms;
 
-
 use ContentParser\ContentParser;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Collection;
@@ -22,19 +21,15 @@ class Block
     public function get(string $block_name): string
     {
         try {
-
             $file_path = $this->getFilePathFromName($block_name);
 
             $parsed_content = ContentParser::forFile($file_path)->parse();
 
             return $parsed_content;
-
-        } catch(\Exception $exception) {
-
+        } catch (\Exception $exception) {
             Log::error($exception->getMessage());
 
             return "";
-
         }
     }
 
@@ -51,14 +46,13 @@ class Block
 
         $files_in_folder = File::allFiles($folder_path);
 
-        $requested_files = array_values(array_filter($files_in_folder, function(\SplFileInfo $file) use ($block_name) {
-
+        $requested_files = array_values(array_filter($files_in_folder, function (\SplFileInfo $file) use ($block_name) {
             $filename = str_replace(".{$file->getExtension()}", "", $file->getFilename());
 
             return $filename === $block_name;
         }));
 
-        if(count($requested_files) === 0) {
+        if (count($requested_files) === 0) {
             throw new FileNotFoundException("Content block with name {$block_name} was not found at {$folder_path}");
         }
 
@@ -85,36 +79,30 @@ class Block
     {
         $tag_positions = $this->strpos_all($html_string, '===');
 
-        if(count($tag_positions) % 2 !== 0) {
+        if (count($tag_positions) % 2 !== 0) {
             return $html_string;
         }
 
         $pairs = [];
 
-        foreach($tag_positions as $key => $position) {
-            if($key % 2 === 0) {
-
+        foreach ($tag_positions as $key => $position) {
+            if ($key % 2 === 0) {
                 $pairs[] = [$position];
-
             } else {
-
                 $last_index = count($pairs) - 1;
 
                 $pairs[$last_index][] = $position;
-
             }
         }
 
         $replacements = [];
 
-        foreach($pairs as $key => $pair) {
-
+        foreach ($pairs as $key => $pair) {
             $tag = substr($html_string, $pair[0], $pair[1] - $pair[0] + 3);
 
             $block_name = trim(str_replace("===", "", $tag));
 
             $replacements[$tag] = $this->getReplacementFromBlockName($tag, $block_name);
-
         }
 
         return str_replace(array_keys($replacements), array_values($replacements), $html_string);
@@ -127,22 +115,21 @@ class Block
      * @param string $needle
      * @return array
      */
-    function strpos_all(string $haystack, string $needle): array {
-
+    public function strpos_all(string $haystack, string $needle): array
+    {
         $s = 0;
         $i = 0;
 
-        while(is_integer($i)) {
-
+        while (is_integer($i)) {
             $i = stripos($haystack, $needle, $s);
 
-            if(is_integer($i)) {
+            if (is_integer($i)) {
                 $aStrPos[] = $i;
                 $s = $i + strlen($needle);
             }
         }
 
-        if(isset($aStrPos)) {
+        if (isset($aStrPos)) {
             return $aStrPos;
         } else {
             return [];
@@ -164,23 +151,21 @@ class Block
 
         $link = null;
 
-        if($index_of_options !== false) {
-
+        if ($index_of_options !== false) {
             $options_string = substr($block_name, $index_of_options + 1, -1);
 
-            if(strlen($options_string) > 0) {
+            if (strlen($options_string) > 0) {
                 $options = $this->blockAttributes($options_string);
 
                 $link = $this->linkAttributes($options_string);
 
                 $block_name = substr($block_name, 0, $index_of_options);
             }
-
         }
 
         $block_value = $this->get($block_name);
 
-        if(empty($block_value)) {
+        if (empty($block_value)) {
             $block_value = $tag;
         }
 
@@ -196,7 +181,7 @@ class Block
     private function wrapperAttributes(string $options_string): Collection
     {
         return Collection::make(explode(',', $options_string))
-            ->map(function(string $option_string) {
+            ->map(function (string $option_string) {
                 return explode('=', $option_string);
             });
     }
@@ -210,7 +195,7 @@ class Block
     private function linkAttributes(string $options_string): string
     {
         $attributes = $this->wrapperAttributes($options_string)
-            ->filter(function(array $option) {
+            ->filter(function (array $option) {
                 return in_array($option[0], ['href']);
             });
 
@@ -226,7 +211,7 @@ class Block
     private function blockAttributes(string $options_string): string
     {
         $attributes = $this->wrapperAttributes($options_string)
-            ->filter(function(array $option) {
+            ->filter(function (array $option) {
                 return in_array($option[0], ['class', 'id', 'style']);
             });
 
@@ -242,7 +227,7 @@ class Block
     private function toAttributesString(Collection $attributes): string
     {
         return $attributes
-            ->reduce(function(string $carry, array $option_pair) {
+            ->reduce(function (string $carry, array $option_pair) {
                 return "{$carry}{$option_pair[0]}=\"{$option_pair[1]}\" ";
             }, ' ');
     }
@@ -256,11 +241,10 @@ class Block
      */
     private function linkTag(?string $link, bool $open_tag = true): string
     {
-        if(!is_null($link) && !empty($link)) {
+        if (!is_null($link) && !empty($link)) {
             return $open_tag ? "<a{$link}>" : "</a>";
         }
 
         return "";
     }
-
 }

@@ -3,12 +3,10 @@
 
 namespace FlatFileCms\Tests;
 
-
 use FlatFileCms\Block;
 
 class BlockTest extends TestCase
 {
-
     public function test_nothing_is_returned_if_block_does_not_exist()
     {
         $block = new Block();
@@ -93,5 +91,4 @@ class BlockTest extends TestCase
             $block->parseHtmlString($html_string)
         );
     }
-
 }

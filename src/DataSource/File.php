@@ -3,7 +3,6 @@
 
 namespace FlatFileCms\DataSource;
 
-
 class File
 {
     /**

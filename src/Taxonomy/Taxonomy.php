@@ -23,10 +23,8 @@ class Taxonomy
 
         return TaxonomyCollection::make(json_decode(File::get($file_path), true))
 
-            ->map(function(array $data_source) {
-
+            ->map(function (array $data_source) {
                 return TaxonomyLevel::forDataSource($data_source);
-
             });
     }
 
@@ -40,10 +38,8 @@ class Taxonomy
     {
         return self::get()
 
-            ->filter(function(TaxonomyLevel $level) use ($category_name) {
-
+            ->filter(function (TaxonomyLevel $level) use ($category_name) {
                 return $level->name() === $category_name;
-
             })
 
             ->first();
@@ -73,10 +69,8 @@ class Taxonomy
     {
         return self::get()
 
-            ->filter(function(TaxonomyLevel $level) use ($category_url) {
-
+            ->filter(function (TaxonomyLevel $level) use ($category_url) {
                 return $level->url() === $category_url;
-
             })
 
             ->first();
@@ -90,7 +84,7 @@ class Taxonomy
      */
     protected static function validateFilePath(string $file_path)
     {
-        if(! File::exists($file_path)) {
+        if (! File::exists($file_path)) {
             self::update(
                 new Collection([
                     Taxonomy::emptyState()
@@ -111,7 +105,7 @@ class Taxonomy
         File::put(
             $file_path,
             $taxonomies
-                ->map(function(TaxonomyLevel $level) {
+                ->map(function (TaxonomyLevel $level) {
                     return [
                         "category_url_prefix" => $level->url(),
                         "category_name" => $level->name(),
@@ -163,13 +157,10 @@ class Taxonomy
         $updating_taxonomy = Taxonomy::byUrl($parent_url_prefix);
 
         self::update(
-
             Taxonomy::get()
 
-                ->map(function(TaxonomyLevel $level) use ($parent_url_prefix, $parent_category, $updating_taxonomy) {
-
-                    if($level->url() === $parent_url_prefix) {
-
+                ->map(function (TaxonomyLevel $level) use ($parent_url_prefix, $parent_category, $updating_taxonomy) {
+                    if ($level->url() === $parent_url_prefix) {
                         self::onUpdatingTaxonomy($level->name(), $parent_category['category_name']);
 
                         $level
@@ -178,12 +169,11 @@ class Taxonomy
                     }
 
                     // Update the children with the new parent category
-                    else if($level->parent() === $updating_taxonomy->name()) {
+                    elseif ($level->parent() === $updating_taxonomy->name()) {
                         $level->setParent($parent_category['category_name']);
                     }
 
                     return $level;
-
                 })
         );
     }
@@ -197,17 +187,14 @@ class Taxonomy
     private static function onUpdatingTaxonomy(string $old_taxonomy_name, ?string $new_taxonomy_name): void
     {
         Page::update(
-
             Page::raw()
 
-                ->map(function(array $page) use ($old_taxonomy_name, $new_taxonomy_name) {
-
-                    if(isset($page['category']) && $page['category'] === $old_taxonomy_name) {
+                ->map(function (array $page) use ($old_taxonomy_name, $new_taxonomy_name) {
+                    if (isset($page['category']) && $page['category'] === $old_taxonomy_name) {
                         $page['category'] = $new_taxonomy_name;
                     }
 
                     return $page;
-
                 })
         );
     }
@@ -224,25 +211,21 @@ class Taxonomy
         self::update(
             Taxonomy::get()
 
-                ->map(function(TaxonomyLevel $level) use ($category_name) {
+                ->map(function (TaxonomyLevel $level) use ($category_name) {
 
                     // Update the children with the new parent category
-                    if($level->parent() === $category_name) {
+                    if ($level->parent() === $category_name) {
                         $level->setParent(null);
                     }
 
                     return $level;
-
                 })
 
-                ->filter(function(TaxonomyLevel $level) use ($category_name) {
-
+                ->filter(function (TaxonomyLevel $level) use ($category_name) {
                     return $level->name() !== $category_name;
-
                 })
 
                 ->values()
         );
     }
-
 }

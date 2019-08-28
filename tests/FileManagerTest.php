@@ -6,7 +6,6 @@ use FlatFileCms\FileManager;
 
 class FileManagerTest extends TestCase
 {
-
     public function test_folder_is_created_when_none_existent()
     {
         $this->assertFalse($this->fs->hasChild('content/files'));
@@ -37,5 +36,4 @@ class FileManagerTest extends TestCase
 //    {
 //
 //    }
-
 }

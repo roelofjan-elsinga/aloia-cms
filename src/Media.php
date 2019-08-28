@@ -75,10 +75,8 @@ class Media
      */
     private function createImagesPathIfNotExisting(string $image_path)
     {
-        if(! file_exists( $image_path ) ) {
-
+        if (! file_exists($image_path)) {
             mkdir($image_path);
-
         }
     }
 }

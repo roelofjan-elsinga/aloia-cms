@@ -2,7 +2,6 @@
 
 namespace FlatFileCms\Contracts;
 
-
 interface DataSourceInterface
 {
 
@@ -20,5 +19,4 @@ interface DataSourceInterface
      * @return array
      */
     public function toArray(): array;
-
 }

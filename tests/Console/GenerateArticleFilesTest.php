@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\File;
 
 class GenerateArticleFilesTest extends TestCase
 {
-
     public function test_article_file_is_not_created_if_no_data_file_present()
     {
         $this->artisan('flatfilecms:article:generate');
@@ -33,5 +32,4 @@ class GenerateArticleFilesTest extends TestCase
 
         $this->assertTrue($this->fs->hasChild('content/articles/testing.md'));
     }
-
 }

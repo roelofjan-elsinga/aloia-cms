@@ -11,5 +11,4 @@ interface StorableInterface
      * @return string
      */
     public function getFolderPath(): string;
-
 }
