@@ -120,8 +120,15 @@ class Article extends Content implements ArticleInterface, StorableInterface
      */
     public function thumbnail(): string
     {
-        return $this->article['thumbnail']
-            ?? "/{$this->getImagesUrlPath()}/{$this->getThumbnailFromPath($this->image())}";
+        if (isset($this->article['thumbnail'])) {
+            return $this->article['thumbnail'];
+        }
+
+        if (!empty($this->image())) {
+            return "/{$this->getImagesUrlPath()}/{$this->getThumbnailFromPath($this->image())}";
+        }
+
+        return "";
     }
 
     /**
