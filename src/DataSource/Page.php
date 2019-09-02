@@ -44,7 +44,8 @@ class Page implements DataSourceInterface
             'image',
             'category',
             'menu_name',
-            'sidebar'
+            'sidebar',
+            'meta_data',
         ];
         
         $resource_fields = [
@@ -69,7 +70,8 @@ class Page implements DataSourceInterface
 
     private function has(string $string)
     {
-        return isset($this->attributes[$string]);
+        return isset($this->attributes[$string])
+            && !is_null($this->attributes[$string]);
     }
 
     /**

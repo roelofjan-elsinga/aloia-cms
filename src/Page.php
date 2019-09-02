@@ -291,6 +291,16 @@ class Page extends Content implements PageInterface, StorableInterface
     }
 
     /**
+     * Get the meta data for this page
+     *
+     * @return array|null
+     */
+    public function metaData(): ?array
+    {
+        return $this->page['meta_data'] ?? null;
+    }
+
+    /**
      * Get the file path of this page
      *
      * @return string
