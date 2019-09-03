@@ -40,6 +40,11 @@ class PermissionsCommand extends Command
             Config::get('flatfilecms.uploaded_files.folder_path'),
         ];
 
+        $resource_paths = array_merge(
+            $resource_paths,
+            Config::get('flatfilecms.permissions.additional_paths')
+        );
+
         $user = Config::get('flatfilecms.permissions.user');
 
         $group = Config::get('flatfilecms.permissions.group');
