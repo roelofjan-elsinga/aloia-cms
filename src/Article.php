@@ -401,7 +401,7 @@ class Article extends Content implements ArticleInterface, StorableInterface
     {
         $file_path = self::getMetaDataFilePath();
 
-        $filename = '';
+        $filename = null;
 
         File::put(
             $file_path,
@@ -421,7 +421,9 @@ class Article extends Content implements ArticleInterface, StorableInterface
                 ->toJson(JSON_PRETTY_PRINT)
         );
 
-        File::delete(Config::get('flatfilecms.articles.folder_path') . '/' . $filename);
+        if ($filename !== null) {
+            File::delete(Config::get('flatfilecms.articles.folder_path') . '/' . $filename);
+        }
     }
 
     /**

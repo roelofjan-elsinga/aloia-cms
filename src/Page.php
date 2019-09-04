@@ -536,7 +536,7 @@ class Page extends Content implements PageInterface, StorableInterface
     {
         $file_path = self::getMetaDataFilePath();
 
-        $filename = '';
+        $filename = null;
 
         File::put(
             $file_path,
@@ -556,6 +556,8 @@ class Page extends Content implements PageInterface, StorableInterface
                 ->toJson(JSON_PRETTY_PRINT)
         );
 
-        File::delete(Config::get('flatfilecms.pages.folder_path') . '/' . $filename);
+        if ($filename !== null) {
+            File::delete(Config::get('flatfilecms.pages.folder_path') . '/' . $filename);
+        }
     }
 }
