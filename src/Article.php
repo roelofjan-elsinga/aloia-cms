@@ -393,6 +393,38 @@ class Article extends Content implements ArticleInterface, StorableInterface
     }
 
     /**
+     * Delete an article by slug
+     *
+     * @param string $slug
+     */
+    public static function deleteBySlug(string $slug): void
+    {
+        $file_path = self::getMetaDataFilePath();
+
+        $filename = '';
+
+        File::put(
+            $file_path,
+            self::raw()
+                ->filter(function (array $article) use (&$filename, $slug) {
+                    $matches = strpos($article['filename'], $slug) !== false;
+
+                    if ($matches) {
+                        $filename = $article['filename'];
+                    }
+
+                    return !$matches;
+                })
+                ->map(function ($article) {
+                    return \FlatFileCms\DataSource\Article::create($article)->toArray();
+                })
+                ->toJson(JSON_PRETTY_PRINT)
+        );
+
+        File::delete(Config::get('flatfilecms.articles.folder_path') . '/' . $filename);
+    }
+
+    /**
      * Get all articles
      *
      * @return Collection

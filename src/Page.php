@@ -513,17 +513,49 @@ class Page extends Content implements PageInterface, StorableInterface
      *
      * @param Collection $articles
      */
-    public static function update(Collection $articles): void
+    public static function update(Collection $pages): void
     {
         $file_path = self::getMetaDataFilePath();
 
         File::put(
             $file_path,
-            $articles
-                ->map(function ($article) {
-                    return \FlatFileCms\DataSource\Page::create($article)->toArray();
+            $pages
+                ->map(function (array $page) {
+                    return \FlatFileCms\DataSource\Page::create($page)->toArray();
                 })
                 ->toJson(JSON_PRETTY_PRINT)
         );
+    }
+
+    /**
+     * Delete a page by slug
+     *
+     * @param string $slug
+     */
+    public static function deleteBySlug(string $slug): void
+    {
+        $file_path = self::getMetaDataFilePath();
+
+        $filename = '';
+
+        File::put(
+            $file_path,
+            self::raw()
+                ->filter(function (array $page) use (&$filename, $slug) {
+                    $matches = strpos($page['filename'], $slug) !== false;
+
+                    if ($matches) {
+                        $filename = $page['filename'];
+                    }
+
+                    return !$matches;
+                })
+                ->map(function (array $page) {
+                    return \FlatFileCms\DataSource\Page::create($page)->toArray();
+                })
+                ->toJson(JSON_PRETTY_PRINT)
+        );
+
+        File::delete(Config::get('flatfilecms.pages.folder_path') . '/' . $filename);
     }
 }
