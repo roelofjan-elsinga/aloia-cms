@@ -46,7 +46,7 @@
     }
   },
   "require": {
-    "roelofjan-elsinga/content-to-html-parser": "^0.1.0",
+    "roelofjan-elsinga/content-to-html-parser": "^0.4.0",
     "illuminate/support": "^5.7",
     "illuminate/console": "^5.7",
     "ext-json": "*",
