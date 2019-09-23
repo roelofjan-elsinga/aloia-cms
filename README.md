@@ -1,11 +1,9 @@
-<p align="center">
+# Flat File CMS
 <a href="https://travis-ci.com/roelofjan-elsinga/flat-file-cms"><img src="https://travis-ci.com/roelofjan-elsinga/flat-file-cms.svg" alt="Build Status"></a>
+<img src="https://github.styleci.io/repos/192778142/shield" alt="StyleCI Status">
 <a href="https://packagist.org/packages/roelofjan-elsinga/flat-file-cms"><img src="https://poser.pugx.org/roelofjan-elsinga/flat-file-cms/downloads" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/roelofjan-elsinga/flat-file-cms"><img src="https://poser.pugx.org/roelofjan-elsinga/flat-file-cms/v/stable" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/roelofjan-elsinga/flat-file-cms"><img src="https://poser.pugx.org/roelofjan-elsinga/flat-file-cms/license" alt="License"></a>
-</p>
-
-# Flat File CMS
 
 This package contains a drop-in CMS that uses files to store its contents.
 
