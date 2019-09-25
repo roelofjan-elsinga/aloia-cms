@@ -1,9 +1,11 @@
 # Flat File CMS
-<a href="https://travis-ci.com/roelofjan-elsinga/flat-file-cms"><img src="https://travis-ci.com/roelofjan-elsinga/flat-file-cms.svg" alt="Build Status"></a>
-<img src="https://github.styleci.io/repos/192778142/shield" alt="StyleCI Status">
-<a href="https://packagist.org/packages/roelofjan-elsinga/flat-file-cms"><img src="https://poser.pugx.org/roelofjan-elsinga/flat-file-cms/downloads" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/roelofjan-elsinga/flat-file-cms"><img src="https://poser.pugx.org/roelofjan-elsinga/flat-file-cms/v/stable" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/roelofjan-elsinga/flat-file-cms"><img src="https://poser.pugx.org/roelofjan-elsinga/flat-file-cms/license" alt="License"></a>
+
+[![Build status](https://travis-ci.com/roelofjan-elsinga/flat-file-cms.svg)](https://travis-ci.com/roelofjan-elsinga/flat-file-cms)
+[![StyleCI Status](https://github.styleci.io/repos/192778142/shield)](https://github.styleci.io/repos/192778142)
+[![Code coverage](https://codecov.io/gh/roelofjan-elsinga/flat-file-cms/branch/master/graph/badge.svg)](https://codecov.io/gh/roelofjan-elsinga/flat-file-cms)
+[![Total Downloads](https://poser.pugx.org/roelofjan-elsinga/flat-file-cms/downloads)](https://packagist.org/packages/roelofjan-elsinga/flat-file-cms)
+[![Latest Stable Version](https://poser.pugx.org/roelofjan-elsinga/flat-file-cms/v/stable)](https://packagist.org/packages/roelofjan-elsinga/flat-file-cms)
+[![License](https://poser.pugx.org/roelofjan-elsinga/flat-file-cms/license)](https://packagist.org/packages/roelofjan-elsinga/flat-file-cms)
 
 This package contains a drop-in CMS that uses files to store its contents.
 
