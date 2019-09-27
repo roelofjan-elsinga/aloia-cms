@@ -13,7 +13,7 @@ class PermissionsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'flatfilecms:set-permissions';
+    protected $signature = 'flatfilecms:set-permissions {--use-sudo}';
 
     /**
      * The console command description.
@@ -49,10 +49,12 @@ class PermissionsCommand extends Command
 
         $group = Config::get('flatfilecms.permissions.group');
 
+        $sudo_prefix = $this->option('use-sudo') ? 'sudo ' : '';
+
         foreach ($resource_paths as $resource_path) {
             $this->info("Setting owner of \"{$resource_path}\" to {$user}:{$group}");
 
-            system("chown -R {$user}:{$group} {$resource_path}");
+            system("{$sudo_prefix}chown -R {$user}:{$group} {$resource_path}", $output);
         }
     }
 }
