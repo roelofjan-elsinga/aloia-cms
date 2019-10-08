@@ -115,7 +115,7 @@ class Page extends Content implements PageInterface, StorableInterface
      */
     public function fileType(): string
     {
-        return pathinfo($this->article['filename'], PATHINFO_EXTENSION) ?? "";
+        return pathinfo($this->page['filename'], PATHINFO_EXTENSION) ?? "";
     }
 
     /**
@@ -136,7 +136,7 @@ class Page extends Content implements PageInterface, StorableInterface
      */
     public function image(): string
     {
-        return $this->page['image'];
+        return $this->page['image'] ?? "";
     }
 
     /**
@@ -147,7 +147,7 @@ class Page extends Content implements PageInterface, StorableInterface
      */
     public function thumbnail(): string
     {
-        return $this->page['image'];
+        return $this->page['image'] ?? "";
     }
 
     /**
@@ -267,9 +267,9 @@ class Page extends Content implements PageInterface, StorableInterface
      */
     public function sidebar(): ?string
     {
-        if (isset($this->page['sidebar']) && !empty($this->page['sidebar'])) {
+        if (isset($this->page['meta_data']['sidebar']) && !empty($this->page['meta_data']['sidebar'])) {
             return $this->parseContentBlocks(
-                $this->page['sidebar']
+                $this->page['meta_data']['sidebar']
             );
         }
 
@@ -283,8 +283,8 @@ class Page extends Content implements PageInterface, StorableInterface
      */
     public function rawSidebar(): ?string
     {
-        if (isset($this->page['sidebar']) && !empty($this->page['sidebar'])) {
-            return $this->page['sidebar'];
+        if (isset($this->page['meta_data']['sidebar']) && !empty($this->page['meta_data']['sidebar'])) {
+            return $this->page['meta_data']['sidebar'];
         }
 
         return null;
