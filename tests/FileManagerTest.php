@@ -3,6 +3,10 @@
 namespace FlatFileCms\Tests;
 
 use FlatFileCms\FileManager;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Storage;
+use org\bovigo\vfs\vfsStream;
 
 class FileManagerTest extends TestCase
 {
@@ -15,25 +19,45 @@ class FileManagerTest extends TestCase
         $this->assertTrue($this->fs->hasChild('content/files'));
     }
 
-//    public function test_files_can_be_retrieved_after_uploading()
-//    {
-//        $files = FileManager::all();
-//
-//        $this->assertSame(0, $files->count());
-//
-//        $file = vfsStream::newFile('test.txt')->at($this->fs)->setContent("The new contents of the file");
-//
-//        $uploaded_file = UploadedFile::createFromBase(new UploadedFile($file->url(), 'test-file.txt'), true);
-//
-//        FileManager::open()->upload($uploaded_file);
-//
-//        $files = FileManager::all();
-//
-//        $this->assertSame(1, $files->count());
-//    }
+    public function test_files_can_be_retrieved_after_uploading()
+    {
+        Storage::fake('files');
 
-//    public function test_file_is_deleted()
-//    {
-//
-//    }
+        Config::set('flatfilecms.uploaded_files.folder_path', storage_path('framework/testing/disks/files'));
+
+        $files = FileManager::all();
+
+        $this->assertSame(0, $files->count());
+
+        $file = UploadedFile::fake()->image('avatar.jpg');
+
+        FileManager::open()->upload($file);
+
+        $files = FileManager::all();
+
+        $this->assertSame(1, $files->count());
+
+        Storage::disk('files')->assertExists($file->getClientOriginalName());
+    }
+
+    public function test_file_is_deleted()
+    {
+        Storage::fake('files');
+
+        Config::set('flatfilecms.uploaded_files.folder_path', storage_path('framework/testing/disks/files'));
+
+        $files = FileManager::all();
+
+        $this->assertSame(0, $files->count());
+
+        $file = UploadedFile::fake()->image('avatar.jpg');
+
+        FileManager::open()->upload($file);
+
+        Storage::disk('files')->assertExists($file->getClientOriginalName());
+
+        FileManager::delete('avatar.jpg');
+
+        Storage::disk('files')->assertMissing($file->getClientOriginalName());
+    }
 }

@@ -23,6 +23,18 @@ class BlockTest extends TestCase
         $this->assertSame("<h1>Testing</h1>", $block->get('testing'));
     }
 
+    public function test_replacement_tags_are_preserved_when_no_closing_tags()
+    {
+        $html_string = "This is a ===replacement for the string";
+
+        $block = new Block();
+
+        $this->assertSame(
+            "This is a ===replacement for the string",
+            $block->parseHtmlString($html_string)
+        );
+    }
+
     public function test_html_is_returned_for_a_markdown_block()
     {
         file_put_contents("{$this->fs->getChild('content/blocks')->url()}/testing.md", "# Testing");
@@ -90,5 +102,12 @@ class BlockTest extends TestCase
             "This is a <div class=\"big small\"><a href=\"/link-to-page\"><strong>replacing text</strong></a></div> for the string",
             $block->parseHtmlString($html_string)
         );
+    }
+
+    public function test_block_can_be_accessed_through_service_container()
+    {
+        file_put_contents("{$this->fs->getChild('content/blocks')->url()}/testing.html", "<h1>Testing</h1>");
+
+        $this->assertSame("<h1>Testing</h1>", app('FlatFileCmsBlock')->get('testing'));
     }
 }
