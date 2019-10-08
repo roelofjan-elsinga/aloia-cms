@@ -30,7 +30,11 @@ class TestCase extends \Orchestra\Testbench\TestCase
                 'pages' => [],
                 'articles' => [],
                 'blocks' => [],
-                'test-file.txt' => 'Test'
+                'test-file.txt' => 'Test',
+            ],
+            'images' => [
+                'image.jpg' => 'image',
+                'image.png' => 'image',
             ]
         ]);
 
