@@ -24,7 +24,7 @@ class MediaTest extends TestCase
 
         $files = (new Media())->allFiles();
 
-        $this->assertCount(2, $files);
+        $this->assertCount(3, $files);
     }
 
     public function test_filename_can_be_converted_to_title()
@@ -39,5 +39,14 @@ class MediaTest extends TestCase
         $title = Media::titleToFilename('Great photo of cats');
 
         $this->assertSame('great-photo-of-cats', $title);
+    }
+
+    public function test_only_full_size_images_can_be_retrieved_through_collection()
+    {
+        Config::set('flatfilecms.articles.image_path', $this->fs->getChild('images')->url());
+
+        $files = (new Media())->allFiles()->onlyFullSize();
+
+        $this->assertCount(2, $files);
     }
 }

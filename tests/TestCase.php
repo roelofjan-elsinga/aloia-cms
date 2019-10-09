@@ -35,6 +35,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
             'images' => [
                 'image.jpg' => 'image',
                 'image.png' => 'image',
+                'image_w300.png' => 'image',
             ]
         ]);
 
