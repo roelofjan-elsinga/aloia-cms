@@ -468,4 +468,25 @@ class PageTest extends TestCase
 
         $this->assertTrue($page->rawPostDate()->isSameDay($page->rawUpdatedDate()));
     }
+
+    public function test_page_with_invalid_taxonomy_returns_as_having_root_as_category()
+    {
+        Page::update(
+            Collection::make([
+                [
+                    'title' => 'Homepage title',
+                    'description' => 'Homepage description',
+                    'summary' => 'Homepage summary',
+                    'template_name' => 'template',
+                    'isPublished' => true,
+                    'isScheduled' => false,
+                    'filename' => 'testing.md',
+                    'postDate' => date('Y-m-d'),
+                    'category' => 'pages'
+                ]
+            ])
+        );
+
+        $this->assertSame('testing', Page::forSlug('testing')->slug(true));
+    }
 }
