@@ -20,6 +20,34 @@ class ArticleTest extends TestCase
         $this->assertTrue($this->fs->hasChild('content/articles.json'));
     }
 
+    public function test_filename_is_required_to_create_article_config()
+    {
+        $this->expectExceptionMessage('Attribute filename is required');
+
+        Article::update(
+            Article::raw()
+                ->push(
+                    [
+                        'postDate' => date('Y-m-d')
+                    ]
+                )
+        );
+    }
+
+    public function test_post_date_is_required_to_create_article_config()
+    {
+        $this->expectExceptionMessage('Attribute postDate is required');
+
+        Article::update(
+            Article::raw()
+                ->push(
+                    [
+                        'filename' => 'testing.md',
+                    ]
+                )
+        );
+    }
+
     public function test_articles_data_file_is_updated()
     {
         Article::all();

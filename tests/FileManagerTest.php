@@ -2,6 +2,7 @@
 
 namespace FlatFileCms\Tests;
 
+use FlatFileCms\DataSource\File;
 use FlatFileCms\FileManager;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Config;
@@ -59,5 +60,24 @@ class FileManagerTest extends TestCase
         FileManager::delete('avatar.jpg');
 
         Storage::disk('files')->assertMissing($file->getClientOriginalName());
+    }
+
+    public function test_underlying_filesystem_methods_can_be_used()
+    {
+        // Create folder;
+        FileManager::all();
+
+        file_put_contents(vfsStream::url('root/content/files/test.txt'), 'This is a test');
+
+        $files = FileManager::open()->get();
+
+        $this->assertTrue($files->first()->exists());
+    }
+
+    public function test_file_path_can_be_retrieved()
+    {
+        $file = File::forFilePath('content/testing.txt');
+
+        $this->assertSame('content/testing.txt', $file->getFilePath());
     }
 }
