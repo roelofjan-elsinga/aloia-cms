@@ -333,6 +333,24 @@ This is a paragraph');
         $this->assertSame('This is a paragraph', Article::forSlug('testing')->description());
     }
 
+    public function test_description_is_empty_when_no_paragraphs_found()
+    {
+        Article::update(
+            Collection::make([
+                [
+                    'filename' => 'testing.md',
+                    'postDate' => date('Y-m-d')
+                ]
+            ])
+        );
+
+        vfsStream::newFile('content/articles/testing.md')
+            ->at($this->fs)
+            ->setContent('# Testing');
+
+        $this->assertEmpty(Article::forSlug('testing')->description());
+    }
+
     public function test_canonical_link_is_returned_when_specified()
     {
         Article::update(
