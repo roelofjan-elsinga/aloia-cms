@@ -18,9 +18,13 @@ class FileFinderTest extends TestCase
         // Using the real filesystem here,
         // because the native linux command doesn't recognize the virtual filesystem
 
-        mkdir(__DIR__.'/test', 0777, true);
+        $content_path = __DIR__.'/test';
 
-        Config::set('flatfilecms.articles.folder_path', __DIR__.'/test');
+        if (!is_dir($content_path)) {
+            mkdir($content_path, 0777, true);
+        }
+
+        Config::set('flatfilecms.articles.folder_path', $content_path);
     }
 
     public function tearDown(): void
@@ -28,24 +32,6 @@ class FileFinderTest extends TestCase
         parent::tearDown();
 
         $this->recursively_remove_directory(__DIR__.'/test');
-    }
-
-    private function recursively_remove_directory($dir)
-    {
-        if (is_dir($dir)) {
-            $objects = scandir($dir);
-            foreach ($objects as $object) {
-                if ($object != "." && $object != "..") {
-                    if (filetype($dir."/".$object) == "dir") {
-                        $this->recursively_remove_directory($dir."/".$object);
-                    } else {
-                        unlink($dir."/".$object);
-                    }
-                }
-            }
-            reset($objects);
-            rmdir($dir);
-        }
     }
 
     public function test_no_results_are_returned_when_no_matching_files_found()

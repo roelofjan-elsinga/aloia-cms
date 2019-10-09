@@ -60,4 +60,22 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         return file_get_contents($this->fs->getChild($file_path)->url());
     }
+
+    protected function recursively_remove_directory($dir)
+    {
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (filetype($dir."/".$object) == "dir") {
+                        $this->recursively_remove_directory($dir."/".$object);
+                    } else {
+                        unlink($dir."/".$object);
+                    }
+                }
+            }
+            reset($objects);
+            rmdir($dir);
+        }
+    }
 }
