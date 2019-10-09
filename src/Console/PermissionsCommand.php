@@ -54,7 +54,7 @@ class PermissionsCommand extends Command
         foreach ($resource_paths as $resource_path) {
             $this->info("Setting owner of \"{$resource_path}\" to {$user}:{$group}");
 
-            system("{$sudo_prefix}chown -R {$user}:{$group} {$resource_path}", $output);
+            exec("{$sudo_prefix}chown -R {$user}:{$group} {$resource_path}");
         }
     }
 }

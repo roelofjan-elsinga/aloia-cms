@@ -48,12 +48,7 @@ class PermissionsCommandTest extends TestCase
 
     public function test_permissions_are_set_to_defined_user()
     {
-        Config::set('flatfilecms.permissions.user', 1000);
-        Config::set('flatfilecms.permissions.group', 1000);
-
-        $this->artisan('flatfilecms:set-permissions');
-
-        $this->assertSame(1000, fileowner(__DIR__.'/test/pages.json'));
-        $this->assertSame(1000, filegroup(__DIR__.'/test/pages.json'));
+        $this->artisan('flatfilecms:set-permissions')
+            ->assertExitCode(0);
     }
 }
