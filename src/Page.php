@@ -78,7 +78,7 @@ class Page extends Content implements PageInterface, StorableInterface
         if (isset($this->page['category']) && $including_parents) {
             $category = Taxonomy::byName($this->page['category']);
 
-            if (!empty($category->fullUrl())) {
+            if (!is_null($category) && !empty($category->fullUrl())) {
                 $slug_prefix = "{$category->fullUrl()}/";
             }
         }
