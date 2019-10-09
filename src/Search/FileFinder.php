@@ -20,26 +20,22 @@ class FileFinder
      */
     public static function find(StorableInterface $storable, string $search_string): Collection
     {
-        try {
-            $instance_name = get_class($storable);
+        $instance_name = get_class($storable);
 
-            $folder_path = $storable->getFolderPath();
+        $folder_path = $storable->getFolderPath();
 
-            exec("grep -iRl \"{$search_string}\" {$folder_path}", $files);
+        exec("grep -iRl \"{$search_string}\" {$folder_path}", $files);
 
-            return Collection::make($files)
+        return Collection::make($files)
 
-                ->map(function (string $file_path) use ($instance_name): ?ArticleInterface {
-                    $filename_without_extension = pathinfo($file_path, PATHINFO_FILENAME);
+            ->map(function (string $file_path) use ($instance_name): ?ArticleInterface {
+                $filename_without_extension = pathinfo($file_path, PATHINFO_FILENAME);
 
-                    return $instance_name::forSlug($filename_without_extension);
-                })
+                return $instance_name::forSlug($filename_without_extension);
+            })
 
-                ->filter(function (?ArticleInterface $article) {
-                    return !is_null($article) && $article->isPublished();
-                });
-        } catch (\Exception $exception) {
-            return new Collection();
-        }
+            ->filter(function (?ArticleInterface $article) {
+                return !is_null($article) && $article->isPublished();
+            });
     }
 }

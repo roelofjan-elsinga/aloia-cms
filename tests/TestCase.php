@@ -35,6 +35,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
             'images' => [
                 'image.jpg' => 'image',
                 'image.png' => 'image',
+                'image_w300.png' => 'image',
             ]
         ]);
 
@@ -58,5 +59,23 @@ class TestCase extends \Orchestra\Testbench\TestCase
     protected function getFileContentsFromFilePath(string $file_path): string
     {
         return file_get_contents($this->fs->getChild($file_path)->url());
+    }
+
+    protected function recursively_remove_directory($dir)
+    {
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (filetype($dir."/".$object) == "dir") {
+                        $this->recursively_remove_directory($dir."/".$object);
+                    } else {
+                        unlink($dir."/".$object);
+                    }
+                }
+            }
+            reset($objects);
+            rmdir($dir);
+        }
     }
 }

@@ -87,17 +87,17 @@ class NewArticle extends Command
      */
     private function createPostFile(): void
     {
-        $this->call('article:generate');
+        $this->call('flatfilecms:article:generate');
     }
 
     /**
      * Validate the command input
+     * @throws \Exception
      */
     private function validateInput()
     {
         if (! $this->option('slug')) {
-            $this->error("You need to submit a slug using --slug");
-            exit(1);
+            throw new \Exception("You need to submit a slug using --slug");
         }
 
         if ($this->option('post_date')) {
@@ -107,14 +107,14 @@ class NewArticle extends Command
 
     /**
      * Validate the date input to be the correct format
+     * @throws \Exception
      */
     private function validateDateInput()
     {
         try {
             Carbon::createFromFormat('Y-m-d', $this->option('post_date'));
         } catch (\Exception $exception) {
-            $this->error("You need to submit the date with the following format: Y-m-d");
-            exit(1);
+            throw new \Exception("You need to submit the date with the following format: Y-m-d");
         }
     }
 }

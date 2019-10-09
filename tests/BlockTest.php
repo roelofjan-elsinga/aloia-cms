@@ -4,6 +4,7 @@
 namespace FlatFileCms\Tests;
 
 use FlatFileCms\Block;
+use FlatFileCms\Facades\BlockFacade;
 
 class BlockTest extends TestCase
 {
@@ -109,5 +110,6 @@ class BlockTest extends TestCase
         file_put_contents("{$this->fs->getChild('content/blocks')->url()}/testing.html", "<h1>Testing</h1>");
 
         $this->assertSame("<h1>Testing</h1>", app('FlatFileCmsBlock')->get('testing'));
+        $this->assertSame("<h1>Testing</h1>", BlockFacade::get('testing'));
     }
 }

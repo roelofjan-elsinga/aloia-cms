@@ -29,7 +29,6 @@ class FlatFileCmsServiceProvider extends ServiceProvider
                 GenerateArticleFiles::class,
                 NewArticle::class,
                 ConfigCommand::class,
-                SelfUpgradeCommand::class,
                 PermissionsCommand::class,
             ]);
         }
