@@ -22,7 +22,6 @@ class TaxonomyTest extends TestCase
         Taxonomy::addChildToCategoryWithName('home', [
             'category_name' => 'static-pages',
             'category_url_prefix' => 'static-pages',
-            'parent_category' => 'home',
             'children' => []
         ]);
 
@@ -41,7 +40,6 @@ class TaxonomyTest extends TestCase
         Taxonomy::addChildToCategoryWithName('home', [
             'category_name' => 'static-pages',
             'category_url_prefix' => 'static-pages',
-            'parent_category' => 'home',
             'children' => []
         ]);
 
@@ -86,7 +84,6 @@ class TaxonomyTest extends TestCase
         Taxonomy::addChildToCategoryWithName('home', [
             'category_name' => 'static-pages',
             'category_url_prefix' => 'static-pages',
-            'parent_category' => 'home',
             'children' => []
         ]);
 
@@ -102,14 +99,12 @@ class TaxonomyTest extends TestCase
         Taxonomy::addChildToCategoryWithName('home', [
             'category_name' => 'static-pages',
             'category_url_prefix' => 'static-pages',
-            'parent_category' => 'home',
             'children' => []
         ]);
 
         Taxonomy::addChildToCategoryWithName('static-pages', [
             'category_name' => 'pages',
             'category_url_prefix' => 'pages',
-            'parent_category' => 'static-pages',
             'children' => []
         ]);
 
