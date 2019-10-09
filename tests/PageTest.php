@@ -326,24 +326,21 @@ class PageTest extends TestCase
             ])
         );
 
-        vfsStream::newFile('content/pages/homepage.md')
-            ->at($this->fs)
-            ->setContent('# Homepage');
+        file_put_contents(vfsStream::url('root/content/pages/homepage.md'), '# Testing');
+        file_put_contents(vfsStream::url('root/content/pages/contact.md'), '# Contact');
 
-        vfsStream::newFile('content/pages/contact.md')
-            ->at($this->fs)
-            ->setContent('# Contact');
+        $this->assertTrue($this->fs->hasChild('content/pages/homepage.md'));
+        $this->assertTrue($this->fs->hasChild('content/pages/contact.md'));
+        $this->assertCount(2, Page::all());
 
         Page::deleteBySlug('contact');
 
-        $this->assertSame(1, Page::all()->count());
-
-        $this->assertNull(Page::forSlug('contact'));
-
-        // Assert the file for this page is deleted
+        $this->assertTrue($this->fs->hasChild('content/pages/homepage.md'));
+        $this->assertFalse($this->fs->hasChild('content/pages/contact.md'));
+        $this->assertCount(1, Page::all());
     }
     
-    public function testSlugCanBeRetrievedWithCategoryPrefix()
+    public function test_slug_can_be_retrieved_with_category_prefix()
     {
         Page::update(
             Collection::make([
@@ -371,7 +368,7 @@ class PageTest extends TestCase
         $this->assertSame('content-pages/homepage', Page::forSlug('homepage')->slug(true));
     }
     
-    public function testFetchingTheTaxonomyOfAPageWithoutCategoryResultsInDefaultTaxonomy()
+    public function test_fetching_the_taxonomy_of_a_page_without_category_results_in_default_taxonomy()
     {
         Page::update(
             Collection::make([
@@ -394,7 +391,7 @@ class PageTest extends TestCase
         $this->assertSame('', $taxonomy->fullUrl());
     }
 
-    public function testTaxonomyCanBeFetched()
+    public function test_taxonomy_can_be_fetched()
     {
         Page::update(
             Collection::make([
@@ -425,7 +422,7 @@ class PageTest extends TestCase
         $this->assertSame('content-pages', $taxonomy->fullUrl());
     }
 
-    public function testMalformedPostDateResultsIntoTodaysDate()
+    public function test_malformed_post_date_results_into_todays_date()
     {
         file_put_contents(Config::get('flatfilecms.pages.file_path'), json_encode([
             [
@@ -439,7 +436,7 @@ class PageTest extends TestCase
         $this->assertTrue($page->rawPostDate()->isToday());
     }
 
-    public function testUpdatedPageResultsInADifferentDateThanPostDate()
+    public function test_updated_page_results_in_a_different_date_than_post_date()
     {
         file_put_contents(Config::get('flatfilecms.pages.file_path'), json_encode([
             [
@@ -456,7 +453,7 @@ class PageTest extends TestCase
         $this->assertTrue($page->rawUpdatedDate()->isToday());
     }
 
-    public function testMalformedUpdatedDateWillResultInThePostDate()
+    public function test_malformed_updated_date_will_result_in_the_post_date()
     {
         file_put_contents(Config::get('flatfilecms.pages.file_path'), json_encode([
             [
