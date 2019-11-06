@@ -44,7 +44,6 @@ class Page implements DataSourceInterface
             'image',
             'category',
             'menu_name',
-            'sidebar',
             'meta_data',
         ];
         
