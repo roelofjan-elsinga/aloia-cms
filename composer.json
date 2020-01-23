@@ -13,6 +13,7 @@
       "email": "roelofjanelsinga@gmail.com"
     }
   ],
+  "minimum-stability": "stable",
   "scripts": {
     "post-install-cmd": "vendor/bin/cghooks add --ignore-lock",
     "post-update-cmd": "vendor/bin/cghooks update"
@@ -41,7 +42,7 @@
     },
     "laravel": {
       "providers": [
-        "FlatFileCms\\FlatFileCmsServiceProvider"
+        "FlatFileCms\\AppServiceProvider"
       ]
     }
   },
@@ -50,13 +51,15 @@
     "illuminate/support": "^5.7",
     "illuminate/console": "^5.7",
     "ext-json": "*",
-    "ext-dom": "*"
+    "ext-dom": "*",
+    "spatie/yaml-front-matter": "^2.0",
+    "symfony/yaml": "^5.0"
   },
   "require-dev": {
     "orchestra/testbench": "^3.8",
     "mikey179/vfsstream": "^1.6",
     "phpunit/phpunit": "^8.3",
-    "spatie/phpunit-watcher": "^1.11",
+    "spatie/phpunit-watcher": "^1.22",
     "friendsofphp/php-cs-fixer": "^2.15",
     "brainmaestro/composer-git-hooks": "^2.7"
   }
