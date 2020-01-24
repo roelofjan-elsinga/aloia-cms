@@ -4,7 +4,7 @@
 namespace FlatFileCms\Tests\Console;
 
 use FlatFileCms\Tests\TestCase;
-use FlatFileCms\Writer\Page;
+use FlatFileCms\Models\Page;
 use Illuminate\Support\Facades\Config;
 
 class UpgradeZeroToOneCommandTest extends TestCase
@@ -39,6 +39,8 @@ class UpgradeZeroToOneCommandTest extends TestCase
             ->execute();
 
         $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/pages/page.md'));
-        $this->assertStringContainsString("title: 'This is a page title'", Page::open('page.md')->read());
+        $this->assertTrue(Page::fileExists('page'));
+        $this->assertStringContainsString("title: 'This is a page title'", Page::open('page')->rawContent());
+        $this->assertStringContainsString("This is a page title", Page::open('page')->title);
     }
 }

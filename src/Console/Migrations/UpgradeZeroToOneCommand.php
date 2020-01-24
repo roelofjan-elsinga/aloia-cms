@@ -4,7 +4,7 @@
 namespace FlatFileCms\Console\Migrations;
 
 use FlatFileCms\Writer\FrontMatterCreator;
-use FlatFileCms\Writer\Page;
+use FlatFileCms\Models\Page;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 
@@ -56,9 +56,11 @@ class UpgradeZeroToOneCommand extends Command
         foreach ($page_data as $page) {
             $file_content = file_get_contents(Config::get('flatfilecms.pages.folder_path') . "/{$page['filename']}");
 
-            $front_matter = FrontMatterCreator::seed($page, $file_content)->create();
-
-            Page::open($page['filename'])->write($front_matter);
+            Page::open(pathinfo($page['filename'], PATHINFO_FILENAME))
+                ->setExtension(pathinfo($page['filename'], PATHINFO_EXTENSION))
+                ->setMatter($page_data)
+                ->setBody($file_content)
+                ->save();
         }
     }
 }
