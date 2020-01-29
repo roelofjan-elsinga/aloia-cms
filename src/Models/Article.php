@@ -133,4 +133,14 @@ class Article extends Model implements ModelInterface, PublishInterface
 
         return "";
     }
+
+    /**
+     * Get the canonical if it's set
+     *
+     * @return null|string
+     */
+    public function canonicalLink(): ?string
+    {
+        return $this->matter['canonical'] ?? null;
+    }
 }
