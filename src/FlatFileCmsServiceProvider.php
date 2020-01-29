@@ -3,7 +3,6 @@
 namespace FlatFileCms;
 
 use FlatFileCms\Console\ConfigCommand;
-use FlatFileCms\Console\GenerateArticleFiles;
 use FlatFileCms\Console\Migrations\UpgradeZeroToOneCommand;
 use FlatFileCms\Console\NewArticle;
 use FlatFileCms\Console\PermissionsCommand;
@@ -26,7 +25,6 @@ class FlatFileCmsServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                GenerateArticleFiles::class,
                 NewArticle::class,
                 ConfigCommand::class,
                 PermissionsCommand::class,
