@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3b05d8d39777cc35ca215f1bde5c3006",
+    "content-hash": "56cd64489d40c993f4940dea05ec24d8",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -1111,16 +1111,16 @@
         },
         {
             "name": "roelofjan-elsinga/content-to-html-parser",
-            "version": "0.4.0",
+            "version": "0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/roelofjan-elsinga/content-to-html-parser.git",
-                "reference": "9bbd584ee0d371aa95e4d7d5828b67ef073fc555"
+                "reference": "91447e4c11f522a44b32629ca8a8c486a29d89e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/roelofjan-elsinga/content-to-html-parser/zipball/9bbd584ee0d371aa95e4d7d5828b67ef073fc555",
-                "reference": "9bbd584ee0d371aa95e4d7d5828b67ef073fc555",
+                "url": "https://api.github.com/repos/roelofjan-elsinga/content-to-html-parser/zipball/91447e4c11f522a44b32629ca8a8c486a29d89e3",
+                "reference": "91447e4c11f522a44b32629ca8a8c486a29d89e3",
                 "shasum": ""
             },
             "require": {
@@ -1147,7 +1147,7 @@
                 }
             ],
             "description": "This package converts content from strings or files to HTML strings to be rendered on a page",
-            "time": "2019-09-23T14:01:06+00:00"
+            "time": "2020-01-29T13:40:04+00:00"
         },
         {
             "name": "spatie/yaml-front-matter",
