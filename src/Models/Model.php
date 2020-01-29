@@ -7,6 +7,7 @@ use FlatFileCms\Contracts\StorableInterface;
 use FlatFileCms\Writer\FolderCreator;
 use FlatFileCms\Writer\FrontMatterCreator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
@@ -23,16 +24,36 @@ class Model implements ModelInterface, StorableInterface
 
     protected $body = '';
 
-    private function __construct(string $file_name)
-    {
-        $this->file_name = $file_name;
-
-        $this->parseFile();
-    }
-
+    /**
+     * Find a single model
+     *
+     * @param string $file_name
+     * @return ModelInterface
+     */
     public static function find(string $file_name): ModelInterface
     {
-        return new static($file_name);
+        $instance = new static();
+
+        $instance->setFileName($file_name);
+
+        return $instance;
+    }
+
+    /**
+     * Return all instances of the model
+     *
+     * @return Collection|ModelInterface[]
+     */
+    public static function all(): Collection
+    {
+        $instance = new static();
+
+        $files = File::allFiles($instance->getFolderPath());
+
+        return Collection::make($files)
+            ->map(function (\SplFileInfo $fileInfo): ModelInterface {
+                return self::find(pathinfo($fileInfo->getFilename(), PATHINFO_FILENAME));
+            });
     }
 
     public function rawContent(): string
@@ -69,14 +90,16 @@ class Model implements ModelInterface, StorableInterface
     {
         $folder_path = $this->getFolderPath();
 
-        FolderCreator::forPath($folder_path);
-
         return "{$folder_path}/{$this->file_name}.{$this->extension}";
     }
 
     public function getFolderPath(): string
     {
-        return Config::get('flatfilecms.collections_path') . "/{$this->folder}";
+        $folder_path = Config::get('flatfilecms.collections_path') . "/{$this->folder}";
+
+        FolderCreator::forPath($folder_path);
+
+        return $folder_path;
     }
 
     public function matter(): array
@@ -135,9 +158,20 @@ class Model implements ModelInterface, StorableInterface
 
     public static function fileExists(string $file_name): bool
     {
-        $instance = new static($file_name);
+        $instance = new static();
+
+        $instance->setFileName($file_name);
         
         return $instance->exists();
+    }
+
+    protected function setFileName(string $file_name): ModelInterface
+    {
+        $this->file_name = $file_name;
+
+        $this->parseFile();
+
+        return $this;
     }
 
     public function __get($key)
