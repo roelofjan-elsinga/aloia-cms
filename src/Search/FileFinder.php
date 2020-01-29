@@ -5,6 +5,7 @@ namespace FlatFileCms\Search;
 use FlatFileCms\Article;
 use FlatFileCms\Contracts\ArticleInterface;
 use FlatFileCms\Contracts\StorableInterface;
+use FlatFileCms\Models\ModelInterface;
 use FlatFileCms\Page;
 use Illuminate\Support\Collection;
 
@@ -28,14 +29,14 @@ class FileFinder
 
         return Collection::make($files)
 
-            ->map(function (string $file_path) use ($instance_name): ?ArticleInterface {
+            ->map(function (string $file_path) use ($instance_name): ?ModelInterface {
                 $filename_without_extension = pathinfo($file_path, PATHINFO_FILENAME);
 
-                return $instance_name::forSlug($filename_without_extension);
+                return $instance_name::find($filename_without_extension);
             })
 
-            ->filter(function (?ArticleInterface $article) {
-                return !is_null($article) && $article->isPublished();
+            ->filter(function (?ModelInterface $model): bool {
+                return !is_null($model);
             });
     }
 }
