@@ -2,7 +2,7 @@
 
 namespace FlatFileCms\Tests;
 
-use FlatFileCms\AppServiceProvider;
+use FlatFileCms\FlatFileCmsServiceProvider;
 use Illuminate\Support\Facades\Config;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
@@ -55,7 +55,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
     protected function getPackageProviders($app)
     {
-        return [AppServiceProvider::class];
+        return [FlatFileCmsServiceProvider::class];
     }
 
     protected function getFileContentsFromFilePath(string $file_path): string

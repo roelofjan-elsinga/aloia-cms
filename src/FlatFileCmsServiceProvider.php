@@ -9,7 +9,7 @@ use FlatFileCms\Console\NewArticle;
 use FlatFileCms\Console\PermissionsCommand;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class FlatFileCmsServiceProvider extends ServiceProvider
 {
     public function register()
     {

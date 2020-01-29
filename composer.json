@@ -42,7 +42,7 @@
     },
     "laravel": {
       "providers": [
-        "FlatFileCms\\AppServiceProvider"
+        "FlatFileCms\\FlatFileCmsServiceProvider"
       ]
     }
   },
