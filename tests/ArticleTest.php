@@ -540,4 +540,17 @@ This is a paragraph');
         $this->assertFalse($this->fs->hasChild('content/articles/contact.html'));
         $this->assertCount(1, Article::all());
     }
+
+    public function test_can_get_all_articles()
+    {
+        \FlatFileCms\Models\Article::find('article')
+            ->setMatter(['title' => 'Article title'])
+            ->setBody('# This is content')
+            ->save();
+
+        $articles = \FlatFileCms\Models\Article::all();
+
+        $this->assertCount(1, $articles);
+        $this->assertSame('Article title', $articles->first()->title);
+    }
 }
