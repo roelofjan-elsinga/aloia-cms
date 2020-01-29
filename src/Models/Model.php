@@ -3,13 +3,14 @@
 
 namespace FlatFileCms\Models;
 
+use FlatFileCms\Contracts\StorableInterface;
 use FlatFileCms\Writer\FolderCreator;
 use FlatFileCms\Writer\FrontMatterCreator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 
-class Model implements ModelInterface
+class Model implements ModelInterface, StorableInterface
 {
     protected $folder = '';
 
@@ -72,7 +73,7 @@ class Model implements ModelInterface
         return "{$folder_path}/{$this->file_name}.{$this->extension}";
     }
 
-    private function getFolderPath(): string
+    public function getFolderPath(): string
     {
         return Config::get('flatfilecms.collections_path') . "/{$this->folder}";
     }
