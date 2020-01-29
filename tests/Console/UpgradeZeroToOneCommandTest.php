@@ -20,7 +20,7 @@ class UpgradeZeroToOneCommandTest extends TestCase
         $this->artisan('flatfilecms:upgrade:0-to-1');
 
         $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/pages/page.md'));
-        $this->assertTrue(Page::fileExists('page'));
+        $this->assertTrue(Page::find('page')->exists());
         $this->assertStringContainsString("title: 'This is a page title'", Page::find('page')->rawContent());
         $this->assertStringContainsString("This is a page title", Page::find('page')->title);
     }
@@ -33,9 +33,10 @@ class UpgradeZeroToOneCommandTest extends TestCase
         $this->artisan('flatfilecms:upgrade:0-to-1');
 
         $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/articles/article.md'));
-        $this->assertTrue(Article::fileExists('article'));
+        $this->assertTrue(Article::find('article')->exists());
         $this->assertStringContainsString("filename: article.md", Article::find('article')->rawContent());
         $this->assertStringContainsString("Article description", Article::find('article')->description);
+        $this->assertSame("https://google.com", Article::find('article')->external_url);
     }
 
     public function testUpgradeCorrectlyMigratesContentBlocks()
@@ -45,7 +46,7 @@ class UpgradeZeroToOneCommandTest extends TestCase
         $this->artisan('flatfilecms:upgrade:0-to-1');
 
         $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/content_blocks/content.md'));
-        $this->assertTrue(ContentBlock::fileExists('content'));
+        $this->assertTrue(ContentBlock::find('content')->exists());
         $this->assertStringContainsString("identifier: content", ContentBlock::find('content')->rawContent());
     }
 
@@ -56,7 +57,7 @@ class UpgradeZeroToOneCommandTest extends TestCase
         $this->artisan('flatfilecms:upgrade:0-to-1');
 
         $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/meta_tags/default.md'));
-        $this->assertTrue(MetaTag::fileExists('default'));
+        $this->assertTrue(MetaTag::find('default')->exists());
         $this->assertStringContainsString("title: 'Page title'", MetaTag::find('default')->rawContent());
         $this->assertStringContainsString("Page description", MetaTag::find('default')->description);
     }
@@ -70,7 +71,7 @@ class UpgradeZeroToOneCommandTest extends TestCase
         $this->artisan('flatfilecms:upgrade:0-to-1');
 
         $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/pages/page.md'));
-        $this->assertTrue(Page::fileExists('page'));
+        $this->assertTrue(Page::find('page')->exists());
         $this->assertStringContainsString("url: /page", Page::find('page')->rawContent());
         $this->assertStringContainsString("/page", Page::find('page')->url);
     }
@@ -87,7 +88,7 @@ class UpgradeZeroToOneCommandTest extends TestCase
         $this->artisan('flatfilecms:upgrade:0-to-1');
 
         $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/pages/page.md'));
-        $this->assertTrue(Page::fileExists('page'));
+        $this->assertTrue(Page::find('page')->exists());
         $this->assertStringContainsString("url: /testing/page", Page::find('page')->rawContent());
         $this->assertStringContainsString("/testing/page", Page::find('page')->url);
     }
@@ -120,7 +121,8 @@ class UpgradeZeroToOneCommandTest extends TestCase
             "updateDate" => "2020-01-01 12:00:00",
             "description" => "Article description",
             "isScheduled" => false,
-            "isPublished" => false
+            "isPublished" => false,
+            'url' => 'https://google.com'
         ];
     }
 

@@ -87,14 +87,22 @@ class UpgradeZeroToOneCommand extends Command
             return;
         }
 
-        $page_data = json_decode(file_get_contents(Config::get('flatfilecms.articles.file_path')), true);
+        $article_data = json_decode(file_get_contents(Config::get('flatfilecms.articles.file_path')), true);
 
-        foreach ($page_data as $page) {
-            $file_content = file_get_contents(Config::get('flatfilecms.articles.folder_path') . "/{$page['filename']}");
+        foreach ($article_data as $article) {
+            $file_content = file_get_contents(Config::get('flatfilecms.articles.folder_path') . "/{$article['filename']}");
 
-            Article::find(pathinfo($page['filename'], PATHINFO_FILENAME))
-                ->setExtension(pathinfo($page['filename'], PATHINFO_EXTENSION))
-                ->setMatter($page)
+            $article['post_date'] = $article['postDate'];
+            unset($article['postDate']);
+
+            if (isset($article['url'])) {
+                $article['external_url'] = $article['url'];
+                unset($article['url']);
+            }
+
+            Article::find(pathinfo($article['filename'], PATHINFO_FILENAME))
+                ->setExtension(pathinfo($article['filename'], PATHINFO_EXTENSION))
+                ->setMatter($article)
                 ->setBody($file_content)
                 ->save();
         }
