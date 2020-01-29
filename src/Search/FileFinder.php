@@ -4,8 +4,8 @@ namespace FlatFileCms\Search;
 
 use FlatFileCms\Models\Article;
 use FlatFileCms\Models\Contracts\PublishInterface;
+use FlatFileCms\Models\Contracts\StorableInterface;
 use FlatFileCms\Models\Page;
-use FlatFileCms\Contracts\StorableInterface;
 use Illuminate\Support\Collection;
 
 class FileFinder

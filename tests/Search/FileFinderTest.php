@@ -6,7 +6,6 @@ namespace FlatFileCms\Tests\Search;
 use FlatFileCms\Models\Article;
 use FlatFileCms\Search\FileFinder;
 use FlatFileCms\Tests\TestCase;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 
 class FileFinderTest extends TestCase
