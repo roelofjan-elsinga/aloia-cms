@@ -12,17 +12,34 @@ class FrontMatterCreator
 
     private $content = '';
 
+    /**
+     * FrontMatterCreator constructor.
+     * @param array $matter
+     * @param string $content
+     */
     private function __construct(array $matter, string $content)
     {
         $this->matter = $matter;
         $this->content = $content;
     }
 
+    /**
+     * Provide the front matter and file content
+     *
+     * @param array $matter
+     * @param string $content
+     * @return static
+     */
     public static function seed(array $matter, string $content)
     {
         return new static($matter, $content);
     }
 
+    /**
+     * Create a data file including the front matter
+     *
+     * @return string
+     */
     public function create(): string
     {
         $matter = Collection::make($this->matter)
@@ -40,6 +57,12 @@ class FrontMatterCreator
         return $front_matter_string;
     }
 
+    /**
+     * Convert camelcase strings to snake case
+     *
+     * @param $input
+     * @return string
+     */
     private function toSnakeCase($input)
     {
         if (preg_match('/[A-Z]/', $input) === 0) {
