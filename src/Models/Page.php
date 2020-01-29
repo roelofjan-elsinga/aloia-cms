@@ -1,11 +1,8 @@
 <?php
 
-
 namespace FlatFileCms\Models;
 
-use Illuminate\Support\Facades\Config;
-
-class Page extends Model
+class Page extends Model implements ModelInterface
 {
     protected $folder = 'pages';
 }
