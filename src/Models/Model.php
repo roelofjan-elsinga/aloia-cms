@@ -4,6 +4,7 @@
 namespace FlatFileCms\Models;
 
 use FlatFileCms\Contracts\StorableInterface;
+use FlatFileCms\Models\Contracts\ModelInterface;
 use FlatFileCms\Writer\FolderCreator;
 use FlatFileCms\Writer\FrontMatterCreator;
 use Illuminate\Support\Arr;

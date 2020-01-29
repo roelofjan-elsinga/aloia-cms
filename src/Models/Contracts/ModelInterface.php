@@ -1,11 +1,15 @@
 <?php
 
 
-namespace FlatFileCms\Models;
+namespace FlatFileCms\Models\Contracts;
+
+use Illuminate\Support\Collection;
 
 interface ModelInterface
 {
     public static function find(string $file_name): ModelInterface;
+
+    public static function all(): Collection;
 
     public function matter(): array;
 
@@ -25,5 +29,5 @@ interface ModelInterface
 
     public function exists(): bool;
 
-    public static function fileExists(string $file_name): bool;
+    public function delete(): bool;
 }
