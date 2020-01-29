@@ -5,7 +5,7 @@ namespace FlatFileCms;
 use Carbon\Carbon;
 use ContentParser\ContentParser;
 use FlatFileCms\Contracts\PageInterface;
-use FlatFileCms\Contracts\StorableInterface;
+use FlatFileCms\Models\Contracts\StorableInterface;
 use FlatFileCms\Taxonomy\Taxonomy;
 use FlatFileCms\Taxonomy\TaxonomyLevel;
 use Illuminate\Support\Collection;

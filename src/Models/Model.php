@@ -5,8 +5,8 @@ namespace FlatFileCms\Models;
 
 use ContentParser\ContentParser;
 use FlatFileCms\Block;
-use FlatFileCms\Contracts\StorableInterface;
 use FlatFileCms\Models\Contracts\ModelInterface;
+use FlatFileCms\Models\Contracts\StorableInterface;
 use FlatFileCms\Writer\FolderCreator;
 use FlatFileCms\Writer\FrontMatterCreator;
 use Illuminate\Support\Arr;
