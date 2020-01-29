@@ -3,12 +3,95 @@
 
 namespace FlatFileCms\Tests\Console;
 
+use FlatFileCms\Models\ContentBlock;
 use FlatFileCms\Tests\TestCase;
 use FlatFileCms\Models\Page;
+use FlatFileCms\Models\Article;
+use FlatFileCms\Models\MetaTag;
 use Illuminate\Support\Facades\Config;
 
 class UpgradeZeroToOneCommandTest extends TestCase
 {
+    public function testUpgradeCorrectlyMigratesPages()
+    {
+        file_put_contents(Config::get('flatfilecms.pages.file_path'), json_encode([$this->defaultPageConfig()], 128));
+        file_put_contents(Config::get('flatfilecms.pages.folder_path') . '/page.md', "# This is content");
+
+        $this->artisan('flatfilecms:upgrade:0-to-1');
+
+        $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/pages/page.md'));
+        $this->assertTrue(Page::fileExists('page'));
+        $this->assertStringContainsString("title: 'This is a page title'", Page::find('page')->rawContent());
+        $this->assertStringContainsString("This is a page title", Page::find('page')->title);
+    }
+
+    public function testUpgradeCorrectlyMigratesArticles()
+    {
+        file_put_contents(Config::get('flatfilecms.articles.file_path'), json_encode([$this->defaultArticleConfig()], 128));
+        file_put_contents(Config::get('flatfilecms.articles.folder_path') . '/article.md', "# This is content");
+
+        $this->artisan('flatfilecms:upgrade:0-to-1');
+
+        $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/articles/article.md'));
+        $this->assertTrue(Article::fileExists('article'));
+        $this->assertStringContainsString("filename: article.md", Article::find('article')->rawContent());
+        $this->assertStringContainsString("Article description", Article::find('article')->description);
+    }
+
+    public function testUpgradeCorrectlyMigratesContentBlocks()
+    {
+        file_put_contents(Config::get('flatfilecms.content_blocks.folder_path') . '/content.md', "# This is content");
+
+        $this->artisan('flatfilecms:upgrade:0-to-1');
+
+        $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/content_blocks/content.md'));
+        $this->assertTrue(ContentBlock::fileExists('content'));
+        $this->assertStringContainsString("identifier: content", ContentBlock::find('content')->rawContent());
+    }
+
+    public function testUpgradeCorrectlyMigratesMetaTags()
+    {
+        file_put_contents(Config::get('flatfilecms.meta_tags.file_path'), json_encode(["default" => $this->defaultMetaTagConfig()], 128));
+
+        $this->artisan('flatfilecms:upgrade:0-to-1');
+
+        $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/meta_tags/default.md'));
+        $this->assertTrue(MetaTag::fileExists('default'));
+        $this->assertStringContainsString("title: 'Page title'", MetaTag::find('default')->rawContent());
+        $this->assertStringContainsString("Page description", MetaTag::find('default')->description);
+    }
+
+    public function testUpgradeWritesTaxonomyAsUrlToPages()
+    {
+        file_put_contents(Config::get('flatfilecms.pages.file_path'), json_encode([$this->defaultPageConfig()], 128));
+        file_put_contents(Config::get('flatfilecms.pages.folder_path') . '/page.md', "# This is content");
+        file_put_contents(Config::get('flatfilecms.taxonomy.file_path'), json_encode([$this->defaultTaxonomyConfig()], 128));
+
+        $this->artisan('flatfilecms:upgrade:0-to-1');
+
+        $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/pages/page.md'));
+        $this->assertTrue(Page::fileExists('page'));
+        $this->assertStringContainsString("url: /page", Page::find('page')->rawContent());
+        $this->assertStringContainsString("/page", Page::find('page')->url);
+    }
+
+    public function testUpgradeWritesNestedTaxonomyAsUrlToPages()
+    {
+        $page_content = $this->defaultPageConfig();
+        $page_content['category'] = 'testing';
+
+        file_put_contents(Config::get('flatfilecms.pages.file_path'), json_encode([$page_content], 128));
+        file_put_contents(Config::get('flatfilecms.pages.folder_path') . '/page.md', "# This is content");
+        file_put_contents(Config::get('flatfilecms.taxonomy.file_path'), json_encode($this->defaultNestedTaxonomyConfig(), 128));
+
+        $this->artisan('flatfilecms:upgrade:0-to-1');
+
+        $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/pages/page.md'));
+        $this->assertTrue(Page::fileExists('page'));
+        $this->assertStringContainsString("url: /testing/page", Page::find('page')->rawContent());
+        $this->assertStringContainsString("/testing/page", Page::find('page')->url);
+    }
+
     private function defaultPageConfig(): array
     {
         return [
@@ -29,18 +112,49 @@ class UpgradeZeroToOneCommandTest extends TestCase
         ];
     }
 
-    public function testUpgradeCorrectlyMigratesArticles()
+    private function defaultArticleConfig()
     {
-        file_put_contents(Config::get('flatfilecms.pages.file_path'), json_encode([$this->defaultPageConfig()], 128));
-        file_put_contents(Config::get('flatfilecms.pages.folder_path') . '/page.md', "# This is content");
+        return [
+            "filename" => "article.md",
+            "postDate" => "2020-01-01",
+            "updateDate" => "2020-01-01 12:00:00",
+            "description" => "Article description",
+            "isScheduled" => false,
+            "isPublished" => false
+        ];
+    }
 
-        $this
-            ->artisan('flatfilecms:upgrade:0-to-1')
-            ->execute();
+    private function defaultMetaTagConfig()
+    {
+        return [
+            "title" => "Page title",
+            "keywords" => "Keywords go here",
+            "description" => "Page description",
+            "author" => "Author name",
+            "image_small" => "https://roelofjanelsinga.com/images/logo/logo_banner.jpg",
+            "image_large" => "https://roelofjanelsinga.com/images/logo/logo_banner.jpg"
+        ];
+    }
 
-        $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/pages/page.md'));
-        $this->assertTrue(Page::fileExists('page'));
-        $this->assertStringContainsString("title: 'This is a page title'", Page::open('page')->rawContent());
-        $this->assertStringContainsString("This is a page title", Page::open('page')->title);
+    private function defaultTaxonomyConfig()
+    {
+        return [
+            "category_url_prefix" => "",
+            "category_name" => "home",
+            "parent_category" => null
+        ];
+    }
+
+    protected function defaultNestedTaxonomyConfig()
+    {
+        $taxonomy = [$this->defaultTaxonomyConfig()];
+
+        $taxonomy[] = [
+            "category_url_prefix" => "testing",
+            "category_name" => "testing",
+            "parent_category" => "home"
+        ];
+
+        return $taxonomy;
     }
 }
