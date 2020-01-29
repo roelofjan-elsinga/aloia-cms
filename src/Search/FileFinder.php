@@ -2,12 +2,10 @@
 
 namespace FlatFileCms\Search;
 
-use FlatFileCms\Article;
-use FlatFileCms\Contracts\ArticleInterface;
-use FlatFileCms\Contracts\PublishInterface;
+use FlatFileCms\Models\Article;
+use FlatFileCms\Models\Contracts\PublishInterface;
+use FlatFileCms\Models\Page;
 use FlatFileCms\Contracts\StorableInterface;
-use FlatFileCms\Models\ModelInterface;
-use FlatFileCms\Page;
 use Illuminate\Support\Collection;
 
 class FileFinder
@@ -18,7 +16,7 @@ class FileFinder
      *
      * @param StorableInterface $storable
      * @param string $search_string
-     * @return Collection|Article[]
+     * @return Collection|Article[]|Page[]
      */
     public static function find(StorableInterface $storable, string $search_string): Collection
     {

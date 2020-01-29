@@ -29,18 +29,13 @@ class NewArticle extends Command
      * Execute the console command.
      *
      * @return mixed
+     * @throws \Exception
      */
     public function handle()
     {
         $this->validateInput();
 
-        $post_entry = $this->generatePostEntry();
-
-        $posts = $this->appendPostToMetaData($post_entry);
-
-        $this->savePostsEntryToFile($posts);
-
-        $this->createPostFile();
+        $this->createNewPost();
 
         $this->info("Created new post entry for {$this->option('slug')}");
     }
@@ -48,46 +43,19 @@ class NewArticle extends Command
     /**
      * Generate a post entry and set the post as a draft status
      *
-     * @return array
+     * @return void
      */
-    private function generatePostEntry(): array
+    private function createNewPost(): void
     {
-        return [
-            "filename" => "{$this->option('slug')}.{$this->option('file_type')}",
-            "postDate" => $this->option('post_date') ?? date('Y-m-d'),
-            "description" => "",
-            "isPublished" => false,
-            "isScheduled" => false
-        ];
-    }
-
-    /**
-     * Append the newly generated post meta data to the meta data collection
-     *
-     * @param array $post_entry
-     * @return Collection
-     */
-    private function appendPostToMetaData(array $post_entry): Collection
-    {
-        return Article::raw()->push($post_entry);
-    }
-
-    /**
-     * Save the posts to the meta data file
-     *
-     * @param Collection $posts
-     */
-    private function savePostsEntryToFile(Collection $posts)
-    {
-        Article::update($posts);
-    }
-
-    /**
-     * Create the article file from the meta data information
-     */
-    private function createPostFile(): void
-    {
-        $this->call('flatfilecms:article:generate');
+        \FlatFileCms\Models\Article::find($this->option('slug'))
+            ->setExtension($this->option('file_type'))
+            ->setMatter([
+                "post_date" => $this->option('post_date') ?? date('Y-m-d'),
+                "description" => "",
+                "is_published" => false,
+                "is_scheduled" => false
+            ])
+            ->save();
     }
 
     /**
