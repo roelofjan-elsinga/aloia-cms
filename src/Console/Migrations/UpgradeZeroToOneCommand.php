@@ -73,6 +73,13 @@ class UpgradeZeroToOneCommand extends Command
         foreach ($page_data as $page) {
             $file_content = file_get_contents(Config::get('flatfilecms.pages.folder_path') . "/{$page['filename']}");
 
+            $page['post_date'] = $page['postDate'];
+            unset($page['postDate']);
+            $page['is_published'] = $page['isPublished'];
+            unset($page['isPublished']);
+            $page['is_scheduled'] = $page['isScheduled'];
+            unset($page['isScheduled']);
+
             Page::find(pathinfo($page['filename'], PATHINFO_FILENAME))
                 ->setExtension(pathinfo($page['filename'], PATHINFO_EXTENSION))
                 ->setMatter($page)
