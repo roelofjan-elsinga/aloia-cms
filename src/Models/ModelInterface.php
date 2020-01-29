@@ -5,7 +5,7 @@ namespace FlatFileCms\Models;
 
 interface ModelInterface
 {
-    public static function open(string $file_name): ModelInterface;
+    public static function find(string $file_name): ModelInterface;
 
     public function matter(): array;
 
