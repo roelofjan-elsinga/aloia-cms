@@ -2,6 +2,9 @@
 
 namespace FlatFileCms\Contracts;
 
+/**
+ * @deprecated deprecated since version 1.0.0
+ */
 interface PageInterface extends ArticleInterface
 {
 

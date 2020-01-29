@@ -4,6 +4,9 @@ namespace FlatFileCms\DataSource;
 
 use FlatFileCms\Contracts\DataSourceInterface;
 
+/**
+ * @deprecated deprecated since version 1.0.0
+ */
 class Article implements DataSourceInterface
 {
     private $attributes;

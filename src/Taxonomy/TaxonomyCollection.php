@@ -5,6 +5,9 @@ namespace FlatFileCms\Taxonomy;
 
 use Illuminate\Support\Collection;
 
+/**
+ * @deprecated deprecated since version 1.0.0
+ */
 class TaxonomyCollection extends Collection
 {
     public function asNestedList()
