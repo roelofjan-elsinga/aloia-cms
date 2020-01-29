@@ -123,10 +123,10 @@ class Model implements ModelInterface, StorableInterface
 
     public function exists(): bool
     {
-        $files = glob($this->getFolderPath() . '/');
+        $files = File::allFiles($this->getFolderPath());
 
         $match = Arr::first($files, function (string $file_name) {
-            return strpos($file_name, "/$this->file_name.");
+            return strpos($file_name, "/{$this->file_name}.");
         });
 
         return !is_null($match);
