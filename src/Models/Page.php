@@ -2,7 +2,8 @@
 
 namespace FlatFileCms\Models;
 
-use FlatFileCms\Contracts\PublishInterface;
+use FlatFileCms\Models\Contracts\ModelInterface;
+use FlatFileCms\Models\Contracts\PublishInterface;
 
 class Page extends Model implements ModelInterface, PublishInterface
 {

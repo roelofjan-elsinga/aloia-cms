@@ -3,7 +3,8 @@
 
 namespace FlatFileCms\Models;
 
-use FlatFileCms\Contracts\PublishInterface;
+use FlatFileCms\HtmlParser;
+use FlatFileCms\Models\Contracts\PublishInterface;
 
 class Article extends Model implements ModelInterface, PublishInterface
 {
