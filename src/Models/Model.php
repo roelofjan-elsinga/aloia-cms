@@ -3,6 +3,8 @@
 
 namespace FlatFileCms\Models;
 
+use ContentParser\ContentParser;
+use FlatFileCms\Block;
 use FlatFileCms\Contracts\StorableInterface;
 use FlatFileCms\Models\Contracts\ModelInterface;
 use FlatFileCms\Writer\FolderCreator;
@@ -24,6 +26,8 @@ class Model implements ModelInterface, StorableInterface
     protected $matter = [];
 
     protected $body = '';
+
+    protected $required_fields = [];
 
     /**
      * Find a single model
@@ -57,6 +61,11 @@ class Model implements ModelInterface, StorableInterface
             });
     }
 
+    /**
+     * Get the raw content of the file + front matter
+     *
+     * @return string
+     */
     public function rawContent(): string
     {
         $file_path = $this->getFilePath();
@@ -68,17 +77,30 @@ class Model implements ModelInterface, StorableInterface
         return "";
     }
 
+    /**
+     * Parse the file for this model into model variables
+     */
     private function parseFile(): void
     {
         $parsed_file = YamlFrontMatter::parse($this->rawContent());
 
-        $this->setMatter($parsed_file->matter());
-        $this->setBody($parsed_file->body());
+        $this->matter = $parsed_file->matter();
+        $this->body = $parsed_file->body();
     }
 
+    /**
+     * Save this instance to file
+     *
+     * @return ModelInterface
+     * @throws \Exception
+     */
     public function save(): ModelInterface
     {
         $file_content = FrontMatterCreator::seed($this->matter, $this->body)->create();
+
+        $this->assertFilenameExists();
+
+        $this->assertRequiredMatterIsPresent();
 
         $file_path = $this->getFilePath();
 
@@ -87,13 +109,27 @@ class Model implements ModelInterface, StorableInterface
         return $this;
     }
 
+    /**
+     * Get the file path for this instance
+     *
+     * @return string
+     */
     private function getFilePath(): string
     {
         $folder_path = $this->getFolderPath();
 
+        if (!is_null($matching_filepath = $this->getFileMatchFromDisk())) {
+            $this->setExtension(pathinfo($matching_filepath, PATHINFO_EXTENSION));
+        }
+
         return "{$folder_path}/{$this->file_name}.{$this->extension}";
     }
 
+    /**
+     * Get the folder path for this model
+     *
+     * @return string
+     */
     public function getFolderPath(): string
     {
         $folder_path = Config::get('flatfilecms.collections_path') . "/{$this->folder}";
@@ -103,11 +139,23 @@ class Model implements ModelInterface, StorableInterface
         return $folder_path;
     }
 
+    /**
+     * Get the front matter
+     *
+     * @return array
+     */
     public function matter(): array
     {
         return $this->matter;
     }
 
+    /**
+     * Add data to the front matter
+     *
+     * @param string $key
+     * @param string $value
+     * @return ModelInterface
+     */
     public function addMatter(string $key, string $value): ModelInterface
     {
         $this->matter[$key] = $value;
@@ -115,6 +163,12 @@ class Model implements ModelInterface, StorableInterface
         return $this;
     }
 
+    /**
+     * Set the front matter
+     *
+     * @param array $matter
+     * @return ModelInterface
+     */
     public function setMatter(array $matter): ModelInterface
     {
         $this->matter = $matter;
@@ -122,11 +176,34 @@ class Model implements ModelInterface, StorableInterface
         return $this;
     }
 
-    public function body(): string
+    /**
+     * Get the raw file body
+     *
+     * @return string
+     */
+    public function rawBody(): string
     {
         return $this->body;
     }
 
+    /**
+     * Get the parse file body
+     *
+     * @return string
+     */
+    public function body(): string
+    {
+        $content = new ContentParser($this->rawBody(), $this->extension());
+
+        return (new Block)->parseHtmlString($content->parse());
+    }
+
+    /**
+     * Set the file body
+     *
+     * @param string $body
+     * @return ModelInterface
+     */
     public function setBody(string $body): ModelInterface
     {
         $this->body = $body;
@@ -134,11 +211,22 @@ class Model implements ModelInterface, StorableInterface
         return $this;
     }
 
+    /**
+     * Get the file extension
+     *
+     * @return string
+     */
     public function extension(): string
     {
         return $this->extension;
     }
 
+    /**
+     * Set the file extension
+     *
+     * @param string $extension
+     * @return ModelInterface
+     */
     public function setExtension(string $extension): ModelInterface
     {
         $this->extension = $extension;
@@ -146,26 +234,54 @@ class Model implements ModelInterface, StorableInterface
         return $this;
     }
 
-    public function exists(): bool
+    /**
+     * Get all models for this type
+     *
+     * @return array
+     */
+    private function getModelFiles(): array
     {
-        $files = File::allFiles($this->getFolderPath());
+        return File::allFiles($this->getFolderPath());
+    }
 
-        $match = Arr::first($files, function (string $file_name) {
+    /**
+     * Get the filename from disk
+     *
+     * @return string|null
+     */
+    private function getFileMatchFromDisk(): ?string
+    {
+        return Arr::first($this->getModelFiles(), function (string $file_name) {
             return strpos($file_name, "/{$this->file_name}.");
         });
-
-        return !is_null($match);
     }
 
-    public static function fileExists(string $file_name): bool
+    /**
+     * Determine whether the current model exists
+     *
+     * @return bool
+     */
+    public function exists(): bool
     {
-        $instance = new static();
-
-        $instance->setFileName($file_name);
-        
-        return $instance->exists();
+        return !is_null($this->getFileMatchFromDisk());
     }
 
+    /**
+     * Delete the current model
+     *
+     * @return bool
+     */
+    public function delete(): bool
+    {
+        return File::delete($this->getFilePath());
+    }
+
+    /**
+     * Set the file name for this instance
+     *
+     * @param string $file_name
+     * @return ModelInterface
+     */
     protected function setFileName(string $file_name): ModelInterface
     {
         $this->file_name = $file_name;
@@ -175,8 +291,40 @@ class Model implements ModelInterface, StorableInterface
         return $this;
     }
 
+    /**
+     * Get front matter information through an accessor
+     *
+     * @param $key
+     * @return mixed|null
+     */
     public function __get($key)
     {
-        return $this->matter[$key] ?? "";
+        return $this->matter[$key] ?? null;
+    }
+
+    /**
+     * Throw exception when the file name is not set for this instance
+     *
+     * @throws \Exception
+     */
+    private function assertFilenameExists()
+    {
+        if (is_null($this->file_name)) {
+            throw new \Exception("Filename is required");
+        }
+    }
+
+    /**
+     * Throw exception if at least one required matter attribute is not present
+     *
+     * @throws \Exception
+     */
+    private function assertRequiredMatterIsPresent()
+    {
+        foreach ($this->required_fields as $required_field) {
+            if (!isset($this->matter[$required_field])) {
+                throw new \Exception("Attribute {$required_field} is required");
+            }
+        }
     }
 }
