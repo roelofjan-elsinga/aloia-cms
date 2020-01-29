@@ -4,127 +4,56 @@
 namespace FlatFileCms\Tests;
 
 use Carbon\Carbon;
-use FlatFileCms\Article;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Config;
-use org\bovigo\vfs\vfsStream;
+use FlatFileCms\Models\Article;
 
 class ArticleTest extends TestCase
 {
-    public function test_articles_file_is_created_when_non_exists()
-    {
-        $this->assertFalse($this->fs->hasChild('content/articles.json'));
-
-        Article::all();
-
-        $this->assertTrue($this->fs->hasChild('content/articles.json'));
-    }
-
     public function test_filename_is_required_to_create_article_config()
     {
-        $this->expectExceptionMessage('Attribute filename is required');
+        $this->expectExceptionMessage('Filename is required');
 
-        Article::update(
-            Article::raw()
-                ->push(
-                    [
-                        'postDate' => date('Y-m-d')
-                    ]
-                )
-        );
+        $article = new Article();
+
+        $article
+            ->setMatter(['post_date' => date('Y-m-d')])
+            ->save();
     }
 
     public function test_post_date_is_required_to_create_article_config()
     {
-        $this->expectExceptionMessage('Attribute postDate is required');
+        $this->expectExceptionMessage('Attribute post_date is required');
 
-        Article::update(
-            Article::raw()
-                ->push(
-                    [
-                        'filename' => 'testing.md',
-                    ]
-                )
-        );
+        Article::find('testing')->save();
     }
 
-    public function test_articles_data_file_is_updated()
+    public function test_articles_is_created_when_not_existing()
     {
-        Article::all();
+        $this->assertFalse(Article::find('article')->exists());
 
-        $articles = json_decode($this->getFileContentsFromFilePath('content/articles.json'), true);
+        Article::find('article')
+            ->setMatter(['post_date' => date('Y-m-d')])
+            ->save();
 
-        $this->assertSame(0, count($articles));
-
-        Article::update(
-            Article::raw()
-                ->push(
-                    [
-                        'filename' => 'testing.md',
-                        'postDate' => date('Y-m-d')
-                    ]
-                )
-        );
-
-        $articles = json_decode($this->getFileContentsFromFilePath('content/articles.json'), true);
-
-        $this->assertSame(1, count($articles));
-    }
-
-    public function test_article_entry_is_made()
-    {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ]
-            ])
-        );
-
-        $articles = json_decode($this->getFileContentsFromFilePath('content/articles.json'), true);
-
-        $this->assertSame('testing.md', $articles[0]['filename']);
-        $this->assertSame(date('Y-m-d'), $articles[0]['postDate']);
+        $this->assertTrue(Article::find('article')->exists());
+        $this->assertSame(date('Y-m-d'), Article::find('article')->post_date);
     }
 
     public function test_null_is_returned_when_getting_non_existing_article()
     {
-        $article = Article::forSlug('blabla');
+        $this->assertFalse(Article::find('blabla')->exists());
 
-        $this->assertNull($article);
-    }
+        Article::find('blabla')
+            ->setMatter(['post_date' => date('Y-m-d')])
+            ->save();
 
-    public function test_article_instance_is_returned_when_getting_existing_article_by_slug()
-    {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ]
-            ])
-        );
-
-        vfsStream::newFile('content/articles/testing.md')->at($this->fs)->setContent('# Testing');
-
-        $article = Article::forSlug('testing');
-
-        $this->assertNotNull($article);
-        $this->assertSame('Testing', $article->title());
-        $this->assertSame('article', $article->type());
+        $this->assertTrue(Article::find('blabla')->exists());
     }
 
     public function test_article_is_not_published_by_default()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ]
-            ])
-        );
+        Article::find('testing')
+            ->setMatter(['post_date' => date('Y-m-d')])
+            ->save();
 
         $articles = Article::all();
 
@@ -135,420 +64,287 @@ class ArticleTest extends TestCase
         $this->assertSame(0, $articles->count());
     }
 
-    public function test_class_instance_is_statically_retrievable()
-    {
-        $this->assertSame(Article::class, get_class(Article::instance()));
-    }
-
-    public function test_slug_can_be_retrieved_as_partial_and_full_path()
-    {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ]
-            ])
-        );
-
-        vfsStream::newFile('content/articles/testing.md')->at($this->fs)->setContent('# Testing');
-
-        Config::set('flatfilecms.articles.url_prefix', 'articles');
-
-        $article = Article::forSlug('testing');
-
-        $this->assertSame('testing', $article->slug());
-        $this->assertSame('articles/testing', $article->slug(true));
-    }
-
     public function test_article_file_type_returns_file_extension()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ],
-                [
-                    'filename' => 'contact.html',
-                    'postDate' => date('Y-m-d')
-                ]
-            ])
-        );
+        Article::find('testing')
+            ->setExtension('md')
+            ->setMatter(['post_date' => date('Y-m-d')])
+            ->save();
 
-        $this->assertSame('md', Article::forSlug('testing')->fileType());
-        $this->assertSame('html', Article::forSlug('contact')->fileType());
+        Article::find('contact')
+            ->setExtension('html')
+            ->setMatter(['post_date' => date('Y-m-d')])
+            ->save();
+
+        $this->assertSame('md', Article::find('testing')->extension());
+        $this->assertSame('html', Article::find('contact')->extension());
     }
 
     public function test_image_can_be_retrieved_from_the_content()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'image.md',
-                    'postDate' => date('Y-m-d')
-                ],
-                [
-                    'filename' => 'no-image.md',
-                    'postDate' => date('Y-m-d')
-                ]
-            ])
-        );
+        Article::find('image')
+            ->setMatter(['post_date' => date('Y-m-d')])
+            ->setBody('# Image ![Placeholder](https://via.placeholder.com/150)')
+            ->save();
 
-        vfsStream::newFile('content/articles/image.md')
-            ->at($this->fs)
-            ->setContent('# Image ![Placeholder](https://via.placeholder.com/150)');
+        Article::find('no-image')
+            ->setMatter(['post_date' => date('Y-m-d')])
+            ->setBody('# Image')
+            ->save();
 
-        vfsStream::newFile('content/articles/no-image.md')
-            ->at($this->fs)
-            ->setContent('# Image');
-
-        $this->assertSame('https://via.placeholder.com/150', Article::forSlug('image')->image());
-        $this->assertEmpty(Article::forSlug('no-image')->image());
+        $this->assertSame('https://via.placeholder.com/150', Article::find('image')->image());
+        $this->assertEmpty(Article::find('no-image')->image());
     }
 
     public function test_thumbnail_is_returned_when_specified_in_config()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d'),
-                    'thumbnail' => 'https://via.placeholder.com/150'
-                ]
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d'),
+                'thumbnail' => 'https://via.placeholder.com/150'
             ])
-        );
+            ->setBody('# Image')
+            ->save();
 
-        $this->assertSame('https://via.placeholder.com/150', Article::forSlug('testing')->thumbnail());
+        $this->assertSame('https://via.placeholder.com/150', Article::find('testing')->thumbnail());
     }
 
     public function test_thumbnail_is_generated_from_image_when_not_specified()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ]
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d'),
             ])
-        );
+            ->setBody('# Image ![Placeholder](https://via.placeholder.com/150.jpg)')
+            ->save();
 
-        vfsStream::newFile('content/articles/testing.md')
-            ->at($this->fs)
-            ->setContent('# Image ![Placeholder](https://via.placeholder.com/150.jpg)');
-
-        $this->assertSame('/images/articles/150_w300.jpg', Article::forSlug('testing')->thumbnail());
+        $this->assertSame('/images/articles/150_w300.jpg', Article::find('testing')->thumbnail());
     }
 
-    public function test_empty_thumbnail_is_returned_when_no_t_humbnail_and_image_are_available()
+    public function test_empty_thumbnail_is_returned_when_no_thumbnail_and_image_are_available()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ]
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d'),
             ])
-        );
+            ->setBody('# Image')
+            ->save();
 
-        vfsStream::newFile('content/articles/testing.md')
-            ->at($this->fs)
-            ->setContent('# Image');
-
-        $this->assertEmpty(Article::forSlug('testing')->thumbnail());
-    }
-
-    public function test_post_date_can_be_retrieved_as_formatted_string_and_date_object()
-    {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ]
-            ])
-        );
-
-        $page = Article::forSlug('testing');
-
-        $this->assertSame(date('F jS, Y'), $page->postDate());
-        $this->assertSame(date('F jS, Y'), $page->updatedDate());
+        $this->assertEmpty(Article::find('testing')->thumbnail());
     }
 
     public function test_update_date_is_returned_when_specified_in_config()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => Carbon::now()->subWeek()->toDateString(),
-                    'updateDate' => Carbon::now()->toDateTimeString(),
-                ]
-            ])
-        );
+        $update_date = Carbon::now();
 
-        $page = Article::forSlug('testing');
+        Article::find('testing')
+            ->setPostDate(Carbon::now()->subWeek())
+            ->setUpdateDate($update_date)
+            ->save();
 
-        $this->assertFalse($page->rawPostDate()->isSameDay($page->rawUpdatedDate()));
-    }
+        $article = Article::find('testing');
 
-    public function test_malformed_update_date_returns_the_post_date()
-    {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => Carbon::now()->subWeek()->toDateString(),
-                    'updateDate' => Carbon::now()->toDateString(),
-                ]
-            ])
-        );
-
-        $page = Article::forSlug('testing');
-
-        $this->assertTrue($page->rawPostDate()->isSameDay($page->rawUpdatedDate()));
+        $this->assertSame($article->getUpdateDate()->toDateTimeString(), $update_date->toDateTimeString());
     }
 
     public function test_raw_content_can_be_retrieved_for_editors()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ]
-            ])
-        );
+        Article::find('testing')
+            ->setMatter(['post_date' => date('Y-m-d')])
+            ->setBody('# Testing')
+            ->save();
 
-        vfsStream::newFile('content/articles/testing.md')
-            ->at($this->fs)
-            ->setContent('# Testing');
-
-        $this->assertSame('# Testing', Article::forSlug('testing')->rawContent());
+        $this->assertStringContainsString('# Testing', Article::find('testing')->rawBody());
     }
 
     public function test_description_is_returned_when_specified_in_config()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d'),
-                    'description' => 'Testing the description'
-                ]
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d'),
+                'description' => 'Testing the description'
             ])
-        );
+            ->setBody('# Testing')
+            ->save();
 
-        $this->assertSame('Testing the description', Article::forSlug('testing')->description());
+        $this->assertSame('Testing the description', Article::find('testing')->description);
     }
 
     public function test_description_is_generated_from_content_when_not_specified()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ]
+        $content = '# Testing 
+This is a paragraph';
+
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d')
             ])
-        );
+            ->setBody($content)
+            ->save();
 
-        vfsStream::newFile('content/articles/testing.md')
-            ->at($this->fs)
-            ->setContent('# Testing 
-This is a paragraph');
-
-        $this->assertSame('This is a paragraph', Article::forSlug('testing')->description());
+        $this->assertSame('This is a paragraph', Article::find('testing')->description());
     }
 
     public function test_description_is_empty_when_no_paragraphs_found()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ]
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d')
             ])
-        );
+            ->setBody('# Testing')
+            ->save();
 
-        vfsStream::newFile('content/articles/testing.md')
-            ->at($this->fs)
-            ->setContent('# Testing');
-
-        $this->assertEmpty(Article::forSlug('testing')->description());
+        $this->assertEmpty(Article::find('testing')->description());
     }
 
     public function test_canonical_link_is_returned_when_specified()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d'),
-                    'canonical' => 'https://www.google.com'
-                ]
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d'),
+                'canonical' => 'https://www.google.com'
             ])
-        );
+            ->setBody('# Testing')
+            ->save();
 
-        $this->assertSame('https://www.google.com', Article::forSlug('testing')->canonicalLink());
+        $this->assertSame('https://www.google.com', Article::find('testing')->canonical);
     }
 
     public function test_canonical_link_is_null_when_not_specified()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ]
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d')
             ])
-        );
+            ->setBody('# Testing')
+            ->save();
 
-        $this->assertNull(Article::forSlug('testing')->canonicalLink());
+        $this->assertNull(Article::find('testing')->canonical);
     }
 
     public function test_external_url_is_returned_when_specified()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d'),
-                    'url' => 'https://www.google.com'
-                ]
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d'),
+                'external_url' => 'https://www.google.com'
             ])
-        );
+            ->setBody('# Testing')
+            ->save();
 
-        $this->assertSame('https://www.google.com', Article::forSlug('testing')->url());
+        $this->assertSame('https://www.google.com', Article::find('testing')->external_url);
     }
 
     public function test_url_is_null_when_not_specified()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ]
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d')
             ])
-        );
+            ->setBody('# Testing')
+            ->save();
 
-        $this->assertNull(Article::forSlug('testing')->url());
+        $this->assertNull(Article::find('testing')->external_url);
     }
 
     public function test_article_is_not_marked_as_scheduled_when_not_set_in_config()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ]
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d')
             ])
-        );
+            ->setBody('# Testing')
+            ->save();
 
-        $this->assertFalse(Article::forSlug('testing')->isScheduled());
+        $this->assertFalse(Article::find('testing')->isScheduled());
     }
 
     public function test_article_is_not_marked_as_scheduled_when_specified_as_so_in_config()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d'),
-                    'isScheduled' => false
-                ]
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d'),
+                'is_scheduled' => false
             ])
-        );
+            ->setBody('# Testing')
+            ->save();
 
-        $this->assertFalse(Article::forSlug('testing')->isScheduled());
+        $this->assertFalse(Article::find('testing')->isScheduled());
     }
 
     public function test_article_is_marked_as_scheduled_when_specified_as_so_in_config()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d'),
-                    'isScheduled' => true
-                ]
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d'),
+                'is_scheduled' => true
             ])
-        );
+            ->setBody('# Testing')
+            ->save();
 
-        $this->assertTrue(Article::forSlug('testing')->isScheduled());
+        $this->assertTrue(Article::find('testing')->isScheduled());
     }
 
     public function test_articles_folder_path_is_created_when_not_existent()
     {
-        Config::set('flatfilecms.articles.folder_path', $this->fs->getChild('content')->url() . '/new-articles');
+        $this->assertFalse($this->fs->hasChild('content/collections/articles'));
 
-        $this->assertFalse($this->fs->hasChild('content/new-articles'));
+        $article = new Article();
 
-        Article::all();
+        $article->getFolderPath();
 
-        $this->assertTrue($this->fs->hasChild('content/new-articles'));
+        $this->assertTrue($this->fs->hasChild('content/collections/articles'));
     }
 
     public function test_title_can_be_retrieved_through_getter_and_method()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ]
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d'),
+                'is_scheduled' => true,
+                'title' => 'Testing things'
             ])
-        );
+            ->setBody('# Testing')
+            ->save();
 
-        vfsStream::newFile('content/articles/testing.md')
-            ->at($this->fs)
-            ->setContent('# Testing');
+        $this->assertSame('Testing things', Article::find('testing')->title());
+        $this->assertSame('Testing things', Article::find('testing')->title);
 
-        $this->assertSame('Testing', Article::forSlug('testing')->title());
-        $this->assertSame('Testing', Article::forSlug('testing')->title);
-        $this->assertNull(Article::forSlug('testing')->titles);
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d'),
+                'is_scheduled' => true
+            ])
+            ->setBody('# Testing')
+            ->save();
+
+        $this->assertSame('Testing', Article::find('testing')->title());
     }
 
     public function test_article_can_be_removed_by_slug()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d')
-                ],
-                [
-                    'filename' => 'contact.html',
-                    'postDate' => date('Y-m-d')
-                ]
+        Article::find('testing')
+            ->setMatter([
+                'post_date' => date('Y-m-d')
             ])
-        );
+            ->setBody('# Testing')
+            ->save();
 
-        file_put_contents(vfsStream::url('root/content/articles/testing.md'), '# Testing');
-        file_put_contents(vfsStream::url('root/content/articles/contact.html'), '<h1>Contact</h1>');
+        $this->assertTrue(Article::find('testing')->exists());
 
-        $this->assertTrue($this->fs->hasChild('content/articles/testing.md'));
-        $this->assertTrue($this->fs->hasChild('content/articles/contact.html'));
-        $this->assertCount(2, Article::all());
+        Article::find('testing')->delete();
 
-        Article::deleteBySlug('contact');
-
-        $this->assertTrue($this->fs->hasChild('content/articles/testing.md'));
-        $this->assertFalse($this->fs->hasChild('content/articles/contact.html'));
-        $this->assertCount(1, Article::all());
+        $this->assertFalse(Article::find('testing')->exists());
     }
 
     public function test_can_get_all_articles()
     {
-        \FlatFileCms\Models\Article::find('article')
-            ->setMatter(['title' => 'Article title'])
+        Article::find('article')
+            ->setMatter(['title' => 'Article title', 'post_date' => date('Y-m-d')])
             ->setBody('# This is content')
             ->save();
 
-        $articles = \FlatFileCms\Models\Article::all();
+        $articles = Article::all();
 
         $this->assertCount(1, $articles);
         $this->assertSame('Article title', $articles->first()->title);
