@@ -46,7 +46,7 @@ class FileFinderTest extends TestCase
         Article::find('testing')
             ->setExtension('md')
             ->setMatter([
-                'postDate' => date('Y-m-d'),
+                'post_date' => date('Y-m-d'),
                 'isPublished' => true
             ])
             ->setBody('# Testing')
@@ -55,7 +55,7 @@ class FileFinderTest extends TestCase
         Article::find('homepage')
             ->setExtension('md')
             ->setMatter([
-                'postDate' => date('Y-m-d'),
+                'post_date' => date('Y-m-d'),
                 'isPublished' => true
             ])
             ->setBody('# Homepage')
@@ -72,7 +72,7 @@ class FileFinderTest extends TestCase
         Article::find('testing')
             ->setExtension('md')
             ->setMatter([
-                'postDate' => date('Y-m-d'),
+                'post_date' => date('Y-m-d'),
                 'isPublished' => false
             ])
             ->setBody('# Testing things')
@@ -81,7 +81,7 @@ class FileFinderTest extends TestCase
         Article::find('homepage')
             ->setExtension('md')
             ->setMatter([
-                'postDate' => date('Y-m-d'),
+                'post_date' => date('Y-m-d'),
                 'isPublished' => true
             ])
             ->setBody('# Homepage things')
@@ -90,6 +90,6 @@ class FileFinderTest extends TestCase
         $results = FileFinder::find(new Article, 'things');
 
         $this->assertCount(1, $results);
-        $this->assertStringContainsString('# Homepage things', $results->first()->body());
+        $this->assertStringContainsString('# Homepage things', $results->first()->rawBody());
     }
 }
