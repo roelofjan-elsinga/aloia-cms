@@ -8,6 +8,7 @@ use FlatFileCms\Writer\FolderCreator;
 use FlatFileCms\Writer\FrontMatterCreator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\File;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 
 class Model implements ModelInterface, StorableInterface
@@ -137,5 +138,10 @@ class Model implements ModelInterface, StorableInterface
         $instance = new static($file_name);
         
         return $instance->exists();
+    }
+
+    public function __get($key)
+    {
+        return $this->matter[$key] ?? "";
     }
 }
