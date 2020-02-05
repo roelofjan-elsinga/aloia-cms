@@ -41,6 +41,16 @@ class Article extends Model implements ModelInterface, PublishInterface
     }
 
     /**
+     * Get the slug of this article
+     *
+     * @return string
+     */
+    public function slug(): string
+    {
+        return $this->file_name;
+    }
+
+    /**
      * Get the main image of this article
      *
      * @return string
@@ -110,7 +120,7 @@ class Article extends Model implements ModelInterface, PublishInterface
      */
     public function description(): string
     {
-        return $this->article['description'] ?? $this->getDescriptionFromContent();
+        return $this->matter['description'] ?? $this->getDescriptionFromContent();
     }
 
     /**
@@ -151,6 +161,6 @@ class Article extends Model implements ModelInterface, PublishInterface
      */
     public function externalUrl(): ?string
     {
-        return $this->matter['url'] ?? null;
+        return $this->matter['external_url'] ?? null;
     }
 }
