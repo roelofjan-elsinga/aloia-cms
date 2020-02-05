@@ -219,4 +219,14 @@ class Page extends Model implements ModelInterface, PublishInterface
     {
         return $this->matter['canonical'] ?? null;
     }
+
+    /**
+     * Get the url of this page
+     *
+     * @return string
+     */
+    public function url(): string
+    {
+        return $this->matter['url'] ?? $this->file_name;
+    }
 }
