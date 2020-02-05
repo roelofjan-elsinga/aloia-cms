@@ -6,6 +6,7 @@ use FlatFileCms\Console\ConfigCommand;
 use FlatFileCms\Console\Migrations\UpgradeZeroToOneCommand;
 use FlatFileCms\Console\NewArticle;
 use FlatFileCms\Console\PermissionsCommand;
+use FlatFileCms\Models\ContentBlock;
 use Illuminate\Support\ServiceProvider;
 
 class FlatFileCmsServiceProvider extends ServiceProvider
@@ -39,7 +40,7 @@ class FlatFileCmsServiceProvider extends ServiceProvider
     private function bindFacades()
     {
         $this->app->bind('FlatFileCmsBlock', function () {
-            return new Block;
+            return new ContentBlock();
         });
     }
 }
