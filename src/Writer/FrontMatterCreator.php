@@ -48,9 +48,13 @@ class FrontMatterCreator
             })
             ->toArray();
 
-        $front_matter_string = "---\n";
-        $front_matter_string .= Yaml::dump($matter);
-        $front_matter_string .= "---\n\n";
+        $front_matter_string = "";
+
+        if (count($matter) > 0) {
+            $front_matter_string = "---\n";
+            $front_matter_string .= Yaml::dump($matter);
+            $front_matter_string .= "---\n\n";
+        }
 
         $front_matter_string .= $this->content;
 
