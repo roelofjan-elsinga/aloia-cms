@@ -143,4 +143,14 @@ class Article extends Model implements ModelInterface, PublishInterface
     {
         return $this->matter['canonical'] ?? null;
     }
+
+    /**
+     * Get the external URL if it's set
+     *
+     * @return null|string
+     */
+    public function externalUrl(): ?string
+    {
+        return $this->matter['url'] ?? null;
+    }
 }

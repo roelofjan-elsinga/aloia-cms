@@ -74,14 +74,18 @@ class UpgradeZeroToOneCommand extends Command
             $file_content = file_get_contents(Config::get('flatfilecms.pages.folder_path') . "/{$page['filename']}");
 
             $page['post_date'] = $page['postDate'];
-            unset($page['postDate']);
             $page['is_published'] = $page['isPublished'];
-            unset($page['isPublished']);
             $page['is_scheduled'] = $page['isScheduled'];
-            unset($page['isScheduled']);
 
-            Page::find(pathinfo($page['filename'], PATHINFO_FILENAME))
-                ->setExtension(pathinfo($page['filename'], PATHINFO_EXTENSION))
+            $filename = $page['filename'];
+
+            unset($page['postDate']);
+            unset($page['filename']);
+            unset($page['isScheduled']);
+            unset($page['isPublished']);
+
+            Page::find(pathinfo($filename, PATHINFO_FILENAME))
+                ->setExtension(pathinfo($filename, PATHINFO_EXTENSION))
                 ->setMatter($page)
                 ->setBody($file_content)
                 ->save();
@@ -100,15 +104,20 @@ class UpgradeZeroToOneCommand extends Command
             $file_content = file_get_contents(Config::get('flatfilecms.articles.folder_path') . "/{$article['filename']}");
 
             $article['post_date'] = $article['postDate'];
-            unset($article['postDate']);
 
             if (isset($article['url'])) {
                 $article['external_url'] = $article['url'];
-                unset($article['url']);
             }
 
-            Article::find(pathinfo($article['filename'], PATHINFO_FILENAME))
-                ->setExtension(pathinfo($article['filename'], PATHINFO_EXTENSION))
+            $article['url'] = pathinfo($article['filename'], PATHINFO_FILENAME);
+
+            $filename = $article['filename'];
+
+            unset($article['postDate']);
+            unset($article['filename']);
+
+            Article::find(pathinfo($filename, PATHINFO_FILENAME))
+                ->setExtension(pathinfo($filename, PATHINFO_EXTENSION))
                 ->setMatter($article)
                 ->setBody($file_content)
                 ->save();

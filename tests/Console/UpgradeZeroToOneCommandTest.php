@@ -34,7 +34,7 @@ class UpgradeZeroToOneCommandTest extends TestCase
 
         $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/articles/article.md'));
         $this->assertTrue(Article::find('article')->exists());
-        $this->assertStringContainsString("filename: article.md", Article::find('article')->rawContent());
+        $this->assertStringContainsString("url: article", Article::find('article')->rawContent());
         $this->assertStringContainsString("Article description", Article::find('article')->description);
         $this->assertSame("https://google.com", Article::find('article')->external_url);
     }
