@@ -104,12 +104,4 @@ class BlockTest extends TestCase
             $block->parseHtmlString($html_string)
         );
     }
-
-    public function test_block_can_be_accessed_through_service_container()
-    {
-        file_put_contents("{$this->fs->getChild('content/blocks')->url()}/testing.html", "<h1>Testing</h1>");
-
-        $this->assertSame("<h1>Testing</h1>", app('FlatFileCmsBlock')->get('testing'));
-        $this->assertSame("<h1>Testing</h1>", BlockFacade::get('testing'));
-    }
 }
