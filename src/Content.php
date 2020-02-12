@@ -84,6 +84,6 @@ abstract class Content
      */
     protected function parseContentBlocks(string $html_string): string
     {
-        return (new Block)->parseHtmlString($html_string);
+        return (new InlineBlockParser)->parseHtmlString($html_string, true);
     }
 }

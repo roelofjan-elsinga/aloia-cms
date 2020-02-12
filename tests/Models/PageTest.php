@@ -4,6 +4,7 @@
 namespace FlatFileCms\Tests\Models;
 
 use Carbon\Carbon;
+use FlatFileCms\Models\ContentBlock;
 use FlatFileCms\Models\Page;
 use FlatFileCms\Tests\TestCase;
 
@@ -202,5 +203,28 @@ class PageTest extends TestCase
             ->save();
 
         $this->assertSame(date('Y-m-d'), Page::find('homepage')->getUpdateDate()->toDateString());
+    }
+
+    public function test_page_can_parse_content_block_in_content()
+    {
+        ContentBlock::find('testing')
+            ->setBody('## Testing content blocks')
+            ->save();
+
+        $page = Page::find('testing')
+            ->setExtension('html')
+            ->setMatter([
+                'title' => 'Testing',
+                'description' => 'Testing',
+                'post_date' => date('Y-m-d'),
+                'is_published' => true,
+                'is_scheduled' => false,
+                'summary' => 'summary',
+                'template_name' => 'default'
+            ])
+            ->setBody('<h1>Testing</h1> ===testing===')
+            ->save();
+
+        $this->assertStringContainsString('<h2>Testing content blocks</h2>', $page->body());
     }
 }

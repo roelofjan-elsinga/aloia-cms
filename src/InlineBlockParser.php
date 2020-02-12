@@ -4,12 +4,13 @@ namespace FlatFileCms;
 
 use ContentParser\ContentParser;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use FlatFileCms\Facades\BlockFacade;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
-class Block
+class InlineBlockParser
 {
 
     /**
@@ -17,6 +18,8 @@ class Block
      *
      * @param string $block_name
      * @return string
+     *
+     * @deprecated since version 1.0.0
      */
     public function get(string $block_name): string
     {
@@ -39,6 +42,8 @@ class Block
      * @param string $block_name
      * @return string
      * @throws FileNotFoundException
+     *
+     * @deprecated since version 1.0.0
      */
     private function getFilePathFromName(string $block_name): string
     {
@@ -63,6 +68,8 @@ class Block
      * Get the folder path of the content blocks.
      *
      * @return string
+     *
+     * @deprecated since version 1.0.0
      */
     private function getBlockFolderPath(): string
     {
@@ -73,9 +80,10 @@ class Block
      * Convert block tags in HTML strings into block content
      *
      * @param string $html_string
+     * @param bool $backward_compatible_mode
      * @return string
      */
-    public function parseHtmlString(string $html_string): string
+    public function parseHtmlString(string $html_string, bool $backward_compatible_mode = false): string
     {
         $tag_positions = $this->strpos_all($html_string, '===');
 
@@ -102,7 +110,7 @@ class Block
 
             $block_name = trim(str_replace("===", "", $tag));
 
-            $replacements[$tag] = $this->getReplacementFromBlockName($tag, $block_name);
+            $replacements[$tag] = $this->getReplacementFromBlockName($tag, $block_name, $backward_compatible_mode);
         }
 
         return str_replace(array_keys($replacements), array_values($replacements), $html_string);
@@ -141,9 +149,10 @@ class Block
      *
      * @param string $tag
      * @param string $block_name
+     * @param bool $backward_compatible_mode
      * @return string
      */
-    private function getReplacementFromBlockName(string $tag, string $block_name): string
+    private function getReplacementFromBlockName(string $tag, string $block_name, bool $backward_compatible_mode): string
     {
         $index_of_options = strpos($block_name, '[');
 
@@ -163,7 +172,7 @@ class Block
             }
         }
 
-        $block_value = $this->get($block_name);
+        $block_value = $backward_compatible_mode ? $this->get($block_name) : BlockFacade::get($block_name);
 
         if (empty($block_value)) {
             $block_value = $tag;

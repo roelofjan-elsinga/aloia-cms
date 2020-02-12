@@ -12,7 +12,7 @@ class ContentBlockTest extends TestCase
     {
         $block = new ContentBlock();
 
-        $this->assertEmpty($block->get('non_exisint'));
+        $this->assertEmpty($block->get('non_existent'));
     }
 
     public function test_html_is_returned_for_an_html_block()

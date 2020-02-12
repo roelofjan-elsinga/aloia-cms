@@ -4,7 +4,7 @@
 namespace FlatFileCms\Models;
 
 use ContentParser\ContentParser;
-use FlatFileCms\Block;
+use FlatFileCms\InlineBlockParser;
 use FlatFileCms\Models\Contracts\ModelInterface;
 use FlatFileCms\Models\Contracts\StorableInterface;
 use FlatFileCms\Writer\FolderCreator;
@@ -195,7 +195,7 @@ class Model implements ModelInterface, StorableInterface
     {
         $content = new ContentParser($this->rawBody(), $this->extension());
 
-        return (new Block)->parseHtmlString($content->parse());
+        return (new InlineBlockParser)->parseHtmlString($content->parse());
     }
 
     /**
