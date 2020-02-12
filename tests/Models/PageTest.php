@@ -96,7 +96,6 @@ class PageTest extends TestCase
         $this->assertNull($homepage->metaData());
         $this->assertNull($homepage->canonicalLink());
         $this->assertEmpty($homepage->author());
-        $this->assertEmpty($homepage->keywords());
     }
 
     public function test_page_url_is_file_name_when_not_specified()

@@ -145,16 +145,6 @@ class Page extends Model implements ModelInterface, PublishInterface
     }
 
     /**
-     * Get the keywords of this page
-     *
-     * @return string
-     */
-    public function keywords(): string
-    {
-        return $this->matter['keywords'] ?? '';
-    }
-
-    /**
      * Get the meta data for this page
      *
      * @return array|null
