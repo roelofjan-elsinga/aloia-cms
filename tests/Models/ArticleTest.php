@@ -385,14 +385,7 @@ This is a paragraph';
 
         file_put_contents(
             $path,
-            <<<EOD
-            ---
-            title: This is a title
-            description: This is a description
-            ---
-            
-            # Page header
-EOD,
+            file_get_contents(getcwd() . '/tests/stubs/article_without_post_and_update_date.stub'),
             FILE_APPEND
         );
 
