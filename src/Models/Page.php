@@ -57,22 +57,7 @@ class Page extends Model implements ModelInterface, PublishInterface
      */
     public function title(): string
     {
-        return $this->matter['title'] ?? $this->getParsedTitleFromContent();
-    }
-
-    /**
-     * Get the parsed title from the page content
-     *
-     * @return string
-     * @throws \Exception
-     */
-    private function getParsedTitleFromContent(): string
-    {
-        $file_content = $this->body();
-
-        $titles = HtmlParser::getTextBetweenTags($file_content, 'h1');
-
-        return $titles[0] ?? "Untitled page";
+        return $this->matter['title'];
     }
 
     /**
@@ -83,28 +68,7 @@ class Page extends Model implements ModelInterface, PublishInterface
      */
     public function description(): string
     {
-        return $this->matter['description'] ?? $this->getDescriptionFromContent();
-    }
-
-    /**
-     * Generate a description for the content
-     *
-     * @return bool|string
-     * @throws \Exception
-     */
-    protected function getDescriptionFromContent(): string
-    {
-        $paragraphs = HtmlParser::getTextBetweenTags($this->body(), 'p');
-
-        $paragraphs_with_text_content = array_filter($paragraphs, function ($paragraph) {
-            return !empty(strip_tags($paragraph));
-        });
-
-        if (count($paragraphs_with_text_content) > 0) {
-            return substr(head($paragraphs_with_text_content), 0, 160);
-        }
-
-        return "";
+        return $this->matter['description'];
     }
 
     /**
