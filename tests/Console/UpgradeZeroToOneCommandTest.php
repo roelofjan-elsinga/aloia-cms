@@ -76,7 +76,7 @@ class UpgradeZeroToOneCommandTest extends TestCase
 
     public function testUpgradeCorrectlyMigratesMetaTags()
     {
-        file_put_contents(Config::get('flatfilecms.meta_tags.file_path'), json_encode(["default" => $this->defaultMetaTagConfig()], 128));
+        file_put_contents(Config::get('flatfilecms.meta_tags.file_path'), json_encode(["tags" => ["default" => $this->defaultMetaTagConfig()]], 128));
 
         $this->artisan('flatfilecms:upgrade:0-to-1');
 

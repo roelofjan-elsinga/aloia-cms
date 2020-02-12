@@ -153,7 +153,7 @@ class UpgradeZeroToOneCommand extends Command
 
         $page_data = json_decode(file_get_contents(Config::get('flatfilecms.meta_tags.file_path')), true);
 
-        foreach ($page_data as $filename => $page) {
+        foreach ($page_data['tags'] as $filename => $page) {
             MetaTag::find($filename)
                 ->setExtension('md')
                 ->setMatter([
