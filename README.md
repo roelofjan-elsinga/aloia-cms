@@ -97,6 +97,7 @@ And finally, to update your article, you can run:
 use Carbon\Carbon;
 
 Article::find($post_slug)
+    ->setExtension('md') // md is the default, but you can use html as well.
     ->setMatter([
         'description' => 'This post is about beautiful things',
         'is_published' => true,
