@@ -156,7 +156,12 @@ class UpgradeZeroToOneCommand extends Command
         foreach ($page_data as $filename => $page) {
             MetaTag::find($filename)
                 ->setExtension('md')
-                ->setMatter($page)
+                ->setMatter([
+                    'title' => $page['title'],
+                    'description' => $page['description'],
+                    'author' => $page['author'],
+                    'image_url' => $page['image_large'],
+                ])
                 ->save();
         }
     }
