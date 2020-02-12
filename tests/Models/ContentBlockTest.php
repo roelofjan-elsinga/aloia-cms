@@ -2,6 +2,7 @@
 
 namespace FlatFileCms\Tests\Models;
 
+use FlatFileCms\Facades\BlockFacade;
 use FlatFileCms\Models\ContentBlock;
 use FlatFileCms\Tests\TestCase;
 
@@ -58,5 +59,15 @@ class ContentBlockTest extends TestCase
             ->save();
 
         $this->assertSame("<h1>Testing</h1>", app('FlatFileCmsBlock')->get('testing'));
+    }
+
+    public function test_block_can_be_accessed_through_facade()
+    {
+        ContentBlock::find('testing')
+            ->setExtension('html')
+            ->setBody("<h1>Testing</h1>")
+            ->save();
+
+        $this->assertSame("<h1>Testing</h1>", BlockFacade::get('testing'));
     }
 }

@@ -6,6 +6,8 @@ namespace FlatFileCms\Tests\Models;
 use Carbon\Carbon;
 use FlatFileCms\Models\Article;
 use FlatFileCms\Tests\TestCase;
+use Illuminate\Support\Facades\Config;
+use org\bovigo\vfs\vfsStream;
 
 class ArticleTest extends TestCase
 {
@@ -95,6 +97,16 @@ class ArticleTest extends TestCase
 
         $this->assertSame('https://via.placeholder.com/150', Article::find('image')->image());
         $this->assertEmpty(Article::find('no-image')->image());
+    }
+
+    public function test_image_is_retrieved_from_front_matter_if_present()
+    {
+        Article::find('image')
+            ->setMatter(['post_date' => date('Y-m-d'), 'image' => 'https://google.com/image.jpeg'])
+            ->setBody('# Image ![Placeholder](https://via.placeholder.com/150)')
+            ->save();
+
+        $this->assertSame('https://google.com/image.jpeg', Article::find('image')->image());
     }
 
     public function test_thumbnail_is_returned_when_specified_in_config()
@@ -209,6 +221,7 @@ This is a paragraph';
             ->save();
 
         $this->assertSame('https://www.google.com', Article::find('testing')->canonical);
+        $this->assertSame('https://www.google.com', Article::find('testing')->canonicalLink());
     }
 
     public function test_canonical_link_is_null_when_not_specified()
@@ -221,6 +234,7 @@ This is a paragraph';
             ->save();
 
         $this->assertNull(Article::find('testing')->canonical);
+        $this->assertNull(Article::find('testing')->canonicalLink());
     }
 
     public function test_external_url_is_returned_when_specified()
@@ -234,6 +248,7 @@ This is a paragraph';
             ->save();
 
         $this->assertSame('https://www.google.com', Article::find('testing')->external_url);
+        $this->assertSame('https://www.google.com', Article::find('testing')->externalUrl());
     }
 
     public function test_url_is_null_when_not_specified()
@@ -246,6 +261,7 @@ This is a paragraph';
             ->save();
 
         $this->assertNull(Article::find('testing')->external_url);
+        $this->assertNull(Article::find('testing')->externalUrl());
     }
 
     public function test_article_is_not_marked_as_scheduled_when_not_set_in_config()
@@ -349,5 +365,68 @@ This is a paragraph';
 
         $this->assertCount(1, $articles);
         $this->assertSame('Article title', $articles->first()->title);
+    }
+
+    public function test_slug_is_same_as_file_name()
+    {
+        $article = Article::find('article')
+            ->setMatter(['title' => 'Article title', 'post_date' => date('Y-m-d')])
+            ->setBody('# This is content')
+            ->save();
+
+        $this->assertSame('article', $article->slug());
+    }
+
+    public function test_post_date_can_be_retrieved()
+    {
+        $path = vfsStream::url('root/content/collections/articles/testing.md');
+
+        mkdir(vfsStream::url('root/content/collections/articles'));
+
+        file_put_contents(
+            $path,
+            <<<EOD
+            ---
+            title: This is a title
+            description: This is a description
+            ---
+            
+            # Page header
+EOD,
+            FILE_APPEND
+        );
+
+        $this->assertNull(Article::find('testing')->getPostDate());
+        $this->assertNull(Article::find('testing')->getUpdateDate());
+    }
+
+    public function test_scheduled_articles_can_be_retrieved()
+    {
+        Article::find('testing_scheduled')
+            ->setMatter(['post_date' => date('Y-m-d'), 'is_scheduled' => true])
+            ->save();
+
+        Article::find('testing_unscheduled')
+            ->setMatter(['post_date' => date('Y-m-d'), 'is_scheduled' => false])
+            ->save();
+
+        $articles = Article::all();
+
+        $this->assertSame(2, $articles->count());
+
+        $articles = Article::scheduled();
+
+        $this->assertSame(1, $articles->count());
+    }
+
+    public function test_front_matter_is_retrievable_as_array()
+    {
+        $article = Article::find('article')
+            ->setMatter(['title' => 'Article title', 'post_date' => date('Y-m-d')])
+            ->setBody('# This is content')
+            ->save();
+
+        $this->assertArrayHasKey('title', $article->matter());
+        $this->assertArrayHasKey('post_date', $article->matter());
     }
 }

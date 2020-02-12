@@ -99,6 +99,27 @@ class PageTest extends TestCase
         $this->assertEmpty($homepage->keywords());
     }
 
+    public function test_page_url_is_file_name_when_not_specified()
+    {
+        Page::find('testing')
+            ->setMatter([
+                'title' => 'title',
+                'description' => 'description',
+                'summary' => 'summary',
+                'template_name' => 'template',
+                'is_published' => true,
+                'is_scheduled' => false,
+                'is_homepage' => true,
+                'post_date' => date('Y-m-d')
+            ])
+            ->setBody('# Homepage')
+            ->save();
+
+        $homepage = Page::homepage();
+
+        $this->assertSame('testing', $homepage->url());
+    }
+
     public function test_can_get_all_published_pages()
     {
         Page::find('homepage')

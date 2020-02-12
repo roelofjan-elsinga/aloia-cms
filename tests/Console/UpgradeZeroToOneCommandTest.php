@@ -9,9 +9,22 @@ use FlatFileCms\Models\Page;
 use FlatFileCms\Models\Article;
 use FlatFileCms\Models\MetaTag;
 use Illuminate\Support\Facades\Config;
+use org\bovigo\vfs\vfsStream;
 
 class UpgradeZeroToOneCommandTest extends TestCase
 {
+    public function testCommandCreatesCollectionFolderIfNonExisting()
+    {
+        $content_path = vfsStream::url('root/content/objects');
+
+        Config::set('flatfilecms.collections_path', $content_path);
+
+        $this->artisan('flatfilecms:upgrade:0-to-1')
+            ->expectsQuestion("The collections folder doesn't exist, do you want to create it at {$content_path}?", true);
+
+        $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path')));
+    }
+
     public function testUpgradeCorrectlyMigratesPages()
     {
         file_put_contents(Config::get('flatfilecms.pages.file_path'), json_encode([$this->defaultPageConfig()], 128));
@@ -48,6 +61,17 @@ class UpgradeZeroToOneCommandTest extends TestCase
         $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/content_blocks/content.md'));
         $this->assertTrue(ContentBlock::find('content')->exists());
         $this->assertStringContainsString("identifier: content", ContentBlock::find('content')->rawContent());
+    }
+
+    public function test_content_blocks_are_skipped_if_folder_does_not_exist()
+    {
+        $content_path = vfsStream::url('root/content/objects');
+
+        Config::set('flatfilecms.content_blocks.folder_path', $content_path);
+
+        $this->artisan('flatfilecms:upgrade:0-to-1');
+
+        $this->assertFalse(file_exists($content_path));
     }
 
     public function testUpgradeCorrectlyMigratesMetaTags()
