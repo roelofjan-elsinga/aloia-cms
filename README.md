@@ -20,16 +20,54 @@ composer require roelofjan-elsinga/flat-file-cms
 and if you want to customize the folder structure, then publish the configuration through:
 
 ```bash
-php artisan vendor:publish --provider="FlatFileCms\\AppServiceProvider"
+php artisan vendor:publish --provider="FlatFileCms\\FlatFileCmsServiceProvider"
 ```
 
-## Usage of Article
+## Creating a custom content type
 
-To load all articles located at the folder you specified in 
-``config('flatfilecms.articles.folder_path')`` you can use the following script:
+Creating a custom content type is very simple. All you have to do is create a class that extends ``FlatFile\Models\Model``, 
+specify a ``$folder_path``, and optionally add required fields to ``$required_fields``. An example can be found below:
 
 ```php
-use FlatFileCms\Article;
+namespace App\Models;
+
+use FlatFileCms\Models\Model;
+
+class PortfolioItem extends Model
+{
+    protected $folder = 'portfolio_items';
+
+    protected $required_fields = [
+        'name',
+        'github_url',
+        'description',
+    ];
+}
+```
+
+Once you have a class like this, you can interact with it like described under "Usage of models"
+
+## Built-in models
+
+There are 4 built-in models which you can use without any additional set-up:
+- Page
+- Article
+- ContentBlock
+- MetaTag
+
+Of course you can add your own models as described at "Creating a custom content type".
+
+## Usage of models
+
+In this example we're looking at one of the built-in content types: Article. 
+You can use these same steps for all classes that extend from "FlatFile\Models\Model".
+
+
+To load all articles in the "articles" folder in the folder you specified in 
+``config('flatfilecms.collection_path')`` you can use the following script:
+
+```php
+use FlatFileCms\Models\Article;
 
 /**@var Article[]*/
 $articles = Article::all();
@@ -38,7 +76,7 @@ $articles = Article::all();
 You can use that to display your posts on a page. You can also load a single post, using:
 
 ```php
-$article = Article::forSlug($post_slug);
+$article = Article::find($post_slug);
 ```
 
 If you only want all published posts, you'll need to retrieve them like so:
@@ -47,26 +85,28 @@ If you only want all published posts, you'll need to retrieve them like so:
 $published_articles = Article::published();
 ```
 
-To get the contents of the articles.json file, you can run:
+To get the raw contents of each article (content + front matter), you can use:
 
 ```php
-$articles = Article::raw();
+$articles = Article::find($post_slug)->rawContent();
 ```
 
-And finally, to update the data in ```articles.json```, you can run:
+And finally, to update your article, you can run:
 
 ```php
-$posts = Article::raw();
+use Carbon\Carbon;
 
-$posts->push([
-    'filename' => 'my-beautiful-post.md', // or: .html, .txt
-    'description' => 'This post is about beautiful things',
-    'postDate' => date('Y-m-d'),
-    'isPublished' => true,
-    'isScheduled' => false,
-]);
-
-Article::update();
+Article::find($post_slug)
+    ->setMatter([
+        'description' => 'This post is about beautiful things',
+        'is_published' => true,
+        'is_sechduled' => false,
+        // Either use post_date in setMatter() or setPostDate()
+        'post_date' => date('Y-m-d')
+    ])
+    ->setPostDate(Carbon::now())
+    ->setBody('# This is the content of an article')
+    ->save();
 ```
 
 ## Content blocks
