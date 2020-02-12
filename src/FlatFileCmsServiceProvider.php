@@ -3,10 +3,10 @@
 namespace FlatFileCms;
 
 use FlatFileCms\Console\ConfigCommand;
-use FlatFileCms\Console\GenerateArticleFiles;
+use FlatFileCms\Console\Migrations\UpgradeZeroToOneCommand;
 use FlatFileCms\Console\NewArticle;
 use FlatFileCms\Console\PermissionsCommand;
-use FlatFileCms\Console\SelfUpgradeCommand;
+use FlatFileCms\Models\ContentBlock;
 use Illuminate\Support\ServiceProvider;
 
 class FlatFileCmsServiceProvider extends ServiceProvider
@@ -26,10 +26,10 @@ class FlatFileCmsServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                GenerateArticleFiles::class,
                 NewArticle::class,
                 ConfigCommand::class,
                 PermissionsCommand::class,
+                UpgradeZeroToOneCommand::class,
             ]);
         }
     }
@@ -40,7 +40,7 @@ class FlatFileCmsServiceProvider extends ServiceProvider
     private function bindFacades()
     {
         $this->app->bind('FlatFileCmsBlock', function () {
-            return new Block;
+            return new ContentBlock();
         });
     }
 }

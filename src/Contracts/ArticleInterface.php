@@ -4,6 +4,9 @@ namespace FlatFileCms\Contracts;
 
 use Carbon\Carbon;
 
+/**
+ * @deprecated deprecated since version 1.0.0
+ */
 interface ArticleInterface extends ContentInterface
 {
 

@@ -5,12 +5,14 @@ namespace FlatFileCms;
 use Carbon\Carbon;
 use ContentParser\ContentParser;
 use FlatFileCms\Contracts\ArticleInterface;
-use FlatFileCms\Contracts\DataSourceInterface;
-use FlatFileCms\Contracts\StorableInterface;
+use FlatFileCms\Models\Contracts\StorableInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 
+/**
+ * @deprecated deprecated since version 1.0.0
+ */
 class Article extends Content implements ArticleInterface, StorableInterface
 {
     private $article;

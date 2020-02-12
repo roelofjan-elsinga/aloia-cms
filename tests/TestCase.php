@@ -30,6 +30,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
                 'pages' => [],
                 'articles' => [],
                 'blocks' => [],
+                'collections' => [],
                 'test-file.txt' => 'Test',
             ],
             'images' => [
@@ -41,6 +42,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
         $content_path = $this->fs->getChild('content')->url();
 
+        Config::set('flatfilecms.collections_path', "{$content_path}/collections");
         Config::set('flatfilecms.pages.file_path', "{$content_path}/pages.json");
         Config::set('flatfilecms.pages.folder_path', "{$content_path}/pages");
         Config::set('flatfilecms.articles.file_path', "{$content_path}/articles.json");

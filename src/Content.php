@@ -6,6 +6,9 @@ use FlatFileCms\Contracts\StorableInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 
+/**
+ * @deprecated deprecated since version 1.0.0
+ */
 abstract class Content
 {
     /**

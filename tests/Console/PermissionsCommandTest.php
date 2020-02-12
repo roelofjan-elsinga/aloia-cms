@@ -37,6 +37,8 @@ class PermissionsCommandTest extends TestCase
         Config::set('flatfilecms.meta_tags.file_path', "{$content_path}/metatags.json");
         Config::set('flatfilecms.taxonomy.file_path', "{$content_path}/taxonomy.json");
         Config::set('flatfilecms.uploaded_files.folder_path', "{$content_path}/files");
+        Config::set('flatfilecms.permissions.user', get_current_user());
+        Config::set('flatfilecms.permissions.group', get_current_user());
     }
 
     public function tearDown(): void

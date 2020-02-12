@@ -33,6 +33,3 @@ class ConfigCommand extends Command
         ]);
     }
 }
-{
-
-}

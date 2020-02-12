@@ -6,6 +6,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 
+/**
+ * @deprecated deprecated since version 1.0.0
+ */
 class TagsParser
 {
     public static function instance(): TagsParser

@@ -3,6 +3,7 @@
 
 namespace FlatFileCms\Tests\Console;
 
+use FlatFileCms\Models\Article;
 use FlatFileCms\Tests\TestCase;
 
 class NewArticleTest extends TestCase
@@ -19,7 +20,7 @@ class NewArticleTest extends TestCase
         $this->artisan('flatfilecms:new:article --slug=testing')
             ->expectsOutput('Created new post entry for testing');
 
-        $this->assertTrue($this->fs->hasChild('content/articles/testing.md'));
+        $this->assertTrue(Article::find('testing')->exists());
     }
 
     public function test_post_date_can_be_defined_from_command_line()
@@ -27,7 +28,7 @@ class NewArticleTest extends TestCase
         $this->artisan('flatfilecms:new:article --slug=testing --post_date=2017-01-01')
             ->expectsOutput('Created new post entry for testing');
 
-        $this->assertTrue($this->fs->hasChild('content/articles/testing.md'));
+        $this->assertTrue(Article::find('testing')->exists());
     }
 
     public function test_error_message_is_shown_when_providing_malformed_date_format()
@@ -36,6 +37,6 @@ class NewArticleTest extends TestCase
 
         $this->artisan('flatfilecms:new:article --slug=testing --post_date="2017-01-01 12:00:00"');
 
-        $this->assertFalse($this->fs->hasChild('content/articles/testing.md'));
+        $this->assertFalse(Article::find('testing')->exists());
     }
 }

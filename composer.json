@@ -46,17 +46,19 @@
     }
   },
   "require": {
-    "roelofjan-elsinga/content-to-html-parser": "^0.4.0",
+    "roelofjan-elsinga/content-to-html-parser": "^0.5",
     "illuminate/support": "^5.7",
     "illuminate/console": "^5.7",
     "ext-json": "*",
-    "ext-dom": "*"
+    "ext-dom": "*",
+    "spatie/yaml-front-matter": "^2.0",
+    "symfony/yaml": "^5.0"
   },
   "require-dev": {
     "orchestra/testbench": "^3.8",
     "mikey179/vfsstream": "^1.6",
     "phpunit/phpunit": "^8.3",
-    "spatie/phpunit-watcher": "^1.11",
+    "spatie/phpunit-watcher": "^1.22",
     "friendsofphp/php-cs-fixer": "^2.15",
     "brainmaestro/composer-git-hooks": "^2.7"
   }

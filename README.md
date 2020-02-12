@@ -20,7 +20,7 @@ composer require roelofjan-elsinga/flat-file-cms
 and if you want to customize the folder structure, then publish the configuration through:
 
 ```bash
-php artisan vendor:publish --provider="FlatFileCms\\FlatFileCmsServiceProvider"
+php artisan vendor:publish --provider="FlatFileCms\\AppServiceProvider"
 ```
 
 ## Usage of Article

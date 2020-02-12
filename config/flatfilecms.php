@@ -2,6 +2,11 @@
 
 return [
 
+    /*
+    * This value represents the folder locations where the collections are saved
+    * */
+    'collections_path' => resource_path('content/collections'),
+
     'pages' => [
 
         /*

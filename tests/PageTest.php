@@ -339,7 +339,7 @@ class PageTest extends TestCase
         $this->assertFalse($this->fs->hasChild('content/pages/contact.md'));
         $this->assertCount(1, Page::all());
     }
-    
+
     public function test_slug_can_be_retrieved_with_category_prefix()
     {
         Page::update(
@@ -367,7 +367,7 @@ class PageTest extends TestCase
 
         $this->assertSame('content-pages/homepage', Page::forSlug('homepage')->slug(true));
     }
-    
+
     public function test_fetching_the_taxonomy_of_a_page_without_category_results_in_default_taxonomy()
     {
         Page::update(

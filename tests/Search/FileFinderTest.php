@@ -3,10 +3,9 @@
 
 namespace FlatFileCms\Tests\Search;
 
-use FlatFileCms\Article;
+use FlatFileCms\Models\Article;
 use FlatFileCms\Search\FileFinder;
 use FlatFileCms\Tests\TestCase;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 
 class FileFinderTest extends TestCase
@@ -24,7 +23,7 @@ class FileFinderTest extends TestCase
             mkdir($content_path, 0777, true);
         }
 
-        Config::set('flatfilecms.articles.folder_path', $content_path);
+        Config::set('flatfilecms.collections_path', $content_path);
     }
 
     public function tearDown(): void
@@ -36,58 +35,60 @@ class FileFinderTest extends TestCase
 
     public function test_no_results_are_returned_when_no_matching_files_found()
     {
-        $results = FileFinder::find(Article::instance(), 'testing');
+        $results = FileFinder::find(new Article, 'testing');
 
         $this->assertCount(0, $results);
     }
 
     public function test_only_files_with_matching_content_are_found_for_search_terms()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d'),
-                    'isPublished' => true
-                ],
-                [
-                    'filename' => 'homepage.md',
-                    'postDate' => date('Y-m-d'),
-                    'isPublished' => true
-                ],
+        Article::find('testing')
+            ->setExtension('md')
+            ->setMatter([
+                'post_date' => date('Y-m-d'),
+                'isPublished' => true
             ])
-        );
+            ->setBody('# Testing')
+            ->save();
 
-        file_put_contents(__DIR__.'/test/testing.md', '# Testing');
-        file_put_contents(__DIR__.'/test/homepage.md', '# Homepage');
+        Article::find('homepage')
+            ->setExtension('md')
+            ->setMatter([
+                'post_date' => date('Y-m-d'),
+                'isPublished' => true
+            ])
+            ->setBody('# Homepage')
+            ->save();
 
-        $results = FileFinder::find(Article::instance(), 'testing');
+        $results = FileFinder::find(new Article, 'testing');
 
         $this->assertCount(1, $results);
+        $this->assertTrue($results->first()->is_published);
     }
 
     public function test_finder_only_returns_published_content()
     {
-        Article::update(
-            Collection::make([
-                [
-                    'filename' => 'testing.md',
-                    'postDate' => date('Y-m-d'),
-                    'isPublished' => true
-                ],
-                [
-                    'filename' => 'homepage.md',
-                    'postDate' => date('Y-m-d'),
-                    'isPublished' => false
-                ],
+        Article::find('testing')
+            ->setExtension('md')
+            ->setMatter([
+                'post_date' => date('Y-m-d'),
+                'isPublished' => false
             ])
-        );
+            ->setBody('# Testing things')
+            ->save();
 
-        file_put_contents(__DIR__.'/test/testing.md', '# Testing things');
-        file_put_contents(__DIR__.'/test/homepage.md', '# Homepage things');
+        Article::find('homepage')
+            ->setExtension('md')
+            ->setMatter([
+                'post_date' => date('Y-m-d'),
+                'isPublished' => true
+            ])
+            ->setBody('# Homepage things')
+            ->save();
 
-        $results = FileFinder::find(Article::instance(), 'things');
+        $results = FileFinder::find(new Article, 'things');
 
         $this->assertCount(1, $results);
+        $this->assertStringContainsString('# Homepage things', $results->first()->rawBody());
     }
 }
