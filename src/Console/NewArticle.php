@@ -3,9 +3,8 @@
 namespace FlatFileCms\Console;
 
 use Carbon\Carbon;
-use FlatFileCms\Article;
+use FlatFileCms\Models\Article;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 
 class NewArticle extends Command
 {
@@ -47,7 +46,7 @@ class NewArticle extends Command
      */
     private function createNewPost(): void
     {
-        \FlatFileCms\Models\Article::find($this->option('slug'))
+        Article::find($this->option('slug'))
             ->setExtension($this->option('file_type'))
             ->setMatter([
                 "post_date" => $this->option('post_date') ?? date('Y-m-d'),
