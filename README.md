@@ -1,8 +1,8 @@
 # Flat File CMS
 
-[![Build status](https://travis-ci.com/roelofjan-elsinga/aloia-cms.svg)](https://travis-ci.com/roelofjan-elsinga/aloia-cms)
+[![Build status](https://travis-ci.com/roelofjan-elsinga/flat-file-cms.svg)](https://travis-ci.com/roelofjan-elsinga/aloia-cms)
 [![StyleCI Status](https://github.styleci.io/repos/192778142/shield)](https://github.styleci.io/repos/192778142)
-[![Code coverage](https://codecov.io/gh/roelofjan-elsinga/aloia-cms/branch/master/graph/badge.svg)](https://codecov.io/gh/roelofjan-elsinga/aloia-cms)
+[![Code Coverage](https://codecov.io/gh/roelofjan-elsinga/aloia-cms/branch/master/graph/badge.svg)](https://codecov.io/gh/roelofjan-elsinga/aloia-cms)
 [![Total Downloads](https://poser.pugx.org/roelofjan-elsinga/aloia-cms/downloads)](https://packagist.org/packages/roelofjan-elsinga/aloia-cms)
 [![Latest Stable Version](https://poser.pugx.org/roelofjan-elsinga/aloia-cms/v/stable)](https://packagist.org/packages/roelofjan-elsinga/aloia-cms)
 [![License](https://poser.pugx.org/roelofjan-elsinga/aloia-cms/license)](https://packagist.org/packages/roelofjan-elsinga/aloia-cms)
