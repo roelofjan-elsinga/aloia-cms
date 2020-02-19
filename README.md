@@ -25,7 +25,7 @@ php artisan vendor:publish --provider="AloiaCms\\AloiaCmsServiceProvider"
 
 ## Creating a custom content type
 
-Creating a custom content type is very simple. All you have to do is create a class that extends ``FlatFile\Models\Model``, 
+Creating a custom content type is very simple. All you have to do is create a class that extends ``AloiaCms\Models\Model``, 
 specify a ``$folder_path``, and optionally add required fields to ``$required_fields``. An example can be found below:
 
 ```php
@@ -60,7 +60,7 @@ Of course you can add your own models as described at "Creating a custom content
 ## Usage of models
 
 In this example we're looking at one of the built-in content types: Article. 
-You can use these same steps for all classes that extend from "FlatFile\Models\Model".
+You can use these same steps for all classes that extend from "AloiaCms\Models\Model".
 
 
 To load all articles in the "articles" folder in the folder you specified in 
@@ -118,9 +118,10 @@ Article::find($post_slug)
 
 ## Content blocks
 
-You can also manage small content blocks for your website through this package. 
-Start by specifying the folder path of your content blocks in 
-``config('AloiaCms.content_blocks.data_folder')``.
+You can manage small content blocks for your website through this package.
+
+The content of the blocks are stored in a folder called "content_blocks" 
+inside of the ``config('aloiacms.collections_path')`` folder.
 
 You'll need to register the facade into your application, by placing the following 
 line to your aliases in ``config/app.php``:
@@ -129,14 +130,14 @@ line to your aliases in ``config/app.php``:
 'Block' => \AloiaCms\Facades\BlockFacade::class,
 ```
 
-Now you can use the facade in your views by using:
+Now you can use the facade in your blade views by using:
 
 ```php
 {!! Block::get('content-file-name') !!}
 ```
 
-If you're using content files managed through the CMS, you can also include content blocks in 
-HTML and Markdown files. You can add several different attributes to enhance these content blocks:
+You can also include content blocks in your HTML and Markdown files. You can add several different attributes 
+to enhance these content blocks:
 
 - class
 - id
@@ -210,7 +211,7 @@ When you add a href attribute to the content block, you get a nested anchor tag:
 ```
 
 This facade will look for a file in the folder you specified in 
-``config('AloiaCms.content_blocks.data_folder')``. 
+``config('aloiacms.collections_path')``. 
 The Facade will parse the contents of the file to HTML to be able to render it. 
 If no file could be found, an empty string will be returned.
 
