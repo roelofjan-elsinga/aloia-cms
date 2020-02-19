@@ -1,4 +1,4 @@
-# Flat File CMS
+# Aloia CMS
 
 [![Build status](https://travis-ci.com/roelofjan-elsinga/flat-file-cms.svg)](https://travis-ci.com/roelofjan-elsinga/aloia-cms)
 [![StyleCI Status](https://github.styleci.io/repos/192778142/shield)](https://github.styleci.io/repos/192778142)
