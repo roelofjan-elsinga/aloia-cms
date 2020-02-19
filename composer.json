@@ -42,7 +42,10 @@
     "laravel": {
       "providers": [
         "AloiaCms\\AloiaCmsServiceProvider"
-      ]
+      ],
+      "aliases": {
+        "Block": "AloiaCms\\Facades\\BlockFacade"
+      }
     }
   },
   "require": {
