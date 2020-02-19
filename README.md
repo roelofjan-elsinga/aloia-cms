@@ -9,6 +9,8 @@
 
 This package contains a drop-in CMS that uses files to store its contents.
 
+For the full documentation, go to the [Aloia CMS Documentation](https://aloiacms.com) website.
+
 ## Installation
 
 You can include this package through Composer using:
