@@ -1,11 +1,11 @@
 <?php
 
 
-namespace FlatFileCms\Tests\Taxonomy;
+namespace AloiaCms\Tests\Taxonomy;
 
-use FlatFileCms\Page;
-use FlatFileCms\Taxonomy\Taxonomy;
-use FlatFileCms\Tests\TestCase;
+use AloiaCms\Page;
+use AloiaCms\Taxonomy\Taxonomy;
+use AloiaCms\Tests\TestCase;
 use Illuminate\Support\Collection;
 
 class TaxonomyTest extends TestCase

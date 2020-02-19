@@ -16,7 +16,7 @@ return [
 
         /*
          * This value represents the location in which the content files are saved.
-         * The filename in the config('flatfilecms.articles.file_path') will search in this folder.
+         * The filename in the config('aloiacms.articles.file_path') will search in this folder.
          * */
         'folder_path' => resource_path('content/pages'),
 
@@ -37,7 +37,7 @@ return [
 
         /*
          * This value represents the location in which the content files are saved.
-         * The filename in the config('flatfilecms.articles.file_path') will search in this folder.
+         * The filename in the config('aloiacms.articles.file_path') will search in this folder.
          * */
         'folder_path' => resource_path('content/articles'),
 

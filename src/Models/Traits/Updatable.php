@@ -1,6 +1,6 @@
 <?php
 
-namespace FlatFileCms\Models\Traits;
+namespace AloiaCms\Models\Traits;
 
 use Carbon\Carbon;
 

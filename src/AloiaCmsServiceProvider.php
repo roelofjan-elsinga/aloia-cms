@@ -1,19 +1,19 @@
 <?php
 
-namespace FlatFileCms;
+namespace AloiaCms;
 
-use FlatFileCms\Console\ConfigCommand;
-use FlatFileCms\Console\Migrations\UpgradeZeroToOneCommand;
-use FlatFileCms\Console\NewArticle;
-use FlatFileCms\Console\PermissionsCommand;
-use FlatFileCms\Models\ContentBlock;
+use AloiaCms\Console\ConfigCommand;
+use AloiaCms\Console\Migrations\UpgradeZeroToOneCommand;
+use AloiaCms\Console\NewArticle;
+use AloiaCms\Console\PermissionsCommand;
+use AloiaCms\Models\ContentBlock;
 use Illuminate\Support\ServiceProvider;
 
-class FlatFileCmsServiceProvider extends ServiceProvider
+class AloiaCmsServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/flatfilecms.php', 'flatfilecms');
+        $this->mergeConfigFrom(__DIR__ . '/../config/aloiacms.php', 'aloiacms');
 
         $this->bindFacades();
     }
@@ -21,7 +21,7 @@ class FlatFileCmsServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../config/flatfilecms.php' => config_path('flatfilecms.php'),
+            __DIR__ . '/../config/aloiacms.php' => config_path('aloiacms.php'),
         ], 'config');
 
         if ($this->app->runningInConsole()) {
@@ -39,7 +39,7 @@ class FlatFileCmsServiceProvider extends ServiceProvider
      */
     private function bindFacades()
     {
-        $this->app->bind('FlatFileCmsBlock', function () {
+        $this->app->bind('AloiaCmsBlock', function () {
             return new ContentBlock();
         });
     }

@@ -1,16 +1,16 @@
 <?php
 
 
-namespace FlatFileCms\Tests;
+namespace AloiaCms\Tests;
 
-use FlatFileCms\Media;
+use AloiaCms\Media;
 use Illuminate\Support\Facades\Config;
 
 class MediaTest extends TestCase
 {
     public function test_image_path_will_be_created_if_none_exists()
     {
-        Config::set('flatfilecms.articles.image_path', $this->fs->getChild('content')->url() . '/images');
+        Config::set('aloiacms.articles.image_path', $this->fs->getChild('content')->url() . '/images');
 
         $files = (new Media())->allFiles();
 
@@ -20,7 +20,7 @@ class MediaTest extends TestCase
 
     public function test_files_can_be_retrieved()
     {
-        Config::set('flatfilecms.articles.image_path', $this->fs->getChild('images')->url());
+        Config::set('aloiacms.articles.image_path', $this->fs->getChild('images')->url());
 
         $files = (new Media())->allFiles();
 
@@ -43,7 +43,7 @@ class MediaTest extends TestCase
 
     public function test_only_full_size_images_can_be_retrieved_through_collection()
     {
-        Config::set('flatfilecms.articles.image_path', $this->fs->getChild('images')->url());
+        Config::set('aloiacms.articles.image_path', $this->fs->getChild('images')->url());
 
         $files = (new Media())->allFiles()->onlyFullSize();
 

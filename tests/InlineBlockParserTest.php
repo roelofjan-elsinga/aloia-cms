@@ -1,11 +1,11 @@
 <?php
 
 
-namespace FlatFileCms\Tests;
+namespace AloiaCms\Tests;
 
-use FlatFileCms\InlineBlockParser;
-use FlatFileCms\Facades\BlockFacade;
-use FlatFileCms\Models\ContentBlock;
+use AloiaCms\InlineBlockParser;
+use AloiaCms\Facades\BlockFacade;
+use AloiaCms\Models\ContentBlock;
 
 class InlineBlockParserTest extends TestCase
 {

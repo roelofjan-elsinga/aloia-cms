@@ -1,6 +1,6 @@
 <?php
 
-namespace FlatFileCms;
+namespace AloiaCms;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
@@ -146,7 +146,7 @@ class TagsParser
      */
     private function getMetaTagsFilePath(): string
     {
-        return Config::get('flatfilecms.meta_tags.file_path');
+        return Config::get('aloiacms.meta_tags.file_path');
     }
 
     /**

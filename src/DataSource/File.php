@@ -1,7 +1,7 @@
 <?php
 
 
-namespace FlatFileCms\DataSource;
+namespace AloiaCms\DataSource;
 
 class File
 {

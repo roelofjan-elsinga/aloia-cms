@@ -1,9 +1,9 @@
 <?php
 
 
-namespace FlatFileCms\Tests\Console;
+namespace AloiaCms\Tests\Console;
 
-use FlatFileCms\Tests\TestCase;
+use AloiaCms\Tests\TestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 
@@ -29,16 +29,16 @@ class PermissionsCommandTest extends TestCase
             mkdir("{$content_path}/files");
         }
 
-        Config::set('flatfilecms.pages.file_path', "{$content_path}/pages.json");
-        Config::set('flatfilecms.pages.folder_path', "{$content_path}/pages");
-        Config::set('flatfilecms.articles.file_path', "{$content_path}/articles.json");
-        Config::set('flatfilecms.articles.folder_path', "{$content_path}/articles");
-        Config::set('flatfilecms.content_blocks.folder_path', "{$content_path}/blocks");
-        Config::set('flatfilecms.meta_tags.file_path', "{$content_path}/metatags.json");
-        Config::set('flatfilecms.taxonomy.file_path', "{$content_path}/taxonomy.json");
-        Config::set('flatfilecms.uploaded_files.folder_path', "{$content_path}/files");
-        Config::set('flatfilecms.permissions.user', get_current_user());
-        Config::set('flatfilecms.permissions.group', get_current_user());
+        Config::set('aloiacms.pages.file_path', "{$content_path}/pages.json");
+        Config::set('aloiacms.pages.folder_path', "{$content_path}/pages");
+        Config::set('aloiacms.articles.file_path', "{$content_path}/articles.json");
+        Config::set('aloiacms.articles.folder_path', "{$content_path}/articles");
+        Config::set('aloiacms.content_blocks.folder_path', "{$content_path}/blocks");
+        Config::set('aloiacms.meta_tags.file_path', "{$content_path}/metatags.json");
+        Config::set('aloiacms.taxonomy.file_path', "{$content_path}/taxonomy.json");
+        Config::set('aloiacms.uploaded_files.folder_path', "{$content_path}/files");
+        Config::set('aloiacms.permissions.user', get_current_user());
+        Config::set('aloiacms.permissions.group', get_current_user());
     }
 
     public function tearDown(): void
@@ -50,7 +50,7 @@ class PermissionsCommandTest extends TestCase
 
     public function test_permissions_are_set_to_defined_user()
     {
-        $this->artisan('flatfilecms:set-permissions')
+        $this->artisan('aloiacms:set-permissions')
             ->assertExitCode(0);
     }
 }

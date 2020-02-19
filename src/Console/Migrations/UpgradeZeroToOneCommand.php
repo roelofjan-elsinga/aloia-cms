@@ -1,21 +1,21 @@
 <?php
 
 
-namespace FlatFileCms\Console\Migrations;
+namespace AloiaCms\Console\Migrations;
 
-use FlatFileCms\Models\Article;
-use FlatFileCms\Models\ContentBlock;
-use FlatFileCms\Models\MetaTag;
-use FlatFileCms\Taxonomy\Taxonomy;
-use FlatFileCms\Writer\FrontMatterCreator;
-use FlatFileCms\Models\Page;
+use AloiaCms\Models\Article;
+use AloiaCms\Models\ContentBlock;
+use AloiaCms\Models\MetaTag;
+use AloiaCms\Taxonomy\Taxonomy;
+use AloiaCms\Writer\FrontMatterCreator;
+use AloiaCms\Models\Page;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 
 class UpgradeZeroToOneCommand extends Command
 {
-    protected $signature = 'flatfilecms:upgrade:0-to-1';
+    protected $signature = 'aloiacms:upgrade:0-to-1';
 
     protected $description = 'Upgrade the files and folder structures from version 0.x to 1.x';
 
@@ -50,7 +50,7 @@ class UpgradeZeroToOneCommand extends Command
 
     private function assertCollectionFolderExists()
     {
-        $collections_path = Config::get('flatfilecms.collections_path');
+        $collections_path = Config::get('aloiacms.collections_path');
         $collections_folder_exists = file_exists($collections_path);
 
         if ($collections_folder_exists) {
@@ -64,14 +64,14 @@ class UpgradeZeroToOneCommand extends Command
 
     private function writeMetaDataToPages()
     {
-        if (!file_exists(Config::get('flatfilecms.pages.file_path'))) {
+        if (!file_exists(Config::get('aloiacms.pages.file_path'))) {
             return;
         }
 
-        $page_data = json_decode(file_get_contents(Config::get('flatfilecms.pages.file_path')), true);
+        $page_data = json_decode(file_get_contents(Config::get('aloiacms.pages.file_path')), true);
 
         foreach ($page_data as $page) {
-            $file_content = file_get_contents(Config::get('flatfilecms.pages.folder_path') . "/{$page['filename']}");
+            $file_content = file_get_contents(Config::get('aloiacms.pages.folder_path') . "/{$page['filename']}");
 
             $page['post_date'] = $page['postDate'];
             $page['is_published'] = $page['isPublished'];
@@ -94,14 +94,14 @@ class UpgradeZeroToOneCommand extends Command
 
     private function writeMetaDataToArticles()
     {
-        if (!file_exists(Config::get('flatfilecms.articles.file_path'))) {
+        if (!file_exists(Config::get('aloiacms.articles.file_path'))) {
             return;
         }
 
-        $article_data = json_decode(file_get_contents(Config::get('flatfilecms.articles.file_path')), true);
+        $article_data = json_decode(file_get_contents(Config::get('aloiacms.articles.file_path')), true);
 
         foreach ($article_data as $article) {
-            $file_content = file_get_contents(Config::get('flatfilecms.articles.folder_path') . "/{$article['filename']}");
+            $file_content = file_get_contents(Config::get('aloiacms.articles.folder_path') . "/{$article['filename']}");
 
             $article['post_date'] = $article['postDate'];
 
@@ -126,11 +126,11 @@ class UpgradeZeroToOneCommand extends Command
 
     private function writeMetaDataToContentBlocks()
     {
-        if (!file_exists(Config::get('flatfilecms.content_blocks.folder_path'))) {
+        if (!file_exists(Config::get('aloiacms.content_blocks.folder_path'))) {
             return;
         }
 
-        $content_blocks = File::allFiles(Config::get('flatfilecms.content_blocks.folder_path'));
+        $content_blocks = File::allFiles(Config::get('aloiacms.content_blocks.folder_path'));
 
         foreach ($content_blocks as $block) {
             $path_name = $block->getPathname();
@@ -147,11 +147,11 @@ class UpgradeZeroToOneCommand extends Command
 
     private function writeMetaDataToMetaTags()
     {
-        if (!file_exists(Config::get('flatfilecms.meta_tags.file_path'))) {
+        if (!file_exists(Config::get('aloiacms.meta_tags.file_path'))) {
             return;
         }
 
-        $page_data = json_decode(file_get_contents(Config::get('flatfilecms.meta_tags.file_path')), true);
+        $page_data = json_decode(file_get_contents(Config::get('aloiacms.meta_tags.file_path')), true);
 
         foreach ($page_data['tags'] as $filename => $page) {
             MetaTag::find($filename)
@@ -168,7 +168,7 @@ class UpgradeZeroToOneCommand extends Command
 
     private function writeTaxonomyToPages()
     {
-        $pages = \FlatFileCms\Page::all();
+        $pages = \AloiaCms\Page::all();
 
         foreach ($pages as $page) {
             $slug = $page->slug(true);

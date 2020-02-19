@@ -1,16 +1,16 @@
 <?php
 
 
-namespace FlatFileCms\Tests\Console;
+namespace AloiaCms\Tests\Console;
 
-use FlatFileCms\Tests\TestCase;
+use AloiaCms\Tests\TestCase;
 
 class ConfigCommandTest extends TestCase
 {
     public function test_config_can_be_published_through_command()
     {
         $this
-            ->artisan('flatfilecms:publish:config')
+            ->artisan('aloiacms:publish:config')
             ->assertExitCode(0);
     }
 }

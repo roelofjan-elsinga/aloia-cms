@@ -1,11 +1,11 @@
 <?php
 
 
-namespace FlatFileCms\Tests\Taxonomy;
+namespace AloiaCms\Tests\Taxonomy;
 
-use FlatFileCms\Taxonomy\Taxonomy;
-use FlatFileCms\Taxonomy\TaxonomyLevel;
-use FlatFileCms\Tests\TestCase;
+use AloiaCms\Taxonomy\Taxonomy;
+use AloiaCms\Taxonomy\TaxonomyLevel;
+use AloiaCms\Tests\TestCase;
 
 class TaxonomyLevelTest extends TestCase
 {

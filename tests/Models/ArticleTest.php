@@ -1,11 +1,11 @@
 <?php
 
 
-namespace FlatFileCms\Tests\Models;
+namespace AloiaCms\Tests\Models;
 
 use Carbon\Carbon;
-use FlatFileCms\Models\Article;
-use FlatFileCms\Tests\TestCase;
+use AloiaCms\Models\Article;
+use AloiaCms\Tests\TestCase;
 use Illuminate\Support\Facades\Config;
 use org\bovigo\vfs\vfsStream;
 

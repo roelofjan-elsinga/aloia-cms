@@ -1,11 +1,11 @@
 <?php
 
-namespace FlatFileCms\Search;
+namespace AloiaCms\Search;
 
-use FlatFileCms\Models\Article;
-use FlatFileCms\Models\Contracts\PublishInterface;
-use FlatFileCms\Models\Contracts\StorableInterface;
-use FlatFileCms\Models\Page;
+use AloiaCms\Models\Article;
+use AloiaCms\Models\Contracts\PublishInterface;
+use AloiaCms\Models\Contracts\StorableInterface;
+use AloiaCms\Models\Page;
 use Illuminate\Support\Collection;
 
 class FileFinder

@@ -1,6 +1,6 @@
 <?php
 
-namespace FlatFileCms;
+namespace AloiaCms;
 
 class HtmlParser
 {

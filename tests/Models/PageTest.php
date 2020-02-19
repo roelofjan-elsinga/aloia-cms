@@ -1,12 +1,12 @@
 <?php
 
 
-namespace FlatFileCms\Tests\Models;
+namespace AloiaCms\Tests\Models;
 
 use Carbon\Carbon;
-use FlatFileCms\Models\ContentBlock;
-use FlatFileCms\Models\Page;
-use FlatFileCms\Tests\TestCase;
+use AloiaCms\Models\ContentBlock;
+use AloiaCms\Models\Page;
+use AloiaCms\Tests\TestCase;
 
 class PageTest extends TestCase
 {

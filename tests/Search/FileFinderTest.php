@@ -1,11 +1,11 @@
 <?php
 
 
-namespace FlatFileCms\Tests\Search;
+namespace AloiaCms\Tests\Search;
 
-use FlatFileCms\Models\Article;
-use FlatFileCms\Search\FileFinder;
-use FlatFileCms\Tests\TestCase;
+use AloiaCms\Models\Article;
+use AloiaCms\Search\FileFinder;
+use AloiaCms\Tests\TestCase;
 use Illuminate\Support\Facades\Config;
 
 class FileFinderTest extends TestCase
@@ -23,7 +23,7 @@ class FileFinderTest extends TestCase
             mkdir($content_path, 0777, true);
         }
 
-        Config::set('flatfilecms.collections_path', $content_path);
+        Config::set('aloiacms.collections_path', $content_path);
     }
 
     public function tearDown(): void

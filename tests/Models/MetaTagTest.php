@@ -1,9 +1,9 @@
 <?php
 
-namespace FlatFileCms\Tests\Models;
+namespace AloiaCms\Tests\Models;
 
-use FlatFileCms\Models\MetaTag;
-use FlatFileCms\Tests\TestCase;
+use AloiaCms\Models\MetaTag;
+use AloiaCms\Tests\TestCase;
 
 class MetaTagTest extends TestCase
 {

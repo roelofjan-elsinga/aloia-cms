@@ -1,7 +1,7 @@
 <?php
 
 
-namespace FlatFileCms\Console;
+namespace AloiaCms\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
@@ -13,7 +13,7 @@ class PermissionsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'flatfilecms:set-permissions {--use-sudo}';
+    protected $signature = 'aloiacms:set-permissions {--use-sudo}';
 
     /**
      * The console command description.
@@ -30,24 +30,24 @@ class PermissionsCommand extends Command
     public function handle()
     {
         $resource_paths = [
-            Config::get('flatfilecms.pages.file_path'),
-            Config::get('flatfilecms.pages.folder_path'),
-            Config::get('flatfilecms.articles.file_path'),
-            Config::get('flatfilecms.articles.folder_path'),
-            Config::get('flatfilecms.content_blocks.folder_path'),
-            Config::get('flatfilecms.meta_tags.file_path'),
-            Config::get('flatfilecms.taxonomy.file_path'),
-            Config::get('flatfilecms.uploaded_files.folder_path'),
+            Config::get('aloiacms.pages.file_path'),
+            Config::get('aloiacms.pages.folder_path'),
+            Config::get('aloiacms.articles.file_path'),
+            Config::get('aloiacms.articles.folder_path'),
+            Config::get('aloiacms.content_blocks.folder_path'),
+            Config::get('aloiacms.meta_tags.file_path'),
+            Config::get('aloiacms.taxonomy.file_path'),
+            Config::get('aloiacms.uploaded_files.folder_path'),
         ];
 
         $resource_paths = array_merge(
             $resource_paths,
-            Config::get('flatfilecms.permissions.additional_paths')
+            Config::get('aloiacms.permissions.additional_paths')
         );
 
-        $user = Config::get('flatfilecms.permissions.user');
+        $user = Config::get('aloiacms.permissions.user');
 
-        $group = Config::get('flatfilecms.permissions.group');
+        $group = Config::get('aloiacms.permissions.group');
 
         $sudo_prefix = $this->option('use-sudo') ? 'sudo ' : '';
 

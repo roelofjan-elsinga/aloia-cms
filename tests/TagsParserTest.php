@@ -1,9 +1,9 @@
 <?php
 
 
-namespace FlatFileCms\Tests;
+namespace AloiaCms\Tests;
 
-use FlatFileCms\TagsParser;
+use AloiaCms\TagsParser;
 use Illuminate\Support\Facades\Config;
 
 class TagsParserTest extends TestCase
@@ -39,7 +39,7 @@ class TagsParserTest extends TestCase
         $config_file['tags']['home']['title'] = "Homepage";
         $config_file['tags']['home']['keywords'] = null;
 
-        file_put_contents(Config::get('flatfilecms.meta_tags.file_path'), json_encode($config_file));
+        file_put_contents(Config::get('aloiacms.meta_tags.file_path'), json_encode($config_file));
 
         $tags = TagsParser::instance()->getTagsForPageName('home');
 

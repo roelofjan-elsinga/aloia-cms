@@ -1,11 +1,11 @@
 # Flat File CMS
 
-[![Build status](https://travis-ci.com/roelofjan-elsinga/flat-file-cms.svg)](https://travis-ci.com/roelofjan-elsinga/flat-file-cms)
+[![Build status](https://travis-ci.com/roelofjan-elsinga/aloia-cms.svg)](https://travis-ci.com/roelofjan-elsinga/aloia-cms)
 [![StyleCI Status](https://github.styleci.io/repos/192778142/shield)](https://github.styleci.io/repos/192778142)
-[![Code coverage](https://codecov.io/gh/roelofjan-elsinga/flat-file-cms/branch/master/graph/badge.svg)](https://codecov.io/gh/roelofjan-elsinga/flat-file-cms)
-[![Total Downloads](https://poser.pugx.org/roelofjan-elsinga/flat-file-cms/downloads)](https://packagist.org/packages/roelofjan-elsinga/flat-file-cms)
-[![Latest Stable Version](https://poser.pugx.org/roelofjan-elsinga/flat-file-cms/v/stable)](https://packagist.org/packages/roelofjan-elsinga/flat-file-cms)
-[![License](https://poser.pugx.org/roelofjan-elsinga/flat-file-cms/license)](https://packagist.org/packages/roelofjan-elsinga/flat-file-cms)
+[![Code coverage](https://codecov.io/gh/roelofjan-elsinga/aloia-cms/branch/master/graph/badge.svg)](https://codecov.io/gh/roelofjan-elsinga/aloia-cms)
+[![Total Downloads](https://poser.pugx.org/roelofjan-elsinga/aloia-cms/downloads)](https://packagist.org/packages/roelofjan-elsinga/aloia-cms)
+[![Latest Stable Version](https://poser.pugx.org/roelofjan-elsinga/aloia-cms/v/stable)](https://packagist.org/packages/roelofjan-elsinga/aloia-cms)
+[![License](https://poser.pugx.org/roelofjan-elsinga/aloia-cms/license)](https://packagist.org/packages/roelofjan-elsinga/aloia-cms)
 
 This package contains a drop-in CMS that uses files to store its contents.
 
@@ -14,13 +14,13 @@ This package contains a drop-in CMS that uses files to store its contents.
 You can include this package through Composer using:
 
 ```bash
-composer require roelofjan-elsinga/flat-file-cms
+composer require roelofjan-elsinga/aloia-cms
 ```
 
 and if you want to customize the folder structure, then publish the configuration through:
 
 ```bash
-php artisan vendor:publish --provider="FlatFileCms\\FlatFileCmsServiceProvider"
+php artisan vendor:publish --provider="AloiaCms\\AloiaCmsServiceProvider"
 ```
 
 ## Creating a custom content type
@@ -31,7 +31,7 @@ specify a ``$folder_path``, and optionally add required fields to ``$required_fi
 ```php
 namespace App\Models;
 
-use FlatFileCms\Models\Model;
+use AloiaCms\Models\Model;
 
 class PortfolioItem extends Model
 {
@@ -64,10 +64,10 @@ You can use these same steps for all classes that extend from "FlatFile\Models\M
 
 
 To load all articles in the "articles" folder in the folder you specified in 
-``config('flatfilecms.collection_path')`` you can use the following script:
+``config('aloiacms.collection_path')`` you can use the following script:
 
 ```php
-use FlatFileCms\Models\Article;
+use AloiaCms\Models\Article;
 
 /**@var Article[]*/
 $articles = Article::all();
@@ -76,6 +76,8 @@ $articles = Article::all();
 You can use that to display your posts on a page. You can also load a single post, using:
 
 ```php
+$post_slug = 'this-post-is-amazing';
+
 $article = Article::find($post_slug);
 ```
 
@@ -88,6 +90,8 @@ $published_articles = Article::published();
 To get the raw contents of each article (content + front matter), you can use:
 
 ```php
+$post_slug = 'this-post-is-amazing';
+
 $articles = Article::find($post_slug)->rawContent();
 ```
 
@@ -95,6 +99,8 @@ And finally, to update your article, you can run:
 
 ```php
 use Carbon\Carbon;
+
+$post_slug = 'this-post-is-amazing';
 
 Article::find($post_slug)
     ->setExtension('md') // md is the default, but you can use html as well.
@@ -114,13 +120,13 @@ Article::find($post_slug)
 
 You can also manage small content blocks for your website through this package. 
 Start by specifying the folder path of your content blocks in 
-``config('flatfilecms.content_blocks.data_folder')``.
+``config('AloiaCms.content_blocks.data_folder')``.
 
 You'll need to register the facade into your application, by placing the following 
 line to your aliases in ``config/app.php``:
 
 ```php
-'Block' => \FlatFileCms\Facades\BlockFacade::class,
+'Block' => \AloiaCms\Facades\BlockFacade::class,
 ```
 
 Now you can use the facade in your views by using:
@@ -204,7 +210,7 @@ When you add a href attribute to the content block, you get a nested anchor tag:
 ```
 
 This facade will look for a file in the folder you specified in 
-``config('flatfilecms.content_blocks.data_folder')``. 
+``config('AloiaCms.content_blocks.data_folder')``. 
 The Facade will parse the contents of the file to HTML to be able to render it. 
 If no file could be found, an empty string will be returned.
 

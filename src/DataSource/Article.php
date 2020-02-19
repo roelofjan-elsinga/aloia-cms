@@ -1,8 +1,8 @@
 <?php
 
-namespace FlatFileCms\DataSource;
+namespace AloiaCms\DataSource;
 
-use FlatFileCms\Contracts\DataSourceInterface;
+use AloiaCms\Contracts\DataSourceInterface;
 
 /**
  * @deprecated deprecated since version 1.0.0

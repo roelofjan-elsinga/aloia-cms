@@ -1,13 +1,13 @@
 <?php
 
 
-namespace FlatFileCms\Tests\Console;
+namespace AloiaCms\Tests\Console;
 
-use FlatFileCms\Models\ContentBlock;
-use FlatFileCms\Tests\TestCase;
-use FlatFileCms\Models\Page;
-use FlatFileCms\Models\Article;
-use FlatFileCms\Models\MetaTag;
+use AloiaCms\Models\ContentBlock;
+use AloiaCms\Tests\TestCase;
+use AloiaCms\Models\Page;
+use AloiaCms\Models\Article;
+use AloiaCms\Models\MetaTag;
 use Illuminate\Support\Facades\Config;
 use org\bovigo\vfs\vfsStream;
 
@@ -17,22 +17,22 @@ class UpgradeZeroToOneCommandTest extends TestCase
     {
         $content_path = vfsStream::url('root/content/objects');
 
-        Config::set('flatfilecms.collections_path', $content_path);
+        Config::set('aloiacms.collections_path', $content_path);
 
-        $this->artisan('flatfilecms:upgrade:0-to-1')
+        $this->artisan('aloiacms:upgrade:0-to-1')
             ->expectsQuestion("The collections folder doesn't exist, do you want to create it at {$content_path}?", true);
 
-        $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path')));
+        $this->assertTrue(file_exists(Config::get('aloiacms.collections_path')));
     }
 
     public function testUpgradeCorrectlyMigratesPages()
     {
-        file_put_contents(Config::get('flatfilecms.pages.file_path'), json_encode([$this->defaultPageConfig()], 128));
-        file_put_contents(Config::get('flatfilecms.pages.folder_path') . '/page.md', "# This is content");
+        file_put_contents(Config::get('aloiacms.pages.file_path'), json_encode([$this->defaultPageConfig()], 128));
+        file_put_contents(Config::get('aloiacms.pages.folder_path') . '/page.md', "# This is content");
 
-        $this->artisan('flatfilecms:upgrade:0-to-1');
+        $this->artisan('aloiacms:upgrade:0-to-1');
 
-        $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/pages/page.md'));
+        $this->assertTrue(file_exists(Config::get('aloiacms.collections_path') . '/pages/page.md'));
         $this->assertTrue(Page::find('page')->exists());
         $this->assertStringContainsString("title: 'This is a page title'", Page::find('page')->rawContent());
         $this->assertStringContainsString("This is a page title", Page::find('page')->title);
@@ -40,12 +40,12 @@ class UpgradeZeroToOneCommandTest extends TestCase
 
     public function testUpgradeCorrectlyMigratesArticles()
     {
-        file_put_contents(Config::get('flatfilecms.articles.file_path'), json_encode([$this->defaultArticleConfig()], 128));
-        file_put_contents(Config::get('flatfilecms.articles.folder_path') . '/article.md', "# This is content");
+        file_put_contents(Config::get('aloiacms.articles.file_path'), json_encode([$this->defaultArticleConfig()], 128));
+        file_put_contents(Config::get('aloiacms.articles.folder_path') . '/article.md', "# This is content");
 
-        $this->artisan('flatfilecms:upgrade:0-to-1');
+        $this->artisan('aloiacms:upgrade:0-to-1');
 
-        $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/articles/article.md'));
+        $this->assertTrue(file_exists(Config::get('aloiacms.collections_path') . '/articles/article.md'));
         $this->assertTrue(Article::find('article')->exists());
         $this->assertStringContainsString("url: article", Article::find('article')->rawContent());
         $this->assertStringContainsString("Article description", Article::find('article')->description);
@@ -54,11 +54,11 @@ class UpgradeZeroToOneCommandTest extends TestCase
 
     public function testUpgradeCorrectlyMigratesContentBlocks()
     {
-        file_put_contents(Config::get('flatfilecms.content_blocks.folder_path') . '/content.md', "# This is content");
+        file_put_contents(Config::get('aloiacms.content_blocks.folder_path') . '/content.md', "# This is content");
 
-        $this->artisan('flatfilecms:upgrade:0-to-1');
+        $this->artisan('aloiacms:upgrade:0-to-1');
 
-        $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/content_blocks/content.md'));
+        $this->assertTrue(file_exists(Config::get('aloiacms.collections_path') . '/content_blocks/content.md'));
         $this->assertTrue(ContentBlock::find('content')->exists());
         $this->assertStringContainsString("identifier: content", ContentBlock::find('content')->rawContent());
     }
@@ -67,20 +67,20 @@ class UpgradeZeroToOneCommandTest extends TestCase
     {
         $content_path = vfsStream::url('root/content/objects');
 
-        Config::set('flatfilecms.content_blocks.folder_path', $content_path);
+        Config::set('aloiacms.content_blocks.folder_path', $content_path);
 
-        $this->artisan('flatfilecms:upgrade:0-to-1');
+        $this->artisan('aloiacms:upgrade:0-to-1');
 
         $this->assertFalse(file_exists($content_path));
     }
 
     public function testUpgradeCorrectlyMigratesMetaTags()
     {
-        file_put_contents(Config::get('flatfilecms.meta_tags.file_path'), json_encode(["tags" => ["default" => $this->defaultMetaTagConfig()]], 128));
+        file_put_contents(Config::get('aloiacms.meta_tags.file_path'), json_encode(["tags" => ["default" => $this->defaultMetaTagConfig()]], 128));
 
-        $this->artisan('flatfilecms:upgrade:0-to-1');
+        $this->artisan('aloiacms:upgrade:0-to-1');
 
-        $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/meta_tags/default.md'));
+        $this->assertTrue(file_exists(Config::get('aloiacms.collections_path') . '/meta_tags/default.md'));
         $this->assertTrue(MetaTag::find('default')->exists());
         $this->assertStringContainsString("title: 'Page title'", MetaTag::find('default')->rawContent());
         $this->assertStringContainsString("Page description", MetaTag::find('default')->description);
@@ -88,13 +88,13 @@ class UpgradeZeroToOneCommandTest extends TestCase
 
     public function testUpgradeWritesTaxonomyAsUrlToPages()
     {
-        file_put_contents(Config::get('flatfilecms.pages.file_path'), json_encode([$this->defaultPageConfig()], 128));
-        file_put_contents(Config::get('flatfilecms.pages.folder_path') . '/page.md', "# This is content");
-        file_put_contents(Config::get('flatfilecms.taxonomy.file_path'), json_encode([$this->defaultTaxonomyConfig()], 128));
+        file_put_contents(Config::get('aloiacms.pages.file_path'), json_encode([$this->defaultPageConfig()], 128));
+        file_put_contents(Config::get('aloiacms.pages.folder_path') . '/page.md', "# This is content");
+        file_put_contents(Config::get('aloiacms.taxonomy.file_path'), json_encode([$this->defaultTaxonomyConfig()], 128));
 
-        $this->artisan('flatfilecms:upgrade:0-to-1');
+        $this->artisan('aloiacms:upgrade:0-to-1');
 
-        $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/pages/page.md'));
+        $this->assertTrue(file_exists(Config::get('aloiacms.collections_path') . '/pages/page.md'));
         $this->assertTrue(Page::find('page')->exists());
         $this->assertStringContainsString("url: /page", Page::find('page')->rawContent());
         $this->assertStringContainsString("/page", Page::find('page')->url);
@@ -105,13 +105,13 @@ class UpgradeZeroToOneCommandTest extends TestCase
         $page_content = $this->defaultPageConfig();
         $page_content['category'] = 'testing';
 
-        file_put_contents(Config::get('flatfilecms.pages.file_path'), json_encode([$page_content], 128));
-        file_put_contents(Config::get('flatfilecms.pages.folder_path') . '/page.md', "# This is content");
-        file_put_contents(Config::get('flatfilecms.taxonomy.file_path'), json_encode($this->defaultNestedTaxonomyConfig(), 128));
+        file_put_contents(Config::get('aloiacms.pages.file_path'), json_encode([$page_content], 128));
+        file_put_contents(Config::get('aloiacms.pages.folder_path') . '/page.md', "# This is content");
+        file_put_contents(Config::get('aloiacms.taxonomy.file_path'), json_encode($this->defaultNestedTaxonomyConfig(), 128));
 
-        $this->artisan('flatfilecms:upgrade:0-to-1');
+        $this->artisan('aloiacms:upgrade:0-to-1');
 
-        $this->assertTrue(file_exists(Config::get('flatfilecms.collections_path') . '/pages/page.md'));
+        $this->assertTrue(file_exists(Config::get('aloiacms.collections_path') . '/pages/page.md'));
         $this->assertTrue(Page::find('page')->exists());
         $this->assertStringContainsString("url: /testing/page", Page::find('page')->rawContent());
         $this->assertStringContainsString("/testing/page", Page::find('page')->url);

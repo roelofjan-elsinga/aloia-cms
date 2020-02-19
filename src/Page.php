@@ -1,13 +1,13 @@
 <?php
 
-namespace FlatFileCms;
+namespace AloiaCms;
 
 use Carbon\Carbon;
 use ContentParser\ContentParser;
-use FlatFileCms\Contracts\PageInterface;
-use FlatFileCms\Models\Contracts\StorableInterface;
-use FlatFileCms\Taxonomy\Taxonomy;
-use FlatFileCms\Taxonomy\TaxonomyLevel;
+use AloiaCms\Contracts\PageInterface;
+use AloiaCms\Models\Contracts\StorableInterface;
+use AloiaCms\Taxonomy\Taxonomy;
+use AloiaCms\Taxonomy\TaxonomyLevel;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -320,7 +320,7 @@ class Page extends Content implements PageInterface, StorableInterface
      */
     public function getFolderPath(): string
     {
-        return Config::get('flatfilecms.pages.folder_path');
+        return Config::get('aloiacms.pages.folder_path');
     }
 
     /**
@@ -442,7 +442,7 @@ class Page extends Content implements PageInterface, StorableInterface
      */
     protected static function getMetaDataFilePath(): string
     {
-        return Config::get('flatfilecms.pages.file_path');
+        return Config::get('aloiacms.pages.file_path');
     }
 
     /**
@@ -498,7 +498,7 @@ class Page extends Content implements PageInterface, StorableInterface
      */
     protected static function validateMetaDataFile(string $file_path)
     {
-        $pages_folder_path = Config::get('flatfilecms.pages.folder_path');
+        $pages_folder_path = Config::get('aloiacms.pages.folder_path');
 
         if (! is_dir($pages_folder_path)) {
             mkdir($pages_folder_path);
@@ -524,7 +524,7 @@ class Page extends Content implements PageInterface, StorableInterface
             $file_path,
             $pages
                 ->map(function (array $page) {
-                    return \FlatFileCms\DataSource\Page::create($page)->toArray();
+                    return \AloiaCms\DataSource\Page::create($page)->toArray();
                 })
                 ->toJson(JSON_PRETTY_PRINT)
         );
@@ -554,13 +554,13 @@ class Page extends Content implements PageInterface, StorableInterface
                     return !$matches;
                 })
                 ->map(function (array $page) {
-                    return \FlatFileCms\DataSource\Page::create($page)->toArray();
+                    return \AloiaCms\DataSource\Page::create($page)->toArray();
                 })
                 ->toJson(JSON_PRETTY_PRINT)
         );
 
         if ($filename !== null) {
-            File::delete(Config::get('flatfilecms.pages.folder_path') . '/' . $filename);
+            File::delete(Config::get('aloiacms.pages.folder_path') . '/' . $filename);
         }
     }
 }

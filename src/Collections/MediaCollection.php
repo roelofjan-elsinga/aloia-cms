@@ -1,6 +1,6 @@
 <?php
 
-namespace FlatFileCms\Collections;
+namespace AloiaCms\Collections;
 
 use Illuminate\Support\Collection;
 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace FlatFileCms\Console;
+namespace AloiaCms\Console;
 
 use Illuminate\Console\Command;
 
@@ -12,7 +12,7 @@ class ConfigCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'flatfilecms:publish:config';
+    protected $signature = 'aloiacms:publish:config';
     /**
      * The console command description.
      *

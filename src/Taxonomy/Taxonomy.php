@@ -1,9 +1,9 @@
 <?php
 
 
-namespace FlatFileCms\Taxonomy;
+namespace AloiaCms\Taxonomy;
 
-use FlatFileCms\Page;
+use AloiaCms\Page;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -126,7 +126,7 @@ class Taxonomy
      */
     private static function getFilePath(): string
     {
-        return Config::get('flatfilecms.taxonomy.file_path');
+        return Config::get('aloiacms.taxonomy.file_path');
     }
 
     /**

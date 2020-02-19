@@ -1,7 +1,7 @@
 <?php
 
 
-namespace FlatFileCms\Writer;
+namespace AloiaCms\Writer;
 
 use Illuminate\Support\Collection;
 use Symfony\Component\Yaml\Yaml;

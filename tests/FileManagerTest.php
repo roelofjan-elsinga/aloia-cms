@@ -1,9 +1,9 @@
 <?php
 
-namespace FlatFileCms\Tests;
+namespace AloiaCms\Tests;
 
-use FlatFileCms\DataSource\File;
-use FlatFileCms\FileManager;
+use AloiaCms\DataSource\File;
+use AloiaCms\FileManager;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
@@ -24,7 +24,7 @@ class FileManagerTest extends TestCase
     {
         Storage::fake('files');
 
-        Config::set('flatfilecms.uploaded_files.folder_path', storage_path('framework/testing/disks/files'));
+        Config::set('aloiacms.uploaded_files.folder_path', storage_path('framework/testing/disks/files'));
 
         $files = FileManager::all();
 
@@ -45,7 +45,7 @@ class FileManagerTest extends TestCase
     {
         Storage::fake('files');
 
-        Config::set('flatfilecms.uploaded_files.folder_path', storage_path('framework/testing/disks/files'));
+        Config::set('aloiacms.uploaded_files.folder_path', storage_path('framework/testing/disks/files'));
 
         $files = FileManager::all();
 

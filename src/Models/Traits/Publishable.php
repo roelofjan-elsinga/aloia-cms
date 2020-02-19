@@ -1,7 +1,7 @@
 <?php
 
 
-namespace FlatFileCms\Models\Traits;
+namespace AloiaCms\Models\Traits;
 
 use Illuminate\Support\Collection;
 

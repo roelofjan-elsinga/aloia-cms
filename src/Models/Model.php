@@ -1,14 +1,14 @@
 <?php
 
 
-namespace FlatFileCms\Models;
+namespace AloiaCms\Models;
 
 use ContentParser\ContentParser;
-use FlatFileCms\InlineBlockParser;
-use FlatFileCms\Models\Contracts\ModelInterface;
-use FlatFileCms\Models\Contracts\StorableInterface;
-use FlatFileCms\Writer\FolderCreator;
-use FlatFileCms\Writer\FrontMatterCreator;
+use AloiaCms\InlineBlockParser;
+use AloiaCms\Models\Contracts\ModelInterface;
+use AloiaCms\Models\Contracts\StorableInterface;
+use AloiaCms\Writer\FolderCreator;
+use AloiaCms\Writer\FrontMatterCreator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
@@ -132,7 +132,7 @@ class Model implements ModelInterface, StorableInterface
      */
     public function getFolderPath(): string
     {
-        $folder_path = Config::get('flatfilecms.collections_path') . "/{$this->folder}";
+        $folder_path = Config::get('aloiacms.collections_path') . "/{$this->folder}";
 
         FolderCreator::forPath($folder_path);
 

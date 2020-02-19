@@ -1,11 +1,11 @@
 <?php
 
-namespace FlatFileCms;
+namespace AloiaCms;
 
 use Carbon\Carbon;
 use ContentParser\ContentParser;
-use FlatFileCms\Contracts\ArticleInterface;
-use FlatFileCms\Models\Contracts\StorableInterface;
+use AloiaCms\Contracts\ArticleInterface;
+use AloiaCms\Models\Contracts\StorableInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -62,7 +62,7 @@ class Article extends Content implements ArticleInterface, StorableInterface
         $slug_prefix = '';
 
         if ($including_parents) {
-            $slug_prefix = Config::get('flatfilecms.articles.url_prefix');
+            $slug_prefix = Config::get('aloiacms.articles.url_prefix');
             $slug_prefix .= '/';
         }
 
@@ -154,7 +154,7 @@ class Article extends Content implements ArticleInterface, StorableInterface
      */
     private function getImagesUrlPath(): string
     {
-        return Config::get('flatfilecms.articles.image_path');
+        return Config::get('aloiacms.articles.image_path');
     }
 
     /**
@@ -270,7 +270,7 @@ class Article extends Content implements ArticleInterface, StorableInterface
      */
     public function getFolderPath(): string
     {
-        return Config::get('flatfilecms.articles.folder_path');
+        return Config::get('aloiacms.articles.folder_path');
     }
 
     /**
@@ -320,7 +320,7 @@ class Article extends Content implements ArticleInterface, StorableInterface
      */
     protected static function getMetaDataFilePath(): string
     {
-        return Config::get('flatfilecms.articles.file_path');
+        return Config::get('aloiacms.articles.file_path');
     }
 
     /**
@@ -362,7 +362,7 @@ class Article extends Content implements ArticleInterface, StorableInterface
      */
     protected static function validateMetaDataFile(string $file_path)
     {
-        $articles_folder_path = Config::get('flatfilecms.articles.folder_path');
+        $articles_folder_path = Config::get('aloiacms.articles.folder_path');
 
         if (! is_dir($articles_folder_path)) {
             mkdir($articles_folder_path);
@@ -388,7 +388,7 @@ class Article extends Content implements ArticleInterface, StorableInterface
             $file_path,
             $articles
                 ->map(function ($article) {
-                    return \FlatFileCms\DataSource\Article::create($article)->toArray();
+                    return \AloiaCms\DataSource\Article::create($article)->toArray();
                 })
                 ->toJson(JSON_PRETTY_PRINT)
         );
@@ -418,13 +418,13 @@ class Article extends Content implements ArticleInterface, StorableInterface
                     return !$matches;
                 })
                 ->map(function ($article) {
-                    return \FlatFileCms\DataSource\Article::create($article)->toArray();
+                    return \AloiaCms\DataSource\Article::create($article)->toArray();
                 })
                 ->toJson(JSON_PRETTY_PRINT)
         );
 
         if ($filename !== null) {
-            File::delete(Config::get('flatfilecms.articles.folder_path') . '/' . $filename);
+            File::delete(Config::get('aloiacms.articles.folder_path') . '/' . $filename);
         }
     }
 

@@ -19,8 +19,8 @@
   },
   "autoload": {
     "psr-4": {
-      "FlatFileCms\\": "src/",
-      "FlatFileCms\\Tests\\": "tests/"
+      "AloiaCms\\": "src/",
+      "AloiaCms\\Tests\\": "tests/"
     }
   },
   "autoload-dev": {
@@ -41,7 +41,7 @@
     },
     "laravel": {
       "providers": [
-        "FlatFileCms\\FlatFileCmsServiceProvider"
+        "AloiaCms\\AloiaCmsServiceProvider"
       ]
     }
   },

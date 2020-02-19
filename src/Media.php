@@ -1,10 +1,10 @@
 <?php
 
-namespace FlatFileCms;
+namespace AloiaCms;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
-use FlatFileCms\Collections\MediaCollection;
+use AloiaCms\Collections\MediaCollection;
 
 class Media
 {
@@ -32,7 +32,7 @@ class Media
      */
     public static function getImagesPath(): string
     {
-        return Config::get('flatfilecms.articles.image_path');
+        return Config::get('aloiacms.articles.image_path');
     }
 
     /**

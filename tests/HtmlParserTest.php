@@ -1,9 +1,9 @@
 <?php
 
 
-namespace FlatFileCms\Tests;
+namespace AloiaCms\Tests;
 
-use FlatFileCms\HtmlParser;
+use AloiaCms\HtmlParser;
 
 class HtmlParserTest extends TestCase
 {

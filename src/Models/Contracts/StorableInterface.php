@@ -1,6 +1,6 @@
 <?php
 
-namespace FlatFileCms\Models\Contracts;
+namespace AloiaCms\Models\Contracts;
 
 interface StorableInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace FlatFileCms\Contracts;
+namespace AloiaCms\Contracts;
 
 use Carbon\Carbon;
 

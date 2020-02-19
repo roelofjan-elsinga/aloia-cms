@@ -1,13 +1,13 @@
 <?php
 
-namespace FlatFileCms\Models;
+namespace AloiaCms\Models;
 
-use FlatFileCms\HtmlParser;
-use FlatFileCms\Models\Contracts\ModelInterface;
-use FlatFileCms\Models\Contracts\PublishInterface;
-use FlatFileCms\Models\Traits\Postable;
-use FlatFileCms\Models\Traits\Publishable;
-use FlatFileCms\Models\Traits\Updatable;
+use AloiaCms\HtmlParser;
+use AloiaCms\Models\Contracts\ModelInterface;
+use AloiaCms\Models\Contracts\PublishInterface;
+use AloiaCms\Models\Traits\Postable;
+use AloiaCms\Models\Traits\Publishable;
+use AloiaCms\Models\Traits\Updatable;
 
 class Page extends Model implements ModelInterface, PublishInterface
 {

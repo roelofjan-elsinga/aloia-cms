@@ -1,10 +1,10 @@
 <?php
 
 
-namespace FlatFileCms\Tests;
+namespace AloiaCms\Tests;
 
 use Carbon\Carbon;
-use FlatFileCms\Article;
+use AloiaCms\Article;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use org\bovigo\vfs\vfsStream;
@@ -153,7 +153,7 @@ class ArticleTest extends TestCase
 
         vfsStream::newFile('content/articles/testing.md')->at($this->fs)->setContent('# Testing');
 
-        Config::set('flatfilecms.articles.url_prefix', 'articles');
+        Config::set('aloiacms.articles.url_prefix', 'articles');
 
         $article = Article::forSlug('testing');
 
@@ -483,7 +483,7 @@ This is a paragraph');
 
     public function test_articles_folder_path_is_created_when_not_existent()
     {
-        Config::set('flatfilecms.articles.folder_path', $this->fs->getChild('content')->url() . '/new-articles');
+        Config::set('aloiacms.articles.folder_path', $this->fs->getChild('content')->url() . '/new-articles');
 
         $this->assertFalse($this->fs->hasChild('content/new-articles'));
 

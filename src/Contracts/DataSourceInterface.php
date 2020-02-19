@@ -1,6 +1,6 @@
 <?php
 
-namespace FlatFileCms\Contracts;
+namespace AloiaCms\Contracts;
 
 /**
  * @deprecated deprecated since version 1.0.0

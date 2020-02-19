@@ -1,7 +1,7 @@
 <?php
 
 
-namespace FlatFileCms\Models\Contracts;
+namespace AloiaCms\Models\Contracts;
 
 use Illuminate\Support\Collection;
 

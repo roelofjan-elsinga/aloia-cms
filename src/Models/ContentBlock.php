@@ -1,8 +1,8 @@
 <?php
 
-namespace FlatFileCms\Models;
+namespace AloiaCms\Models;
 
-use FlatFileCms\Models\Contracts\ModelInterface;
+use AloiaCms\Models\Contracts\ModelInterface;
 
 class ContentBlock extends Model implements ModelInterface
 {

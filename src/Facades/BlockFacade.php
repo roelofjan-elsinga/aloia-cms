@@ -1,6 +1,6 @@
 <?php
 
-namespace FlatFileCms\Facades;
+namespace AloiaCms\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -14,6 +14,6 @@ class BlockFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'FlatFileCmsBlock';
+        return 'AloiaCmsBlock';
     }
 }

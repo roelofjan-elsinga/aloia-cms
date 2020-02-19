@@ -1,10 +1,10 @@
 <?php
 
-namespace FlatFileCms;
+namespace AloiaCms;
 
 use ContentParser\ContentParser;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use FlatFileCms\Facades\BlockFacade;
+use AloiaCms\Facades\BlockFacade;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -73,7 +73,7 @@ class InlineBlockParser
      */
     private function getBlockFolderPath(): string
     {
-        return Config::get('flatfilecms.content_blocks.folder_path');
+        return Config::get('aloiacms.content_blocks.folder_path');
     }
 
     /**

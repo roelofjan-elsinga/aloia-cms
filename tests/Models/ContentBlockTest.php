@@ -1,10 +1,10 @@
 <?php
 
-namespace FlatFileCms\Tests\Models;
+namespace AloiaCms\Tests\Models;
 
-use FlatFileCms\Facades\BlockFacade;
-use FlatFileCms\Models\ContentBlock;
-use FlatFileCms\Tests\TestCase;
+use AloiaCms\Facades\BlockFacade;
+use AloiaCms\Models\ContentBlock;
+use AloiaCms\Tests\TestCase;
 
 class ContentBlockTest extends TestCase
 {
@@ -58,7 +58,7 @@ class ContentBlockTest extends TestCase
             ->setBody("<h1>Testing</h1>")
             ->save();
 
-        $this->assertSame("<h1>Testing</h1>", app('FlatFileCmsBlock')->get('testing'));
+        $this->assertSame("<h1>Testing</h1>", app('AloiaCmsBlock')->get('testing'));
     }
 
     public function test_block_can_be_accessed_through_facade()

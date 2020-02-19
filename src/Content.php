@@ -1,8 +1,8 @@
 <?php
 
-namespace FlatFileCms;
+namespace AloiaCms;
 
-use FlatFileCms\Contracts\StorableInterface;
+use AloiaCms\Contracts\StorableInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 

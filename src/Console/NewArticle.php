@@ -1,9 +1,9 @@
 <?php
 
-namespace FlatFileCms\Console;
+namespace AloiaCms\Console;
 
 use Carbon\Carbon;
-use FlatFileCms\Models\Article;
+use AloiaCms\Models\Article;
 use Illuminate\Console\Command;
 
 class NewArticle extends Command
@@ -13,7 +13,7 @@ class NewArticle extends Command
      *
      * @var string
      */
-    protected $signature = 'flatfilecms:new:article {--slug=} {--post_date=} {--file_type=md}';
+    protected $signature = 'aloiacms:new:article {--slug=} {--post_date=} {--file_type=md}';
 
     /**
      * The console command description.

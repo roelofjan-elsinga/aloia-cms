@@ -1,7 +1,7 @@
 <?php
 
 
-namespace FlatFileCms;
+namespace AloiaCms;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
@@ -19,7 +19,7 @@ class FileManager
      */
     private function __construct()
     {
-        $this->uploaded_files_folder_path = Config::get('flatfilecms.uploaded_files.folder_path');
+        $this->uploaded_files_folder_path = Config::get('aloiacms.uploaded_files.folder_path');
 
         $this->assertFolderPathExists();
     }
@@ -56,7 +56,7 @@ class FileManager
     {
         return Collection::make(File::allFiles($this->uploaded_files_folder_path))
             ->map(function (string $file_path) {
-                return \FlatFileCms\DataSource\File::forFilePath($file_path);
+                return \AloiaCms\DataSource\File::forFilePath($file_path);
             });
     }
 

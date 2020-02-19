@@ -1,7 +1,7 @@
 <?php
 
 
-namespace FlatFileCms\Writer;
+namespace AloiaCms\Writer;
 
 class FolderCreator
 {

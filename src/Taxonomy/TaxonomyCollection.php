@@ -1,7 +1,7 @@
 <?php
 
 
-namespace FlatFileCms\Taxonomy;
+namespace AloiaCms\Taxonomy;
 
 use Illuminate\Support\Collection;
 

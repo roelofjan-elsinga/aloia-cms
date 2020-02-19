@@ -1,11 +1,11 @@
 <?php
 
 
-namespace FlatFileCms\Tests;
+namespace AloiaCms\Tests;
 
 use Carbon\Carbon;
-use FlatFileCms\Page;
-use FlatFileCms\Taxonomy\Taxonomy;
+use AloiaCms\Page;
+use AloiaCms\Taxonomy\Taxonomy;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use org\bovigo\vfs\vfsStream;
@@ -219,7 +219,7 @@ class PageTest extends TestCase
 
     public function test_pages_folder_is_created_when_non_existent()
     {
-        Config::set('flatfilecms.pages.folder_path', $this->fs->getChild('content')->url() . '/test-pages');
+        Config::set('aloiacms.pages.folder_path', $this->fs->getChild('content')->url() . '/test-pages');
 
         Page::all();
 
@@ -228,7 +228,7 @@ class PageTest extends TestCase
 
     public function test_page_title_is_resolved_from_content_when_incomplete_config()
     {
-        file_put_contents(Config::get('flatfilecms.pages.file_path'), json_encode([
+        file_put_contents(Config::get('aloiacms.pages.file_path'), json_encode([
             [
                 'description' => 'No title was given',
                 'filename' => 'homepage.md',
@@ -424,7 +424,7 @@ class PageTest extends TestCase
 
     public function test_malformed_post_date_results_into_todays_date()
     {
-        file_put_contents(Config::get('flatfilecms.pages.file_path'), json_encode([
+        file_put_contents(Config::get('aloiacms.pages.file_path'), json_encode([
             [
                 'description' => 'No title was given',
                 'filename' => 'homepage.md',
@@ -438,7 +438,7 @@ class PageTest extends TestCase
 
     public function test_updated_page_results_in_a_different_date_than_post_date()
     {
-        file_put_contents(Config::get('flatfilecms.pages.file_path'), json_encode([
+        file_put_contents(Config::get('aloiacms.pages.file_path'), json_encode([
             [
                 'description' => 'No title was given',
                 'filename' => 'homepage.md',
@@ -455,7 +455,7 @@ class PageTest extends TestCase
 
     public function test_malformed_updated_date_will_result_in_the_post_date()
     {
-        file_put_contents(Config::get('flatfilecms.pages.file_path'), json_encode([
+        file_put_contents(Config::get('aloiacms.pages.file_path'), json_encode([
             [
                 'description' => 'No title was given',
                 'filename' => 'homepage.md',
