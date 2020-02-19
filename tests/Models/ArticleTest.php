@@ -422,4 +422,18 @@ This is a paragraph';
         $this->assertArrayHasKey('title', $article->matter());
         $this->assertArrayHasKey('post_date', $article->matter());
     }
+
+    public function testArticleCanBeRenamed()
+    {
+        $article = Article::find('article')
+            ->setMatter(['title' => 'Article title', 'post_date' => date('Y-m-d')])
+            ->setBody('# This is content')
+            ->save();
+
+        $article
+            ->rename('new_article')
+            ->save();
+
+        $this->assertSame('Article title', Article::find('new_article')->title());
+    }
 }

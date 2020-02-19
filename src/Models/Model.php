@@ -62,6 +62,25 @@ class Model implements ModelInterface, StorableInterface
     }
 
     /**
+     * Rename this file to the given name
+     *
+     * @param string $new_name
+     * @return Model
+     */
+    public function rename(string $new_name): ModelInterface
+    {
+        $old_file_path = $this->getFilePath();
+
+        $this->file_name = $new_name;
+
+        $new_file_path = $this->getFilePath();
+
+        File::move($old_file_path, $new_file_path);
+
+        return self::find($new_name);
+    }
+
+    /**
      * Get the raw content of the file + front matter
      *
      * @return string
