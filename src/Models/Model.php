@@ -254,6 +254,31 @@ class Model implements ModelInterface, StorableInterface
     }
 
     /**
+     * Get the file name for this instance
+     *
+     * @return string
+     */
+    public function filename(): ?string
+    {
+        return $this->file_name;
+    }
+
+    /**
+     * Set the file name for this instance
+     *
+     * @param string $file_name
+     * @return ModelInterface
+     */
+    protected function setFileName(string $file_name): ModelInterface
+    {
+        $this->file_name = $file_name;
+
+        $this->parseFile();
+
+        return $this;
+    }
+
+    /**
      * Get all models for this type
      *
      * @return array
@@ -293,21 +318,6 @@ class Model implements ModelInterface, StorableInterface
     public function delete(): bool
     {
         return File::delete($this->getFilePath());
-    }
-
-    /**
-     * Set the file name for this instance
-     *
-     * @param string $file_name
-     * @return ModelInterface
-     */
-    protected function setFileName(string $file_name): ModelInterface
-    {
-        $this->file_name = $file_name;
-
-        $this->parseFile();
-
-        return $this;
     }
 
     /**

@@ -25,6 +25,8 @@ interface ModelInterface
 
     public function setExtension(string $extension): ModelInterface;
 
+    public function filename(): ?string;
+
     public function save(): ModelInterface;
 
     public function exists(): bool;
