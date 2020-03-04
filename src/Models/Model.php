@@ -172,10 +172,10 @@ class Model implements ModelInterface, StorableInterface
      * Add data to the front matter
      *
      * @param string $key
-     * @param string $value
+     * @param mixed $value
      * @return ModelInterface
      */
-    public function addMatter(string $key, string $value): ModelInterface
+    public function addMatter(string $key, $value): ModelInterface
     {
         $this->matter[$key] = $value;
 
