@@ -13,7 +13,7 @@ interface ModelInterface
 
     public function matter(): array;
 
-    public function addMatter(string $key, string $value): ModelInterface;
+    public function addMatter(string $key, $value): ModelInterface;
 
     public function setMatter(array $matter): ModelInterface;
 
