@@ -3,7 +3,6 @@
 namespace AloiaCms;
 
 use AloiaCms\Console\ConfigCommand;
-use AloiaCms\Console\Migrations\UpgradeZeroToOneCommand;
 use AloiaCms\Console\NewArticle;
 use AloiaCms\Console\PermissionsCommand;
 use AloiaCms\Models\ContentBlock;
@@ -29,7 +28,6 @@ class AloiaCmsServiceProvider extends ServiceProvider
                 NewArticle::class,
                 ConfigCommand::class,
                 PermissionsCommand::class,
-                UpgradeZeroToOneCommand::class,
             ]);
         }
     }
