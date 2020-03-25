@@ -10,19 +10,9 @@ filter:
 build:
   environment:
     php:
-      version: '7.3'
-    variables:
-      DB_HOST: '127.0.0.1'
-      DB_USERNAME: 'root'
-      DB_PASSWORD: ''
-      DB_DATABASE: 'my_database'
-  project_setup:
-    before:
-      - mysql -e "CREATE DATABASE my_database"
+      version: '7.2.5'
   nodes:
     analysis:
-      services:
-        mysql: 5.7
       tests:
         override:
           - php-scrutinizer-run
