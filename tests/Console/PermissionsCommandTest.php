@@ -18,24 +18,16 @@ class PermissionsCommandTest extends TestCase
         if (!is_dir($content_path)) {
             mkdir($content_path, 0777, true);
 
-            touch("{$content_path}/pages.json");
-            touch("{$content_path}/articles.json");
-            touch("{$content_path}/metatags.json");
-            touch("{$content_path}/taxonomy.json");
-
-            mkdir("{$content_path}/pages");
-            mkdir("{$content_path}/articles");
-            mkdir("{$content_path}/blocks");
+            mkdir("{$content_path}/collections");
+            mkdir("{$content_path}/images");
+            mkdir("{$content_path}/images/pages");
+            mkdir("{$content_path}/images/articles");
             mkdir("{$content_path}/files");
         }
 
-        Config::set('aloiacms.pages.file_path', "{$content_path}/pages.json");
-        Config::set('aloiacms.pages.folder_path', "{$content_path}/pages");
-        Config::set('aloiacms.articles.file_path', "{$content_path}/articles.json");
-        Config::set('aloiacms.articles.folder_path', "{$content_path}/articles");
-        Config::set('aloiacms.content_blocks.folder_path', "{$content_path}/blocks");
-        Config::set('aloiacms.meta_tags.file_path', "{$content_path}/metatags.json");
-        Config::set('aloiacms.taxonomy.file_path', "{$content_path}/taxonomy.json");
+        Config::set('aloiacms.collections.collections_path', "{$content_path}/collections");
+        Config::set('aloiacms.pages.image_path', "{$content_path}/images/pages");
+        Config::set('aloiacms.articles.image_path', "{$content_path}/images/articles");
         Config::set('aloiacms.uploaded_files.folder_path', "{$content_path}/files");
         Config::set('aloiacms.permissions.user', get_current_user());
         Config::set('aloiacms.permissions.group', get_current_user());

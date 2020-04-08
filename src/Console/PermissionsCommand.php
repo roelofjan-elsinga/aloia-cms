@@ -30,13 +30,9 @@ class PermissionsCommand extends Command
     public function handle()
     {
         $resource_paths = [
-            Config::get('aloiacms.pages.file_path'),
-            Config::get('aloiacms.pages.folder_path'),
-            Config::get('aloiacms.articles.file_path'),
-            Config::get('aloiacms.articles.folder_path'),
-            Config::get('aloiacms.content_blocks.folder_path'),
-            Config::get('aloiacms.meta_tags.file_path'),
-            Config::get('aloiacms.taxonomy.file_path'),
+            Config::get('aloiacms.collections.collections_path'),
+            Config::get('aloiacms.pages.image_path'),
+            Config::get('aloiacms.articles.image_path'),
             Config::get('aloiacms.uploaded_files.folder_path'),
         ];
 
