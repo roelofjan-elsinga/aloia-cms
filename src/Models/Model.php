@@ -236,6 +236,21 @@ class Model implements ModelInterface, StorableInterface
     }
 
     /**
+     * Remove a key from the configuration
+     *
+     * @param string $key
+     * @return $this|ModelInterface
+     */
+    public function remove(string $key): ModelInterface
+    {
+        if ($this->has($key)) {
+            unset($this->matter[$key]);
+        }
+
+        return $this;
+    }
+
+    /**
      * Get the raw file body
      *
      * @return string

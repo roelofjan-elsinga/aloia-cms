@@ -326,6 +326,17 @@ This is a paragraph';
 
         $this->assertSame('Testing things', Article::find('testing')->title());
         $this->assertSame('Testing things', Article::find('testing')->title);
+
+        Article::find('testing')
+            ->remove('title')
+            ->setMatter([
+                'post_date' => date('Y-m-d'),
+                'is_scheduled' => true
+            ])
+            ->setBody('# Testing')
+            ->save();
+
+        $this->assertSame('Testing', Article::find('testing')->title());
     }
 
     public function test_article_can_be_removed_by_slug()

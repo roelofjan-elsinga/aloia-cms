@@ -59,4 +59,30 @@ class ModelTest extends TestCase
         $this->assertSame('Article title', $article->get('title'));
         $this->assertSame('Article description', $article->get('description'));
     }
+    
+    public function test_data_can_be_checked_for_existence()
+    {
+        $article = Article::find('testing')
+            ->setMatter([
+                'title' => 'Article title',
+                'description' => 'description',
+            ]);
+
+        $this->assertTrue($article->has('title'));
+        $this->assertFalse($article->has('summary'));
+
+        $article->remove('title');
+
+        $this->assertFalse($article->has('title'));
+    }
+    
+    public function test_add_matter_still_works_after_deprecation()
+    {
+        $article = Article::find('testing')
+            ->set('title', 'Article title')
+            ->addMatter('description', 'description');
+
+        $this->assertSame('Article title', $article->get('title'));
+        $this->assertSame('description', $article->get('description'));
+    }
 }
