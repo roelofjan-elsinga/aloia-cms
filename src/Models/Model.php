@@ -169,13 +169,66 @@ class Model implements ModelInterface, StorableInterface
     }
 
     /**
-     * Add data to the front matter
+     * Set a value on the specified key in the configuration
+     *
+     * Kept around for backward compatibility
      *
      * @param string $key
-     * @param mixed $value
+     * @param $value
      * @return ModelInterface
+     *
+     * @deprecated since 3.2.0
      */
     public function addMatter(string $key, $value): ModelInterface
+    {
+        return $this->set($key, $value);
+    }
+    
+    /**
+     * Set data in the front matter, but only for the keys specified in the input array
+     *
+     * @param array $matter
+     * @return ModelInterface
+     */
+    public function setMatter(array $matter): ModelInterface
+    {
+        foreach (array_keys($matter) as $key) {
+            $this->matter[$key] = $matter[$key];
+        }
+
+        return $this;
+    }
+
+    /**
+     * Determine whether a key is present in the configuration
+     *
+     * @param string $key
+     * @return bool
+     */
+    public function has(string $key): bool
+    {
+        return isset($this->matter[$key]);
+    }
+
+    /**
+     * Get the value of the specified key, return null if it doesn't exist
+     *
+     * @param string $key
+     * @return mixed|null
+     */
+    public function get(string $key)
+    {
+        return $this->matter[$key] ?? null;
+    }
+
+    /**
+     * Set a value on the specified key in the configuration
+     *
+     * @param string $key
+     * @param $value
+     * @return $this|ModelInterface
+     */
+    public function set(string $key, $value): ModelInterface
     {
         $this->matter[$key] = $value;
 
@@ -183,14 +236,16 @@ class Model implements ModelInterface, StorableInterface
     }
 
     /**
-     * Set the front matter
+     * Remove a key from the configuration
      *
-     * @param array $matter
-     * @return ModelInterface
+     * @param string $key
+     * @return $this|ModelInterface
      */
-    public function setMatter(array $matter): ModelInterface
+    public function remove(string $key): ModelInterface
     {
-        $this->matter = $matter;
+        if ($this->has($key)) {
+            unset($this->matter[$key]);
+        }
 
         return $this;
     }
@@ -328,7 +383,7 @@ class Model implements ModelInterface, StorableInterface
      */
     public function __get($key)
     {
-        return $this->matter[$key] ?? null;
+        return $this->get($key);
     }
 
     /**

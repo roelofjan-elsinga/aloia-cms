@@ -328,6 +328,7 @@ This is a paragraph';
         $this->assertSame('Testing things', Article::find('testing')->title);
 
         Article::find('testing')
+            ->remove('title')
             ->setMatter([
                 'post_date' => date('Y-m-d'),
                 'is_scheduled' => true
