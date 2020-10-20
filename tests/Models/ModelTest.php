@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AloiaCms\Tests\Models;
 
 use AloiaCms\Models\Article;
@@ -19,7 +18,7 @@ class ModelTest extends TestCase
         $this->assertSame('title', $article->matter()['title']);
         $this->assertSame('description', $article->matter()['description']);
 
-        $article->addMatter('title', 'New title');
+        $article->set('title', 'New title');
 
         $this->assertSame('New title', $article->matter()['title']);
         $this->assertSame('description', $article->matter()['description']);
@@ -34,5 +33,30 @@ class ModelTest extends TestCase
             ]);
 
         $this->assertSame('testing', $article->filename());
+    }
+
+    public function test_value_can_be_set_on_model_instance()
+    {
+        $article = Article::find('testing')
+            ->set('title', 'Article title');
+
+        $this->assertSame('Article title', $article->get('title'));
+    }
+    
+    public function test_non_specified_configuration_attributes_are_not_overwritten()
+    {
+        $article = Article::find('testing')
+            ->setMatter([
+                'title' => 'Article title',
+                'description' => 'description'
+            ]);
+
+        $this->assertSame('Article title', $article->get('title'));
+        $this->assertSame('description', $article->get('description'));
+
+        $article->setMatter(['description' => 'Article description']);
+
+        $this->assertSame('Article title', $article->get('title'));
+        $this->assertSame('Article description', $article->get('description'));
     }
 }
