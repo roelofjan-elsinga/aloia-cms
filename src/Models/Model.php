@@ -182,6 +182,7 @@ class Model implements ModelInterface, StorableInterface
         $min = 0;
         $max = count($haystack);
 
+        // No saved files, lookup is pointless
         if ($max === 0) {
             return null;
         }
@@ -189,6 +190,7 @@ class Model implements ModelInterface, StorableInterface
         while ($max >= $min) {
             $mid = floor(($min + $max) / 2);
 
+            // Current key doesn't exist, so let's try a lower number
             if (!isset($haystack[$mid])) {
                 $max = $mid - 1;
                 continue;
