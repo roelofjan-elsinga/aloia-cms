@@ -3,7 +3,6 @@
 [![Build status](https://travis-ci.com/roelofjan-elsinga/aloia-cms.svg)](https://travis-ci.com/roelofjan-elsinga/aloia-cms)
 [![StyleCI Status](https://github.styleci.io/repos/192778142/shield)](https://github.styleci.io/repos/192778142)
 [![Code Coverage](https://codecov.io/gh/roelofjan-elsinga/aloia-cms/branch/master/graph/badge.svg)](https://codecov.io/gh/roelofjan-elsinga/aloia-cms)
-[![Scrutinizer](https://scrutinizer-ci.com/g/roelofjan-elsinga/aloia-cms/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/roelofjan-elsinga/aloia-cms/)
 [![Total Downloads](https://poser.pugx.org/roelofjan-elsinga/aloia-cms/downloads)](https://packagist.org/packages/roelofjan-elsinga/aloia-cms)
 [![Latest Stable Version](https://poser.pugx.org/roelofjan-elsinga/aloia-cms/v/stable)](https://packagist.org/packages/roelofjan-elsinga/aloia-cms)
 [![License](https://poser.pugx.org/roelofjan-elsinga/aloia-cms/license)](https://packagist.org/packages/roelofjan-elsinga/aloia-cms)
