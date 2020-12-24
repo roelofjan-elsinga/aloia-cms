@@ -3,6 +3,10 @@
 
 namespace AloiaCms\Models;
 
+use AloiaCms\Events\PostModelDeleted;
+use AloiaCms\Events\PostModelSaved;
+use AloiaCms\Events\PreModelDeleted;
+use AloiaCms\Events\PreModelSaved;
 use ContentParser\ContentParser;
 use AloiaCms\InlineBlockParser;
 use AloiaCms\Models\Contracts\ModelInterface;
@@ -279,6 +283,8 @@ class Model implements ModelInterface, StorableInterface
      */
     public function save(): ModelInterface
     {
+        PreModelSaved::dispatch($this);
+
         $file_content = FrontMatterCreator::seed($this->matter, $this->body)->create();
 
         $this->assertFilenameExists();
@@ -288,6 +294,8 @@ class Model implements ModelInterface, StorableInterface
         $file_path = $this->getFilePath();
 
         file_put_contents($file_path, $file_content);
+
+        PostModelSaved::dispatch($this);
 
         return $this;
     }
@@ -461,7 +469,13 @@ class Model implements ModelInterface, StorableInterface
      */
     public function delete(): bool
     {
-        return File::delete($this->getFilePath());
+        PreModelDeleted::dispatch($this);
+
+        $is_successful = File::delete($this->getFilePath());
+
+        PostModelDeleted::dispatch($this);
+
+        return $is_successful;
     }
 
     /**
