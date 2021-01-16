@@ -64,6 +64,7 @@
     "phpunit/phpunit": "^9.0",
     "spatie/phpunit-watcher": "^1.22",
     "friendsofphp/php-cs-fixer": "^2.15",
-    "brainmaestro/composer-git-hooks": "^2.7"
+    "brainmaestro/composer-git-hooks": "^2.7",
+    "vimeo/psalm": "^4.4"
   }
 }
