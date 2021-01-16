@@ -23,7 +23,7 @@ class ConfigCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return void
+     * @return int
      */
     public function handle()
     {
@@ -31,5 +31,7 @@ class ConfigCommand extends Command
             '--tag' => 'config',
             '--force' => true,
         ]);
+
+        return 0;
     }
 }

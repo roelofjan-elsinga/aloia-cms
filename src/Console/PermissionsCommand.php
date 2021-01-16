@@ -25,7 +25,7 @@ class PermissionsCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return void
+     * @return int
      */
     public function handle()
     {
@@ -52,5 +52,7 @@ class PermissionsCommand extends Command
 
             exec("{$sudo_prefix}chown -R {$user}:{$group} {$resource_path}");
         }
+
+        return 0;
     }
 }

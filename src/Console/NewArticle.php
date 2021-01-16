@@ -27,7 +27,7 @@ class NewArticle extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      * @throws \Exception
      */
     public function handle()
@@ -37,6 +37,8 @@ class NewArticle extends Command
         $this->createNewPost();
 
         $this->info("Created new post entry for {$this->option('slug')}");
+
+        return 0;
     }
 
     /**
