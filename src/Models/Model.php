@@ -10,17 +10,15 @@ use AloiaCms\Events\PreModelSaved;
 use ContentParser\ContentParser;
 use AloiaCms\InlineBlockParser;
 use AloiaCms\Models\Contracts\ModelInterface;
-use AloiaCms\Models\Contracts\StorableInterface;
 use AloiaCms\Writer\FolderCreator;
 use AloiaCms\Writer\FrontMatterCreator;
 use Exception;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 
-class Model implements ModelInterface, StorableInterface
+class Model implements ModelInterface
 {
     /**
      * Represents the folder name where this model saves files

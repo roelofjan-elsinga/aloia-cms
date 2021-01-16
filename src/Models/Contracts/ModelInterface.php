@@ -84,6 +84,13 @@ interface ModelInterface
     public function filename(): ?string;
 
     /**
+     * Get the absolute path of the folder in which this resource is saved
+     *
+     * @return string
+     */
+    public function getFolderPath(): string;
+
+    /**
      * Save this model to the file system
      *
      * @return ModelInterface
