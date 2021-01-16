@@ -16,10 +16,9 @@ class InlineBlockParser
      * Convert block tags in HTML strings into block content
      *
      * @param string $html_string
-     * @param bool $backward_compatible_mode
      * @return string
      */
-    public function parseHtmlString(string $html_string, bool $backward_compatible_mode = false): string
+    public function parseHtmlString(string $html_string): string
     {
         $tag_positions = $this->strpos_all($html_string, '===');
 
@@ -46,7 +45,7 @@ class InlineBlockParser
 
             $block_name = trim(str_replace("===", "", $tag));
 
-            $replacements[$tag] = $this->getReplacementFromBlockName($tag, $block_name, $backward_compatible_mode);
+            $replacements[$tag] = $this->getReplacementFromBlockName($tag, $block_name);
         }
 
         return str_replace(array_keys($replacements), array_values($replacements), $html_string);
@@ -85,10 +84,9 @@ class InlineBlockParser
      *
      * @param string $tag
      * @param string $block_name
-     * @param bool $backward_compatible_mode
      * @return string
      */
-    private function getReplacementFromBlockName(string $tag, string $block_name, bool $backward_compatible_mode): string
+    private function getReplacementFromBlockName(string $tag, string $block_name): string
     {
         $index_of_options = strpos($block_name, '[');
 
@@ -108,7 +106,7 @@ class InlineBlockParser
             }
         }
 
-        $block_value = $backward_compatible_mode ? $this->get($block_name) : BlockFacade::get($block_name);
+        $block_value = BlockFacade::get($block_name);
 
         if (empty($block_value)) {
             $block_value = $tag;
