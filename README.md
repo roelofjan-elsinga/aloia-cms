@@ -223,3 +223,7 @@ This will be parsed automatically.
 ## Testing
 
 You can run the included tests by running ``./vendor/bin/phpunit`` in your terminal.
+
+## Contributing
+If you'd like to contribute to the CMS directly, you can create PR's on this repository. 
+If you'd like to contribute to the documentation, you can create PR's on the [repository for the documentation](https://github.com/roelofjan-elsinga/aloia-cms-website).
