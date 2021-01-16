@@ -177,9 +177,9 @@ class Page extends Model implements ModelInterface, PublishInterface
     /**
      * Get the url of this page
      *
-     * @return string
+     * @return ?string
      */
-    public function url(): string
+    public function url(): ?string
     {
         return $this->matter['url'] ?? $this->file_name;
     }

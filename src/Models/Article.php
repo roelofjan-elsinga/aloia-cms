@@ -43,9 +43,9 @@ class Article extends Model implements ModelInterface, PublishInterface
     /**
      * Get the slug of this article
      *
-     * @return string
+     * @return string|null
      */
-    public function slug(): string
+    public function slug(): ?string
     {
         return $this->file_name;
     }

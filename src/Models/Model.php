@@ -190,7 +190,7 @@ class Model implements ModelInterface
         }
 
         while ($max >= $min) {
-            $mid = floor(($min + $max) / 2);
+            $mid = intval(floor(($min + $max) / 2));
 
             // Current key doesn't exist, so let's try a lower number
             if (!isset($haystack[$mid])) {
