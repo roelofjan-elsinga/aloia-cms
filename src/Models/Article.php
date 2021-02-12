@@ -35,7 +35,11 @@ class Article extends Model implements ModelInterface, PublishInterface
 
         $file_content = $this->body();
 
-        $titles = HtmlParser::getTextBetweenTags($file_content, 'h1');
+        $titles = [];
+
+        if (!empty($file_content)) {
+            $titles = HtmlParser::getTextBetweenTags($file_content, 'h1');
+        }
 
         return $titles[0] ?? "Untitled article";
     }
@@ -64,7 +68,11 @@ class Article extends Model implements ModelInterface, PublishInterface
 
         $file_content = $this->body();
 
-        $images = HtmlParser::getTagAttribute($file_content, 'img', 'src');
+        $images = [];
+
+        if (!empty($file_content)) {
+            $images = HtmlParser::getTagAttribute($file_content, 'img', 'src');
+        }
 
         return $images[0] ?? "";
     }
