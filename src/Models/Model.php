@@ -253,7 +253,7 @@ class Model implements ModelInterface, StorableInterface
      */
     public function exists(): bool
     {
-        return !is_null($this->getFullFileName());
+        return file_exists($this->getFilePath());
     }
 
     /**
