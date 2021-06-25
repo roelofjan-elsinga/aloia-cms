@@ -12,7 +12,7 @@ class ModelRenameFailed
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public ModelInterface $model;
-    private string $new_filename;
+    public string $new_filename;
 
     /**
      * Create a new event instance.
