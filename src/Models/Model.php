@@ -4,8 +4,10 @@
 namespace AloiaCms\Models;
 
 use AloiaCms\Events\PostModelDeleted;
+use AloiaCms\Events\PostModelRenamed;
 use AloiaCms\Events\PostModelSaved;
 use AloiaCms\Events\PreModelDeleted;
+use AloiaCms\Events\PreModelRenamed;
 use AloiaCms\Events\PreModelSaved;
 use ContentParser\ContentParser;
 use AloiaCms\InlineBlockParser;
@@ -14,7 +16,6 @@ use AloiaCms\Models\Contracts\StorableInterface;
 use AloiaCms\Writer\FolderCreator;
 use AloiaCms\Writer\FrontMatterCreator;
 use Exception;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -266,11 +267,15 @@ class Model implements ModelInterface, StorableInterface
     {
         $old_file_path = $this->getFilePath();
 
+        PreModelRenamed::dispatch($this);
+
         $this->file_name = $new_name;
 
         $new_file_path = $this->getFilePath();
 
         File::move($old_file_path, $new_file_path);
+
+        PostModelRenamed::dispatch($this);
 
         return self::find($new_name);
     }
