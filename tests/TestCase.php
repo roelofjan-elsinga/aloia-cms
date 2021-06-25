@@ -25,10 +25,16 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         parent::setUp();
 
+        $invalid_permissions_folder = vfsStream::newDirectory("invalid_articles", 0600);
+
         $this->fs = vfsStream::setup('root', 0777, [
             'content' => [
                 'pages' => [],
-                'articles' => [],
+                'articles' => [
+                    'permissions' => $invalid_permissions_folder
+                        ->chown(vfsStream::OWNER_ROOT)
+                        ->chgrp(vfsStream::GROUP_ROOT)
+                ],
                 'blocks' => [],
                 'collections' => [],
                 'test-file.txt' => 'Test',
@@ -43,13 +49,9 @@ class TestCase extends \Orchestra\Testbench\TestCase
         $content_path = $this->fs->getChild('content')->url();
 
         Config::set('aloiacms.collections_path', "{$content_path}/collections");
-        Config::set('aloiacms.pages.file_path', "{$content_path}/pages.json");
         Config::set('aloiacms.pages.folder_path', "{$content_path}/pages");
-        Config::set('aloiacms.articles.file_path', "{$content_path}/articles.json");
         Config::set('aloiacms.articles.folder_path', "{$content_path}/articles");
         Config::set('aloiacms.content_blocks.folder_path', "{$content_path}/blocks");
-        Config::set('aloiacms.meta_tags.file_path', "{$content_path}/metatags.json");
-        Config::set('aloiacms.taxonomy.file_path', "{$content_path}/taxonomy.json");
         Config::set('aloiacms.uploaded_files.folder_path', "{$content_path}/files");
     }
 

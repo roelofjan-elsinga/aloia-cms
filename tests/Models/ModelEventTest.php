@@ -2,6 +2,7 @@
 
 namespace AloiaCms\Tests\Models;
 
+use AloiaCms\Events\ModelRenameFailed;
 use AloiaCms\Events\PostModelDeleted;
 use AloiaCms\Events\PostModelRenamed;
 use AloiaCms\Events\PostModelSaved;
@@ -57,5 +58,23 @@ class ModelEventTest extends TestCase
         Event::assertDispatched(PostModelRenamed::class, 1);
 
         $this->assertSame("test_article", $renamed_article->filename());
+    }
+
+    public function testRenameFailedEventIsDispatchedForModel()
+    {
+        Event::fake();
+
+        Article::find('article')
+            ->setPostDate(Carbon::now())
+            ->save();
+
+        $renamed_article = Article::find('article')
+            ->rename("permissions/article")
+            ->save();
+
+        Event::assertDispatched(PreModelRenamed::class, 1);
+        Event::assertDispatched(ModelRenameFailed::class, 1);
+
+        $this->assertSame("article", $renamed_article->filename());
     }
 }

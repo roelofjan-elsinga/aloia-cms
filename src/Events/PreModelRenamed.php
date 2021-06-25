@@ -12,14 +12,16 @@ class PreModelRenamed
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public ModelInterface $model;
+    public string $new_filename;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(ModelInterface $model)
+    public function __construct(ModelInterface $model, string $new_filename)
     {
         $this->model = $model;
+        $this->new_filename = $new_filename;
     }
 }

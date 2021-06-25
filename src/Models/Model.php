@@ -3,6 +3,7 @@
 
 namespace AloiaCms\Models;
 
+use AloiaCms\Events\ModelRenameFailed;
 use AloiaCms\Events\PostModelDeleted;
 use AloiaCms\Events\PostModelRenamed;
 use AloiaCms\Events\PostModelSaved;
@@ -266,18 +267,27 @@ class Model implements ModelInterface, StorableInterface
     public function rename(string $new_name): ModelInterface
     {
         $old_file_path = $this->getFilePath();
+        $old_name = $this->filename();
 
-        PreModelRenamed::dispatch($this);
+        PreModelRenamed::dispatch($this, $new_name);
 
         $this->file_name = $new_name;
 
         $new_file_path = $this->getFilePath();
 
-        File::move($old_file_path, $new_file_path);
+        try {
+            $is_moved = File::move($old_file_path, $new_file_path);
 
-        PostModelRenamed::dispatch($this);
-
-        return self::find($new_name);
+            if (!$is_moved) {
+                throw new \InvalidArgumentException("Could not move the file");
+            } else {
+                PostModelRenamed::dispatch($this, $new_name);
+                return self::find($new_name);
+            }
+        } catch (\Exception $exception) {
+            ModelRenameFailed::dispatch($this, $new_name);
+            return self::find($old_name);
+        }
     }
 
     /**
