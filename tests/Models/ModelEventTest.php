@@ -69,7 +69,7 @@ class ModelEventTest extends TestCase
             ->save();
 
         $renamed_article = Article::find('article')
-            ->rename("permissions/article")
+            ->rename("permissions/new-article")
             ->save();
 
         Event::assertDispatched(PreModelRenamed::class, 1);

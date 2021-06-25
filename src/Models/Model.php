@@ -285,6 +285,7 @@ class Model implements ModelInterface, StorableInterface
                 return self::find($new_name);
             }
         } catch (\Exception $exception) {
+            $this->file_name = $old_name;
             ModelRenameFailed::dispatch($this, $new_name);
             return self::find($old_name);
         }
