@@ -4,3 +4,4 @@ vendor/
 .php_cs.cache
 coverage/
 composer.lock
+cghooks.lock
