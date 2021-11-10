@@ -223,10 +223,18 @@ class Model implements ModelInterface, StorableInterface
      */
     private function getModelFiles(): array
     {
+        // Filter out any:
+        // - hidden files: files with leading .
+        // - current folder: .
+        // - parent folder: ..
+
         $filenames = array_values(
-            array_diff(
-                scandir($this->getFolderPath()),
-                ['..', '.']
+            array_filter(
+                array_diff(
+                    scandir($this->getFolderPath()),
+                    ['..', '.']
+                ),
+                fn (string $filename) => $filename[0] !== "."
             )
         );
 
