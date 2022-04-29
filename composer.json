@@ -13,10 +13,6 @@
       "email": "roelofjanelsinga@gmail.com"
     }
   ],
-  "scripts": {
-    "post-install-cmd": "vendor/bin/cghooks add --ignore-lock",
-    "post-update-cmd": "vendor/bin/cghooks update"
-  },
   "autoload": {
     "psr-4": {
       "AloiaCms\\": "src/",
@@ -29,16 +25,6 @@
     ]
   },
   "extra": {
-    "hooks": {
-      "pre-commit": [
-        "echo committing as $(git config user.name)",
-        "./vendor/bin/php-cs-fixer fix . --rules=@PSR2"
-      ],
-      "pre-push": [
-        "./vendor/bin/php-cs-fixer fix --dry-run . --rules=@PSR2"
-      ],
-      "post-merge": "composer install"
-    },
     "laravel": {
       "providers": [
         "AloiaCms\\AloiaCmsServiceProvider"
@@ -49,21 +35,19 @@
     }
   },
   "require": {
-    "php": ">=7.4|>=8.0",
+    "php": ">=8.0",
     "ext-json": "*",
     "ext-dom": "*",
     "roelofjan-elsinga/content-to-html-parser": "^0.5",
-    "illuminate/support": "^6.0|^7.0|^8.0",
-    "illuminate/console": "^6.0|^7.0|^8.0",
+    "illuminate/support": "^9.0",
+    "illuminate/console": "^9.0",
     "spatie/yaml-front-matter": "^2.0",
-    "symfony/yaml": "^5.0"
+    "symfony/yaml": "^6.0"
   },
   "require-dev": {
-    "orchestra/testbench": "^4.0|^5.0",
+    "orchestra/testbench": "^7.4",
     "mikey179/vfsstream": "^1.6",
     "phpunit/phpunit": "^9.0",
-    "spatie/phpunit-watcher": "^1.22",
-    "friendsofphp/php-cs-fixer": "^2.15",
-    "brainmaestro/composer-git-hooks": "^2.7"
+    "friendsofphp/php-cs-fixer": "^3.8"
   }
 }
