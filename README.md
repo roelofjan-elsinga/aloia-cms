@@ -56,13 +56,12 @@ There are 4 built-in models which you can use without any additional set-up:
 - ContentBlock
 - MetaTag
 
-Of course you can add your own models as described at "Creating a custom content type".
+Of course, you can add your own models as described at "Creating a custom content type".
 
 ## Usage of models
 
 In this example we're looking at one of the built-in content types: Article. 
 You can use these same steps for all classes that extend from "AloiaCms\Models\Model".
-
 
 To load all articles in the "articles" folder in the folder you specified in 
 ``config('aloiacms.collection_path')`` you can use the following script:
@@ -108,7 +107,7 @@ Article::find($post_slug)
     ->setMatter([
         'description' => 'This post is about beautiful things',
         'is_published' => true,
-        'is_sechduled' => false,
+        'is_scheduled' => false,
         // Either use post_date in setMatter() or setPostDate()
         'post_date' => date('Y-m-d')
     ])
@@ -137,83 +136,9 @@ Now you can use the facade in your blade views by using:
 {!! Block::get('content-file-name') !!}
 ```
 
-You can also include content blocks in your HTML and Markdown files. You can add several different attributes 
-to enhance these content blocks:
-
-- class
-- id
-- style
-- href
-
-The class, id, and style will be applied to a wrapping div around the content in the block.
-The link in the href attribute will be applied to a wrapping anchor tag inside the wrapping div.
-
-Examples:
-
-Using a content block in a HTML or Markdown file managed through the CMS:
-
-```html
-<!--content.html-->
-<h1>This is a title</h1>
-
-<!--page managed through the CMS-->
-===content===
-
-<!--resulting HTML output-->
-<div>
-    <h1>This is a title</h1>
-</div>
-```
-
-Adding a class to the content block:
-
-```html
-<!--content.html-->
-<h1>This is a title</h1>
-
-<!--page managed through the CMS-->
-===content[class=primary-block]===
-
-<!--resulting HTML output-->
-<div class="primary-block">
-    <h1>This is a title</h1>
-</div>
-```
-
-Adding multiple classes and a style tag to the content block:
-
-```html
-<!--content.html-->
-<h1>This is a title</h1>
-
-<!--page managed through the CMS-->
-===content[class=block primary-block,style=color:red;]===
-
-<!--resulting HTML output-->
-<div class="block primary-block" style="color:red;">
-    <h1>This is a title</h1>
-</div>
-```
-
-When you add a href attribute to the content block, you get a nested anchor tag:
-```html
-<!--content.html-->
-<h1>This is a title</h1>
-
-<!--page managed through the CMS-->
-===content[class=primary-block,href=/link-to-a-page]===
-
-<!--resulting HTML output-->
-<div class="primary-block">
-    <a href="/link-to-a-page">
-        <h1>This is a title</h1>
-    </a>
-</div>
-```
-
 This facade will look for a file in the folder you specified in 
 ``config('aloiacms.collections_path')``. 
-The Facade will parse the contents of the file to HTML to be able to render it. 
+The Facade will parse the contents of the file to HTML to be able to render it.
 If no file could be found, an empty string will be returned.
 
 NOTE: You should not specify the extension of the filename you're passing to ``Block::get()``.
