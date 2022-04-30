@@ -73,7 +73,7 @@ class AloiaCmsUserProvider implements UserProvider
     {
         $user = $this
             ->createModel()
-            ->findById($credentials['username']);
+            ->findById($credentials['email']);
 
         if ($user->exists()) {
             return $user;
