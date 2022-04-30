@@ -4,8 +4,10 @@ namespace AloiaCms;
 
 use AloiaCms\Console\ConfigCommand;
 use AloiaCms\Console\NewArticle;
-use AloiaCms\Console\PermissionsCommand;
+use AloiaCms\Models\Article;
 use AloiaCms\Models\ContentBlock;
+use AloiaCms\Models\MetaTag;
+use AloiaCms\Models\Page;
 use Illuminate\Support\ServiceProvider;
 
 class AloiaCmsServiceProvider extends ServiceProvider
