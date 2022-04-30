@@ -85,39 +85,7 @@ class Article extends Model implements ModelInterface, PublishInterface
      */
     public function thumbnail(): string
     {
-        if (isset($this->matter['thumbnail'])) {
-            return $this->matter['thumbnail'];
-        }
-
-        if (!empty($this->image())) {
-            return "/{$this->getImagesUrlPath()}/{$this->getThumbnailFromPath($this->image())}";
-        }
-
-        return "";
-    }
-
-    /**
-     * @param string $path
-     * @param int $width
-     * @return string
-     */
-    private function getThumbnailFromPath(string $path, int $width = 300): string
-    {
-        $basename = basename($path);
-        $extension = pathinfo($path, PATHINFO_EXTENSION);
-        $filename = str_replace(".{$extension}", "", $basename);
-
-        return "{$filename}_w{$width}.{$extension}";
-    }
-
-    /**
-     * Get the path of the folder than contains all articles
-     *
-     * @return string
-     */
-    private function getImagesUrlPath(): string
-    {
-        return Config::get('aloiacms.articles.image_path');
+        return $this->matter['thumbnail'] ?? "";
     }
 
     /**
