@@ -3,6 +3,7 @@
 
 namespace AloiaCms\Tests\Models;
 
+use AloiaCms\Facades\PageFacade;
 use Carbon\Carbon;
 use AloiaCms\Models\ContentBlock;
 use AloiaCms\Models\Page;
@@ -226,5 +227,43 @@ class PageTest extends TestCase
             ->save();
 
         $this->assertStringContainsString('<h2>Testing content blocks</h2>', $page->body());
+    }
+
+    public function test_page_can_be_accessed_through_service_container()
+    {
+        Page::find('testing')
+            ->setExtension('html')
+            ->setMatter([
+                'title' => 'Testing',
+                'description' => 'Testing',
+                'post_date' => date('Y-m-d'),
+                'is_published' => true,
+                'is_scheduled' => false,
+                'summary' => 'summary',
+                'template_name' => 'default'
+            ])
+            ->setBody("<h1>Testing</h1>")
+            ->save();
+
+        $this->assertSame("<h1>Testing</h1>", trim(app(Page::class)->findById('testing')->body()));
+    }
+
+    public function test_page_can_be_accessed_through_facade()
+    {
+        Page::find('testing')
+            ->setExtension('html')
+            ->setMatter([
+                'title' => 'Testing',
+                'description' => 'Testing',
+                'post_date' => date('Y-m-d'),
+                'is_published' => true,
+                'is_scheduled' => false,
+                'summary' => 'summary',
+                'template_name' => 'default'
+            ])
+            ->setBody("<h1>Testing</h1>")
+            ->save();
+
+        $this->assertSame("<h1>Testing</h1>", trim(PageFacade::findById('testing')->body()));
     }
 }

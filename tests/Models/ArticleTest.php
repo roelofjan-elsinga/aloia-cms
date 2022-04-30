@@ -3,6 +3,7 @@
 
 namespace AloiaCms\Tests\Models;
 
+use AloiaCms\Facades\ArticleFacade;
 use Carbon\Carbon;
 use AloiaCms\Models\Article;
 use AloiaCms\Tests\TestCase;
@@ -120,18 +121,6 @@ class ArticleTest extends TestCase
             ->save();
 
         $this->assertSame('https://via.placeholder.com/150', Article::find('testing')->thumbnail());
-    }
-
-    public function test_thumbnail_is_generated_from_image_when_not_specified()
-    {
-        Article::find('testing')
-            ->setMatter([
-                'post_date' => date('Y-m-d'),
-            ])
-            ->setBody('# Image ![Placeholder](https://via.placeholder.com/150.jpg)')
-            ->save();
-
-        $this->assertSame('/images/articles/150_w300.jpg', Article::find('testing')->thumbnail());
     }
 
     public function test_empty_thumbnail_is_returned_when_no_thumbnail_and_image_are_available()
@@ -424,7 +413,7 @@ This is a paragraph';
         $this->assertArrayHasKey('post_date', $article->matter());
     }
 
-    public function testArticleCanBeRenamed()
+    public function test_article_can_be_renamed()
     {
         $article = Article::find('article')
             ->setMatter(['title' => 'Article title', 'post_date' => date('Y-m-d')])
@@ -436,5 +425,27 @@ This is a paragraph';
             ->save();
 
         $this->assertSame('Article title', Article::find('new_article')->title());
+    }
+
+    public function test_article_can_be_accessed_through_service_container()
+    {
+        Article::find('testing')
+            ->setExtension('html')
+            ->setMatter(['post_date' => date('Y-m-d')])
+            ->setBody("<h1>Testing</h1>")
+            ->save();
+
+        $this->assertSame("<h1>Testing</h1>", trim(app(Article::class)->findById('testing')->body()));
+    }
+
+    public function test_article_can_be_accessed_through_facade()
+    {
+        Article::find('testing')
+            ->setExtension('html')
+            ->setMatter(['post_date' => date('Y-m-d')])
+            ->setBody("<h1>Testing</h1>")
+            ->save();
+
+        $this->assertSame("<h1>Testing</h1>", trim(ArticleFacade::findById('testing')->body()));
     }
 }

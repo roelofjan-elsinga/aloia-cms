@@ -58,7 +58,7 @@ class ContentBlockTest extends TestCase
             ->setBody("<h1>Testing</h1>")
             ->save();
 
-        $this->assertSame("<h1>Testing</h1>", app('AloiaCmsBlock')->get('testing'));
+        $this->assertSame("<h1>Testing</h1>", app(ContentBlock::class)->get('testing'));
     }
 
     public function test_block_can_be_accessed_through_facade()
