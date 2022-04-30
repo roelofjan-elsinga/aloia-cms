@@ -5,3 +5,4 @@ vendor/
 coverage/
 composer.lock
 cghooks.lock
+.php-cs-fixer.cache
