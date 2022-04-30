@@ -1,0 +1,26 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+      - uses: php-actions/composer@v6
+      - name: "Run PHPUnit"
+        run: |
+          sudo chmod -R 777 vendor/orchestra/testbench-core/laravel
+          vendor/bin/phpunit --coverage-clover=coverage.xml
+        env:
+          XDEBUG_MODE: coverage
+      - uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml

@@ -4,8 +4,10 @@ namespace AloiaCms;
 
 use AloiaCms\Console\ConfigCommand;
 use AloiaCms\Console\NewArticle;
-use AloiaCms\Console\PermissionsCommand;
+use AloiaCms\Models\Article;
 use AloiaCms\Models\ContentBlock;
+use AloiaCms\Models\MetaTag;
+use AloiaCms\Models\Page;
 use Illuminate\Support\ServiceProvider;
 
 class AloiaCmsServiceProvider extends ServiceProvider
@@ -27,7 +29,6 @@ class AloiaCmsServiceProvider extends ServiceProvider
             $this->commands([
                 NewArticle::class,
                 ConfigCommand::class,
-                PermissionsCommand::class,
             ]);
         }
     }
@@ -37,8 +38,20 @@ class AloiaCmsServiceProvider extends ServiceProvider
      */
     private function bindFacades()
     {
-        $this->app->bind('AloiaCmsBlock', function () {
+        $this->app->bind(Article::class, function () {
+            return new Article();
+        });
+
+        $this->app->bind(ContentBlock::class, function () {
             return new ContentBlock();
+        });
+
+        $this->app->bind(MetaTag::class, function () {
+            return new MetaTag();
+        });
+
+        $this->app->bind(Page::class, function () {
+            return new Page();
         });
     }
 }

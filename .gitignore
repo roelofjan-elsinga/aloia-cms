@@ -3,5 +3,5 @@ vendor/
 .phpunit.result.cache
 .php_cs.cache
 coverage/
-composer.lock
 cghooks.lock
+.php-cs-fixer.cache

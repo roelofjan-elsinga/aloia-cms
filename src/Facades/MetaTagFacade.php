@@ -2,10 +2,10 @@
 
 namespace AloiaCms\Facades;
 
-use AloiaCms\Models\ContentBlock;
+use AloiaCms\Models\MetaTag;
 use Illuminate\Support\Facades\Facade;
 
-class BlockFacade extends Facade
+class MetaTagFacade extends Facade
 {
 
     /**
@@ -15,6 +15,6 @@ class BlockFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return ContentBlock::class;
+        return MetaTag::class;
     }
 }

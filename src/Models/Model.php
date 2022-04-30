@@ -89,6 +89,21 @@ class Model implements ModelInterface, StorableInterface
     }
 
     /**
+     * Find a single model from an instance of the model
+     *
+     * @param string $file_name
+     * @return ModelInterface
+     */
+    public function findById(string $file_name): ModelInterface
+    {
+        $instance = new static();
+
+        $instance->setFileName($file_name);
+
+        return $instance;
+    }
+
+    /**
      * Find a single model
      *
      * @param string $file_name
