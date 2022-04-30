@@ -52,7 +52,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
         Config::set('aloiacms.pages.folder_path', "{$content_path}/pages");
         Config::set('aloiacms.articles.folder_path', "{$content_path}/articles");
         Config::set('aloiacms.content_blocks.folder_path', "{$content_path}/blocks");
-        Config::set('aloiacms.uploaded_files.folder_path', "{$content_path}/files");
     }
 
     protected function getPackageProviders($app)
