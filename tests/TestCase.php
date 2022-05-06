@@ -3,6 +3,8 @@
 namespace AloiaCms\Tests;
 
 use AloiaCms\AloiaCmsServiceProvider;
+use AloiaCms\Auth\User;
+use AloiaCms\Tests\Auth\TestAuthServiceProvider;
 use Illuminate\Support\Facades\Config;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
@@ -25,8 +27,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         parent::setUp();
 
-        $invalid_permissions_folder = vfsStream::newDirectory("invalid_articles", 0600);
-
         $this->fs = vfsStream::setup('root', 0777, [
             'content' => [
                 'collections' => [],
@@ -45,11 +45,14 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
         Config::set('aloiacms.collections_path', "{$content_path}/collections");
         Config::set('aloiacms.seo.sitemap_path', "{$content_path}/public/sitemap.xml");
+
+        Config::set('auth.providers.users.driver', 'aloiacms');
+        Config::set('auth.providers.users.model', User::class);
     }
 
     protected function getPackageProviders($app)
     {
-        return [AloiaCmsServiceProvider::class];
+        return [AloiaCmsServiceProvider::class, TestAuthServiceProvider::class];
     }
 
     protected function getFileContentsFromFilePath(string $file_path): string
