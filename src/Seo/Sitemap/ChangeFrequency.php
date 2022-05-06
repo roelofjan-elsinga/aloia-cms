@@ -2,10 +2,10 @@
 
 namespace AloiaCms\Seo\Sitemap;
 
-enum ChangeFrequency: string
+class ChangeFrequency
 {
-    case Daily = "daily";
-    case Weekly = "weekly";
-    case Monthly = "monthly";
-    case Yearly = "yearly";
+    const Daily = "daily";
+    const Weekly = "weekly";
+    const Monthly = "monthly";
+    const Yearly = "yearly";
 }

@@ -28,14 +28,14 @@ return [
                 'model' => \AloiaCms\Models\Page::class,
                 'path' => '/{id}',
                 'priority' => 0.9,
-                'change_frequency' => \AloiaCms\Seo\Sitemap\ChangeFrequency::Monthly->value,
+                'change_frequency' => \AloiaCms\Seo\Sitemap\ChangeFrequency::Monthly,
             ],
 
             [
                 'model' => \AloiaCms\Models\Article::class,
                 'path' => '/articles/{id}',
                 'priority' => 0.8,
-                'change_frequency' => \AloiaCms\Seo\Sitemap\ChangeFrequency::Weekly->value,
+                'change_frequency' => \AloiaCms\Seo\Sitemap\ChangeFrequency::Weekly,
             ]
 
         ],
