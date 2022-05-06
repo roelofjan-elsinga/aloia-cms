@@ -4,6 +4,7 @@ namespace AloiaCms;
 
 use AloiaCms\Console\ConfigCommand;
 use AloiaCms\Console\NewArticle;
+use AloiaCms\Console\SitemapCommand;
 use AloiaCms\Models\Article;
 use AloiaCms\Models\ContentBlock;
 use AloiaCms\Models\MetaTag;
@@ -29,6 +30,7 @@ class AloiaCmsServiceProvider extends ServiceProvider
             $this->commands([
                 NewArticle::class,
                 ConfigCommand::class,
+                SitemapCommand::class,
             ]);
         }
     }
