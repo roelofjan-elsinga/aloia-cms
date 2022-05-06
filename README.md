@@ -1,5 +1,6 @@
 # Aloia CMS
 
+[![CI](https://github.com/roelofjan-elsinga/aloia-cms/actions/workflows/ci.yml/badge.svg)](https://github.com/roelofjan-elsinga/aloia-cms/actions/workflows/ci.yml)
 [![StyleCI Status](https://github.styleci.io/repos/192778142/shield)](https://github.styleci.io/repos/192778142)
 [![Code Coverage](https://codecov.io/gh/roelofjan-elsinga/aloia-cms/branch/master/graph/badge.svg)](https://codecov.io/gh/roelofjan-elsinga/aloia-cms)
 [![Total Downloads](https://poser.pugx.org/roelofjan-elsinga/aloia-cms/downloads)](https://packagist.org/packages/roelofjan-elsinga/aloia-cms)
