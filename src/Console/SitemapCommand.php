@@ -48,16 +48,13 @@ class SitemapCommand extends Command
 
             // Call the all() method to fetch all models of this type
             foreach (call_user_func([$config['model'], 'all']) as $model) {
-
                 $generator->add(
                     $this->replaceIdWithFilename($model, $config['path']),
                     $config['priority'],
                     $this->getLastModifiedAt($has_update_date, $has_post_date, $model),
                     $config['change_frequency'],
                 );
-
             }
-
         }
 
         file_put_contents($sitemap_path, $generator->toXML());
