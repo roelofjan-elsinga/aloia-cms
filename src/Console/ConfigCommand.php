@@ -18,7 +18,7 @@ class ConfigCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Re-publish the Flat File CMS config';
+    protected $description = 'Re-publish the Aloia CMS config';
 
     /**
      * Execute the console command.
