@@ -26,7 +26,7 @@ trait Updatable
      */
     public function getUpdateDate()
     {
-        if (!isset($this->matter['update_date'])) {
+        if (!isset($this->matter['update_date']) || empty($this->matter['update_date'])) {
             return null;
         }
 

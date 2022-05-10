@@ -26,7 +26,7 @@ trait Postable
      */
     public function getPostDate(): ?Carbon
     {
-        if (!isset($this->matter['post_date'])) {
+        if (!isset($this->matter['post_date']) || empty($this->matter['post_date'])) {
             return null;
         }
 
