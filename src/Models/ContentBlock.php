@@ -6,8 +6,6 @@ use AloiaCms\Models\Contracts\ModelInterface;
 
 class ContentBlock extends Model implements ModelInterface
 {
-    protected $folder = 'content_blocks';
-
     /**
      * Serve as an entry for Facade usage
      *

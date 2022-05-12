@@ -13,8 +13,6 @@ class Page extends Model implements ModelInterface, PublishInterface
 {
     use Publishable, Postable, Updatable;
 
-    protected $folder = 'pages';
-
     protected $required_fields = [
         'title',
         'description',

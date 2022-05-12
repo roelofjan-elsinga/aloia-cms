@@ -15,8 +15,6 @@ class Article extends Model implements ModelInterface, PublishInterface
 {
     use Publishable, Postable, Updatable;
 
-    protected $folder = 'articles';
-
     protected $required_fields = [
         'post_date'
     ];
