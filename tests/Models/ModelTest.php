@@ -4,6 +4,8 @@ namespace AloiaCms\Tests\Models;
 
 use AloiaCms\Models\Article;
 use AloiaCms\Tests\TestCase;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 
 class ModelTest extends TestCase
 {
@@ -42,7 +44,7 @@ class ModelTest extends TestCase
 
         $this->assertSame('Article title', $article->get('title'));
     }
-    
+
     public function test_non_specified_configuration_attributes_are_not_overwritten()
     {
         $article = Article::find('testing')
@@ -59,7 +61,7 @@ class ModelTest extends TestCase
         $this->assertSame('Article title', $article->get('title'));
         $this->assertSame('Article description', $article->get('description'));
     }
-    
+
     public function test_data_can_be_checked_for_existence()
     {
         $article = Article::find('testing')
@@ -75,7 +77,7 @@ class ModelTest extends TestCase
 
         $this->assertFalse($article->has('title'));
     }
-    
+
     public function test_add_matter_still_works_after_deprecation()
     {
         $article = Article::find('testing')
@@ -84,5 +86,33 @@ class ModelTest extends TestCase
 
         $this->assertSame('Article title', $article->get('title'));
         $this->assertSame('description', $article->get('description'));
+    }
+
+    public function test_model_is_routeable()
+    {
+        $article = Article::find('testing')
+            ->setMatter([
+                'title' => 'Article title',
+                'description' => 'description',
+                'post_date' => now(),
+            ])
+            ->save();
+
+        config(['app.key' => str_repeat('a', 32)]);
+
+        Route::get('/foo/{article}', function (Article $article) {
+            return $article->matter();
+        })
+            ->name('foo')
+            ->middleware('web');
+
+        $this->assertSame('/foo/testing', $uri = URL::route('foo', [$article], false));
+
+        $response = $this->get($uri);
+
+        $response->assertJson([
+            'title' => 'Article title',
+            'description' => 'description',
+        ]);
     }
 }
