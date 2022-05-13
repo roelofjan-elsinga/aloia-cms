@@ -17,12 +17,13 @@ use AloiaCms\Models\Contracts\StorableInterface;
 use AloiaCms\Writer\FolderCreator;
 use AloiaCms\Writer\FrontMatterCreator;
 use Exception;
+use Illuminate\Contracts\Routing\UrlRoutable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 
-class Model implements ModelInterface, StorableInterface
+class Model implements ModelInterface, StorableInterface, UrlRoutable
 {
     /**
      * Represents the folder name where this model saves files
@@ -515,6 +516,53 @@ class Model implements ModelInterface, StorableInterface
         PostModelDeleted::dispatch($this);
 
         return $is_successful;
+    }
+
+    /**
+     * Get the value of the model's route key.
+     *
+     * @return mixed
+     */
+    public function getRouteKey()
+    {
+        return $this->{$this->getRouteKeyName()};
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'file_name';
+    }
+
+    /**
+     * Retrieve the model for a bound value.
+     *
+     * @param  mixed  $value
+     * @param  string|null  $field
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function resolveRouteBinding($value, $field = null)
+    {
+        $model = $this->find($value);
+
+        return $model->exists() ? $model : null;
+    }
+
+    /**
+     * Retrieve the child model for a bound value.
+     *
+     * @param  string  $childType
+     * @param  mixed  $value
+     * @param  string|null  $field
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function resolveChildRouteBinding($childType, $value, $field)
+    {
+        throw new \BadMethodCallException('Method not implemented.');
     }
 
     /**
