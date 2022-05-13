@@ -547,7 +547,9 @@ class Model implements ModelInterface, StorableInterface, UrlRoutable
      */
     public function resolveRouteBinding($value, $field = null)
     {
-        return $this->find($value);
+        $model = $this->find($value);
+
+        return $model->exists() ? $model : null;
     }
 
     /**

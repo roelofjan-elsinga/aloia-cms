@@ -4,6 +4,8 @@ namespace AloiaCms\Tests\Models;
 
 use AloiaCms\Models\Article;
 use AloiaCms\Tests\TestCase;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 
@@ -90,6 +92,10 @@ class ModelTest extends TestCase
 
     public function test_model_is_routeable()
     {
+        Route::get('/foo/{article}', function (Article $article) {
+            return $article->matter();
+        })->name('foo');
+
         $article = Article::find('testing')
             ->setMatter([
                 'title' => 'Article title',
@@ -98,21 +104,37 @@ class ModelTest extends TestCase
             ])
             ->save();
 
-        config(['app.key' => str_repeat('a', 32)]);
+        $this->assertSame('/foo/testing', URL::route('foo', [$article], false));
+    }
 
+    public function test_model_can_be_implicitly_route_binded()
+    {
         Route::get('/foo/{article}', function (Article $article) {
             return $article->matter();
         })
             ->name('foo')
-            ->middleware('web');
+            ->middleware(SubstituteBindings::class);
 
-        $this->assertSame('/foo/testing', $uri = URL::route('foo', [$article], false));
+        $article = Article::find('testing')
+            ->setMatter($attributes = [
+                'title' => 'Article title',
+                'description' => 'description',
+                'post_date' => (string) now(),
+            ])
+            ->save();
 
-        $response = $this->get($uri);
+        $this->get(URL::route('foo', [$article], false))
+            ->assertJson($attributes);
+    }
 
-        $response->assertJson([
-            'title' => 'Article title',
-            'description' => 'description',
-        ]);
+    public function test_throws_exception_when_model_route_binding_not_found()
+    {
+        Route::get('/foo/{article}', function (Article $article) {
+            return $article->matter();
+        })
+            ->name('foo')
+            ->middleware(SubstituteBindings::class);
+
+        $this->get('/foo/testing')->assertNotFound();
     }
 }
