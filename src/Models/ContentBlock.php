@@ -14,7 +14,7 @@ class ContentBlock extends Model implements ModelInterface
      * @param string $block_name
      * @return string
      */
-    public function get(string $block_name): string
+    public function get(string $block_name, $default = null): string
     {
         $instance = self::find($block_name);
 
