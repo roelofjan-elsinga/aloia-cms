@@ -582,8 +582,8 @@ class Model implements ModelInterface, StorableInterface, UrlRoutable
      * @param string $key
      * @return mixed|null
      */
-    public function get(string $key)
+    public function get(string $key, $default = null)
     {
-        return $this->matter[$key] ?? null;
+        return $this->matter[$key] ?? $default;
     }
 }
