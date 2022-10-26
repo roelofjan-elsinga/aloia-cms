@@ -23,7 +23,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
      */
     protected $fs;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
