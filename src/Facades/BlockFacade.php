@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Facade;
 
 class BlockFacade extends Facade
 {
-
     /**
      * Get the registered name of the component.
      *
