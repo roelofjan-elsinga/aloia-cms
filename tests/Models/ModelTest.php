@@ -6,9 +6,11 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 
-class Tutorial extends Model {}
+class Tutorial extends Model
+{
+}
 
-test('matter is not overwritten when using addMatter()', function() {
+test('matter is not overwritten when using addMatter()', function () {
     $article = Article::find('testing')
         ->setMatter([
             'title' => 'title',
@@ -24,7 +26,7 @@ test('matter is not overwritten when using addMatter()', function() {
     $this->assertSame('description', $article->matter()['description']);
 });
 
-test('filename can be retrieved', function() {
+test('filename can be retrieved', function () {
     $article = Article::find('testing')
         ->setMatter([
             'title' => 'title',
@@ -34,14 +36,14 @@ test('filename can be retrieved', function() {
     $this->assertSame('testing', $article->filename());
 });
 
-test('value can be set on model instance', function() {
+test('value can be set on model instance', function () {
     $article = Article::find('testing')
         ->set('title', 'Article title');
 
     $this->assertSame('Article title', $article->get('title'));
 });
 
-test('non-specified configuration attributes are not overwritten during update', function() {
+test('non-specified configuration attributes are not overwritten during update', function () {
     $article = Article::find('testing')
         ->setMatter([
             'title' => 'Article title',
@@ -57,7 +59,7 @@ test('non-specified configuration attributes are not overwritten during update',
     $this->assertSame('Article description', $article->get('description'));
 });
 
-test('data can be checked for existence', function() {
+test('data can be checked for existence', function () {
     $article = Article::find('testing')
         ->setMatter([
             'title' => 'Article title',
@@ -72,7 +74,7 @@ test('data can be checked for existence', function() {
     $this->assertFalse($article->has('title'));
 });
 
-test('add matter still works after deprecation', function() {
+test('add matter still works after deprecation', function () {
     $article = Article::find('testing')
         ->set('title', 'Article title')
         ->addMatter('description', 'description');
@@ -81,7 +83,7 @@ test('add matter still works after deprecation', function() {
     $this->assertSame('description', $article->get('description'));
 });
 
-test('model is routetable', function() {
+test('model is routetable', function () {
     Route::get('/foo/{article}', function (Article $article) {
         return $article->matter();
     })->name('foo');
@@ -116,7 +118,7 @@ test('model can be implicitely bound to the route', function () {
         ->assertJson($attributes);
 });
 
-it('throws an exception when model route binding is not found', function() {
+it('throws an exception when model route binding is not found', function () {
     Route::get('/foo/{article}', function (Article $article) {
         return $article->matter();
     })
@@ -126,8 +128,7 @@ it('throws an exception when model route binding is not found', function() {
     $this->get('/foo/testing')->assertNotFound();
 });
 
-test('model without explicit folder name will be placed in a best-guess folder', function() {
-
+test('model without explicit folder name will be placed in a best-guess folder', function () {
     $tutorials_root_path = \Illuminate\Support\Facades\Config::get('aloiacms.collections_path') . '/tutorials';
 
     expect(file_exists($tutorials_root_path))->toBe(false);
@@ -136,10 +137,9 @@ test('model without explicit folder name will be placed in a best-guess folder',
 
     expect(file_exists($tutorials_root_path))->toBe(true);
     expect(file_exists($tutorials_root_path . '/episode-1.md'))->toBe(true);
-
 });
 
-test('attribute can be set on a model using the magic setter', function() {
+test('attribute can be set on a model using the magic setter', function () {
     $tutorial = Tutorial::find('episode-1');
 
     $tutorial->title = 'Episode 1';
@@ -149,7 +149,7 @@ test('attribute can be set on a model using the magic setter', function() {
     ]);
 });
 
-test('body content can be set on a model using the magic setter', function() {
+test('body content can be set on a model using the magic setter', function () {
     $tutorial = Tutorial::find('episode-1');
 
     $tutorial->body = '# Test';
@@ -157,4 +157,3 @@ test('body content can be set on a model using the magic setter', function() {
     expect($tutorial->rawBody())->toBe('# Test');
     expect($tutorial->body())->toBe('<h1>Test</h1>');
 });
-
