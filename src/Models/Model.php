@@ -21,6 +21,7 @@ use Illuminate\Contracts\Routing\UrlRoutable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 
 class Model implements ModelInterface, StorableInterface, UrlRoutable
@@ -30,7 +31,7 @@ class Model implements ModelInterface, StorableInterface, UrlRoutable
      *
      * @var string $folder
      */
-    protected $folder = '';
+    protected $folder;
 
     /**
      * Represents the basename of the base file
@@ -76,17 +77,29 @@ class Model implements ModelInterface, StorableInterface, UrlRoutable
     }
 
     /**
+     * Guess the folder name for this model
+     *
+     * @return string
+     */
+    protected function guessFolder(): string
+    {
+        return $this->folder ?? Str::snake(Str::pluralStudly(class_basename($this)));
+    }
+
+    /**
      * Get the folder path for this model
      *
      * @return string
      */
     public function getFolderPath(): string
     {
-        $folder_path = Config::get('aloiacms.collections_path') . "/{$this->folder}";
+        $folder = $this->guessFolder();
 
-        FolderCreator::forPath($folder_path);
+        $full_folder_path = Config::get('aloiacms.collections_path') . "/{$folder}";
 
-        return $folder_path;
+        FolderCreator::forPath($full_folder_path);
+
+        return $full_folder_path;
     }
 
     /**
