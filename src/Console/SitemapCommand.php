@@ -40,7 +40,6 @@ class SitemapCommand extends Command
         $generator = new SitemapGenerator($app_url);
 
         foreach ($models as $config) {
-
             // Determine whether we can use the built-in traits for fetching a "last modified at" date.
             $traits = class_uses_recursive($config['model']);
             $has_update_date = in_array(Updatable::class, $traits);
