@@ -4,7 +4,6 @@ namespace AloiaCms\Tests;
 
 use AloiaCms\AloiaCmsServiceProvider;
 use AloiaCms\Auth\User;
-use AloiaCms\Tests\Auth\TestAuthServiceProvider;
 use Illuminate\Support\Facades\Config;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
@@ -23,7 +22,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
      */
     protected $fs;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

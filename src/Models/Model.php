@@ -406,6 +406,22 @@ class Model implements ModelInterface, StorableInterface, UrlRoutable
     }
 
     /**
+     * Use a magic setter for convenient attribute setting.
+     *
+     * @param string $key
+     * @param $value
+     * @return void
+     */
+    public function __set(string $key, $value)
+    {
+        if ($key == "body") {
+            $this->setBody($value);
+        } else {
+            $this->set($key, $value);
+        }
+    }
+
+    /**
      * Set a value on the specified key in the configuration
      *
      * @param string $key

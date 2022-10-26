@@ -8,4 +8,4 @@ it('should create a new folder if it doesn\'t exist', function () {
     \AloiaCms\Writer\FolderCreator::forPath($test_tutorials_root_path);
 
     expect(file_exists($test_tutorials_root_path))->toBe(true);
-})->only();
+});

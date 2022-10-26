@@ -1,6 +1,6 @@
 <?php
 
-namespace AloiaCms\Tests\Auth;
+namespace AloiaCms\Tests;
 
 use AloiaCms\Auth\AloiaCmsUserProvider;
 use Illuminate\Support\Facades\Auth;
