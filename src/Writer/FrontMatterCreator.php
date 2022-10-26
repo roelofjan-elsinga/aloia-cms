@@ -43,9 +43,7 @@ class FrontMatterCreator
     public function create(): string
     {
         $matter = Collection::make($this->matter)
-            ->mapWithKeys(function ($value, $key) {
-                return [$this->toSnakeCase($key) => $value];
-            })
+            ->keysToSnakeCase()
             ->toArray();
 
         $front_matter_string = "";
@@ -59,24 +57,5 @@ class FrontMatterCreator
         $front_matter_string .= $this->content;
 
         return $front_matter_string;
-    }
-
-    /**
-     * Convert camelcase strings to snake case
-     *
-     * @param $input
-     * @return string
-     */
-    private function toSnakeCase($input)
-    {
-        if (preg_match('/[A-Z]/', $input) === 0) {
-            return $input;
-        }
-
-        $pattern = '/([a-z])([A-Z])/';
-
-        return strtolower(preg_replace_callback($pattern, function ($a) {
-            return $a[1] . "_" . strtolower($a[2]);
-        }, $input));
     }
 }

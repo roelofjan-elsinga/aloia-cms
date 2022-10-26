@@ -9,7 +9,9 @@ use AloiaCms\Models\Article;
 use AloiaCms\Models\ContentBlock;
 use AloiaCms\Models\MetaTag;
 use AloiaCms\Models\Page;
+use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AloiaCmsServiceProvider extends ServiceProvider
 {
@@ -33,6 +35,10 @@ class AloiaCmsServiceProvider extends ServiceProvider
                 SitemapCommand::class,
             ]);
         }
+
+        Collection::macro('keysToSnakeCase', function () {
+            return $this->mapWithKeys(fn ($value, $key) => [Str::snake($key) => $value]);
+        });
     }
 
     /**
