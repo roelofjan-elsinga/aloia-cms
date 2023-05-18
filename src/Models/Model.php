@@ -55,6 +55,8 @@ class Model implements ModelInterface, StorableInterface, UrlRoutable
 
     protected $required_fields = [];
 
+    protected $has_changes = false;
+
     /**
      * Return all instances of the model
      *
@@ -336,6 +338,10 @@ class Model implements ModelInterface, StorableInterface, UrlRoutable
      */
     public function save(): ModelInterface
     {
+        if (!$this->has_changes) {
+            return $this;
+        }
+
         PreModelSaved::dispatch($this);
 
         $file_content = FrontMatterCreator::seed($this->matter, $this->body)->create();
@@ -430,6 +436,8 @@ class Model implements ModelInterface, StorableInterface, UrlRoutable
      */
     public function set(string $key, $value): ModelInterface
     {
+        $this->has_changes = true;
+
         $this->matter[$key] = $value;
 
         return $this;
@@ -444,7 +452,7 @@ class Model implements ModelInterface, StorableInterface, UrlRoutable
     public function setMatter(array $matter): ModelInterface
     {
         foreach (array_keys($matter) as $key) {
-            $this->matter[$key] = $matter[$key];
+            $this->set($key, $matter[$key]);
         }
 
         return $this;
@@ -458,6 +466,8 @@ class Model implements ModelInterface, StorableInterface, UrlRoutable
      */
     public function remove(string $key): ModelInterface
     {
+        $this->has_changes = true;
+
         if ($this->has($key)) {
             unset($this->matter[$key]);
         }
@@ -516,6 +526,8 @@ class Model implements ModelInterface, StorableInterface, UrlRoutable
      */
     public function setBody(string $body): ModelInterface
     {
+        $this->has_changes = true;
+
         $this->body = $body;
 
         return $this;
