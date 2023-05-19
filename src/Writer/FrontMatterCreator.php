@@ -54,10 +54,10 @@ class FrontMatterCreator
             $front_matter_string .= "---\n";
         }
 
-        $content = ltrim($this->content, "\n");
+        $content = ltrim($this->content, "\r\n");
 
         if (strlen($content) > 0) {
-            $front_matter_string .= "\n" . ltrim($this->content, "\n");
+            $front_matter_string .= "\n" . $content;
         }
 
         return $front_matter_string;
