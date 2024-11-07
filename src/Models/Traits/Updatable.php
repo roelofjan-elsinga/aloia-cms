@@ -15,6 +15,7 @@ trait Updatable
     public function setUpdateDate(Carbon $update_date)
     {
         $this->matter['update_date'] = $update_date->toDateTimeString();
+        $this->has_changes = true;
 
         return $this;
     }

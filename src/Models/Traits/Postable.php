@@ -15,6 +15,7 @@ trait Postable
     public function setPostDate(Carbon $post_date)
     {
         $this->matter['post_date'] = $post_date->toDateString();
+        $this->has_changes = true;
 
         return $this;
     }

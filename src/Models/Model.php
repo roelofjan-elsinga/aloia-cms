@@ -157,7 +157,7 @@ class Model implements ModelInterface, StorableInterface, UrlRoutable
         $parsed_file = YamlFrontMatter::parse($this->rawContent());
 
         $this->matter = $parsed_file->matter();
-        $this->body = $parsed_file->body();
+        $this->body = ltrim($parsed_file->body());
     }
 
     /**

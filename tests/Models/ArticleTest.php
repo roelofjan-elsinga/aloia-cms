@@ -27,7 +27,9 @@ class ArticleTest extends TestCase
     {
         $this->expectExceptionMessage('Attribute post_date is required');
 
-        Article::find('testing')->save();
+        Article::find('testing')
+            ->set('title', 'Testing')
+            ->save();
     }
 
     public function test_articles_is_created_when_not_existing()

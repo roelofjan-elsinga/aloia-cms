@@ -133,7 +133,9 @@ test('model without explicit folder name will be placed in a best-guess folder',
 
     expect(file_exists($tutorials_root_path))->toBe(false);
 
-    $tutorial = Tutorial::find('episode-1')->save();
+    $tutorial = Tutorial::find('episode-1')
+        ->set('title', 'Episode 1')
+        ->save();
 
     expect(file_exists($tutorials_root_path))->toBe(true);
     expect(file_exists($tutorials_root_path . '/episode-1.md'))->toBe(true);
