@@ -9,14 +9,14 @@ it('can generate markdown with front matter', function ($front_matter, $expected
 })->with([
     [
         ['test' => true],
-        "---\ntest: true\n---\n# Test"
+        "---\ntest: true\n---\n\n# Test"
     ],
     [
         ['TestCases' => 'test'],
-        "---\ntest_cases: test\n---\n# Test"
+        "---\ntest_cases: test\n---\n\n# Test"
     ],
     [
         ['_testAttribute' => 'test'],
-        "---\n_test_attribute: test\n---\n# Test"
+        "---\n_test_attribute: test\n---\n\n# Test"
     ]
 ]);
