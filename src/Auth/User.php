@@ -62,4 +62,9 @@ class User extends Model implements Authenticatable
     {
         return 'remember_token';
     }
+
+    public function getAuthPasswordName()
+    {
+        return 'password';
+    }
 }
