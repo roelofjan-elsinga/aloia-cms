@@ -627,4 +627,14 @@ class Model implements ModelInterface, StorableInterface, UrlRoutable
     {
         return $this->matter[$key] ?? $default;
     }
+
+    public function __isset($key)
+    {
+        return $this->has($key);
+    }
+
+    public function __unset($key)
+    {
+        return $this->remove($key);
+    }
 }
