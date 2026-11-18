@@ -90,6 +90,24 @@ class AloiaCmsUserProvider implements UserProvider
     }
 
     /**
+     * Rehash the user's password if required and supported.
+     *
+     * Required by Illuminate\Contracts\Auth\UserProvider as of Laravel 11.
+     * The password lives in the user file's front matter, so a rehash is a
+     * set() plus a save() rather than a column update.
+     *
+     * @return void
+     */
+    public function rehashPasswordIfRequired(Authenticatable $user, #[\SensitiveParameter] array $credentials, bool $force = false)
+    {
+        if (!$this->hasher->needsRehash($user->getAuthPassword()) && !$force) {
+            return;
+        }
+
+        $user->set('password', $this->hasher->make($credentials['password']))->save();
+    }
+
+    /**
      * Create a new instance of the model.
      *
      * @return \AloiaCms\Models\Model
